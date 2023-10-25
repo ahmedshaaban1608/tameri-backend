@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Review extends Model
 {
     use HasFactory;
+    function tourguide(){
+        return $this->belongsTo(Tourguide::class);
+    }
+    function tourist(){
+        return $this->belongsTo(Tourist::class);
+    }
 }

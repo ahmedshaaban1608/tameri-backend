@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Tourist extends Model
 {
     use HasFactory;
+
+    function user(){
+        return $this->belongsTo(User::class);
+    }
+    function review(){
+        return $this->hasMany(Review::class);
+    }
+    function order(){
+        return $this->hasMany(Order::class);
+    }
 }
