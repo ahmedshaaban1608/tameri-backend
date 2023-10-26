@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string("profile_img")->nullable();
             $table->integer("day_price")->nullable();
             $table->string("phone");
+            $table->softDeletes();
             $table->timestamps();
                
         });

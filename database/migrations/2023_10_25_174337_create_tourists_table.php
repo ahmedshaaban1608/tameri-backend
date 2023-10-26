@@ -17,6 +17,7 @@ return new class extends Migration
             $table->enum('gender', ['male', 'female']);
             $table->string('avatar')->nullable();
             $table->string('phone');
+            $table->softDeletes();
             $table->timestamps();
         });
     

@@ -26,6 +26,8 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'tourist_id'=> 'required',
+            'tourguide_id'=> 'required',
             'comment' => 'required',
             'phone' => 'required',
             'from' => 'required',
@@ -55,6 +57,8 @@ class OrderController extends Controller
     public function update(Request $request, Order $order)
     { {
             $validator = Validator::make($request->all(), [
+                'tourist_id'=> 'required',
+                'tourguide_id'=> 'required',
                 'comment' => 'required',
                 'phone' => 'required',
                 'from' => 'required',
