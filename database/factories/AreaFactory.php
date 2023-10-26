@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Tourguide;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,10 +15,15 @@ class AreaFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    protected $model = Area::class;
+
     public function definition(): array
     {
+        $tourguideId = Tourguide::inRandomOrder()->first()->id;
         return [
-            //
+           'tourguide_id'=>$tourguideId,
+           'area'=>$this->faker->city
+
         ];
     }
 }

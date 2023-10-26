@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Review extends Model
 {
     use HasFactory;
+    protected $fillable = ['tourist_id', 'tourguide_id', 'title', 'comment', 'stars', 'status'];
     function tourguide(){
         return $this->belongsTo(Tourguide::class);
     }

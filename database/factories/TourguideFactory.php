@@ -19,7 +19,7 @@ class TourguideFactory extends Factory
 
     public function definition(): array
     {
-        $user = User::factory()->state(['type' => 'tourist'])->create();
+        $user = User::factory()->state(['type' => 'tourguide'])->create();
         return [
             'id' => $user->id,
             'gender' => $this->faker->randomElement(['male', 'female']),

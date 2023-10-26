@@ -31,7 +31,7 @@ class LanguageController extends Controller
         $vaidator = Validator::make($request->all(),
      [
         "tourguide_id"=>"required",
-         "image"=>"required"]);
+         "language"=>"required"]);
        if($vaidator -> fails()){
        return response( $vaidator->errors()->all(), 422);
 }
@@ -57,7 +57,7 @@ class LanguageController extends Controller
         $vaidator = Validator::make($request->all(),
         [
       "tourguide_id"=>"required",
-      "image"=>"required"]);
+      "language"=>"required"]);
       if($vaidator -> fails()){
       return response( $vaidator->errors()->all(), 422);
 }

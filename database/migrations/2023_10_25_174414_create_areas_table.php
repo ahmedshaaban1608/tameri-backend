@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('areas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("tourguide_id")->constrained('tourguides')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId("tourguide_id")->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('area', 50);
             $table->timestamps();
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ReviewController extends Controller
 {
@@ -27,6 +28,8 @@ class ReviewController extends Controller
         //
 
 $validator = Validator::make($request->all(), [
+    'tourist_id'=> 'required',
+    'tourguide_id'=> 'required',
     'title' => 'required',
     'comment' => 'required',
     'stars' => 'required',
@@ -35,7 +38,7 @@ $validator = Validator::make($request->all(), [
 
 if ($validator->fails()) {
 
-    return response( $vaidator->errors()->all(), 422);
+    return response( $validator->errors()->all(), 422);
 }
 
 $review = Review::create($request->all());
@@ -63,15 +66,18 @@ return $review;
         //
 
 $validator = Validator::make($request->all(), [
+    'tourist_id'=> 'required',
+    'tourguide_id'=> 'required',
     'title' => 'required',
     'comment' => 'required',
     'stars' => 'required',
+    'status' => 'required'
 
 ]);
 
 if ($validator->fails()) {
 
-    return response( $vaidator->errors()->all(), 422);
+    return response( $validator->errors()->all(), 422);
 }
 $review->update($request->all());
 return $review;

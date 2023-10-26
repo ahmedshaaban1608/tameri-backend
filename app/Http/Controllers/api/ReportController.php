@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Report;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ReportController extends Controller
 {
@@ -28,6 +29,7 @@ class ReportController extends Controller
         //
 
 $validator = Validator::make($request->all(), [
+    'user_id'=> 'required',
     'subject' => 'required',
     'problem' => 'required',
     'image' => 'required',
@@ -36,7 +38,7 @@ $validator = Validator::make($request->all(), [
 
 if ($validator->fails()) {
 
-    return response( $vaidator->errors()->all(), 422);
+    return response( $validator->errors()->all(), 422);
 }
 
 $report = Report::create($request->all());
@@ -68,7 +70,7 @@ return $report;
         ]);
 
         if ($validator->fails()) {
-            return response( $vaidator->errors()->all(), 422);
+            return response( $validator->errors()->all(), 422);
         }
         $report->update($request->all());
         return $report;

@@ -9,7 +9,7 @@ class Language extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["tourguide_id", "image"];
+    protected $fillable = ["tourguide_id", "language"];
 
 
 
