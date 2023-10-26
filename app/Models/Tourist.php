@@ -7,8 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tourist extends Model
 {
+   
     use HasFactory;
+    protected $fillable = ['id','country', 'gender', 'avatar', 'phone'];
 
+    // public $incrementing = false;
     function user(){
         return $this->belongsTo(User::class);
     }
