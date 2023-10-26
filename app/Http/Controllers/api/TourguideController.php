@@ -30,7 +30,7 @@ class TourguideController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required', 
+            'id' => 'required', 
             'gender' => 'required',
             'birth_date' => 'required|date',
             'bio' => 'required',

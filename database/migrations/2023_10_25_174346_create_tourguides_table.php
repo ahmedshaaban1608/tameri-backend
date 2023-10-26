@@ -12,20 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tourguides', function (Blueprint $table) {
-            $table->unsignedInteger('user_id')->primary();
-            $table->string("gender");
+            $table->unsignedBigInteger('id')->primary();
+            $table->enum('gender', ['male', 'female']);
             $table->date("birth_date");
             $table->string("bio");
             $table->string("description");
             $table->string("avatar")->nullable();
-            $table->string("profile_img");
-            $table->integer("day_price");
+            $table->string("profile_img")->nullable();
+            $table->integer("day_price")->nullable();
             $table->string("phone");
             $table->timestamps();
-            
-
-          
-        
+               
+        });
+        Schema::table('tourguides', function (Blueprint $table) {
+            $table->foreign('id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

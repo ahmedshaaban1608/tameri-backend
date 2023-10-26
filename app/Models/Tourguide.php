@@ -10,7 +10,7 @@ class Tourguide extends Model
     use HasFactory;
 
     protected $fillable = [
- 'user_id',        
+ 'id',        
 'gender',
 'birth_date',
 'bio',
@@ -20,10 +20,10 @@ class Tourguide extends Model
 'day_price',
 'phone',
     ];
- protected $primaryKey = 'user_id';
+
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
 
     function language(){
