@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Area;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AreaController extends Controller
 {
@@ -13,7 +14,8 @@ class AreaController extends Controller
      */
     public function index()
     {
-        //
+        $area = Area::all();
+        return $area;
     }
 
     /**
@@ -21,7 +23,15 @@ class AreaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'area' => 'required',
+            'tourguide_id' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response($validator->errors()->all(), 422);
+        }
+        $area = Area::create($request->all());
+        return $area;
     }
 
     /**
@@ -29,7 +39,7 @@ class AreaController extends Controller
      */
     public function show(Area $area)
     {
-        //
+        return $area;
     }
 
     /**
@@ -37,7 +47,15 @@ class AreaController extends Controller
      */
     public function update(Request $request, Area $area)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'area' => 'required',
+            'tourguide_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response($validator->errors()->all(), 422);
+        }
+        $area->update($request->all());
+        return $area;
     }
 
     /**
@@ -45,6 +63,7 @@ class AreaController extends Controller
      */
     public function destroy(Area $area)
     {
-        //
+        $area->delete();
+        return "deleted";
     }
 }

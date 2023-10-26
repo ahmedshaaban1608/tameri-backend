@@ -26,8 +26,8 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'tourist_id'=> 'required',
-            'tourguide_id'=> 'required',
+            'tourist_id' => 'required',
+            'tourguide_id' => 'required',
             'comment' => 'required',
             'phone' => 'required',
             'from' => 'required',
@@ -55,24 +55,24 @@ class OrderController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Order $order)
-    { {
-            $validator = Validator::make($request->all(), [
-                'tourist_id'=> 'required',
-                'tourguide_id'=> 'required',
-                'comment' => 'required',
-                'phone' => 'required',
-                'from' => 'required',
-                'to' => 'required',
-                'total' => 'required',
-                'city' => 'required',
-            ]);
-            if ($validator->fails()) {
-                return response($validator->errors()->all(), 422);
+    {
+        $validator = Validator::make($request->all(), [
+            'tourist_id' => 'required',
+            'tourguide_id' => 'required',
+            'comment' => 'required',
+            'phone' => 'required',
+            'from' => 'required',
+            'to' => 'required',
+            'total' => 'required',
+            'city' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response($validator->errors()->all(), 422);
 
-            }
-            $order->update($request->all());
-            return $order;
         }
+        $order->update($request->all());
+        return $order;
+
     }
 
 

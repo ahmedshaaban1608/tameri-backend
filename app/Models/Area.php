@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Area extends Model
 {
     use HasFactory;
-    function tourguide(){
+    protected $fillable = ['area', 'tourguide_id'];
+
+    function tourguide()
+    {
         return $this->belongsTo(Tourguide::class);
     }
 }

@@ -22,7 +22,6 @@ return new class extends Migration {
             $table->integer('total');
             $table->string('city', 30);
             $table->enum('status', ['pending', 'rejected', 'accepted'])->default('pending');
-            $table->timestamps();
 
 
 
