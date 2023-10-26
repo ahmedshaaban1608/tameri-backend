@@ -9,6 +9,10 @@ class Language extends Model
 {
     use HasFactory;
 
+    protected $fillable = ["tourguide_id", "image"];
+
+
+
     function tourguide(){
         return $this->belongsTo(Tourguide::class);
     }

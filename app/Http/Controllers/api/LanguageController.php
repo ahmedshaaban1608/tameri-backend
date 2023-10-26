@@ -5,6 +5,8 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Language;
 use Illuminate\Http\Request;
+use  Illuminate\Support\Facades\Validator;
+
 
 class LanguageController extends Controller
 {
@@ -14,6 +16,10 @@ class LanguageController extends Controller
     public function index()
     {
         //
+        $languages  = Language::all();
+        return $languages;
+
+
     }
 
     /**
@@ -22,6 +28,16 @@ class LanguageController extends Controller
     public function store(Request $request)
     {
         //
+        $vaidator = Validator::make($request->all(),
+     [
+        "tourguide_id"=>"required",
+         "image"=>"required"]);
+       if($vaidator -> fails()){
+       return response( $vaidator->errors()->all(), 422);
+}
+        $language = Language::create($request -> all());
+        return $language;
+
     }
 
     /**
@@ -30,6 +46,7 @@ class LanguageController extends Controller
     public function show(Language $language)
     {
         //
+        return $language;
     }
 
     /**
@@ -37,14 +54,25 @@ class LanguageController extends Controller
      */
     public function update(Request $request, Language $language)
     {
-        //
+        $vaidator = Validator::make($request->all(),
+        [
+      "tourguide_id"=>"required",
+      "image"=>"required"]);
+      if($vaidator -> fails()){
+      return response( $vaidator->errors()->all(), 422);
+}
+        $language->update($request->all());
+        return $language;
     }
-
+    
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Language $language)
     {
         //
+
+        $language->delete();
+        return "Dealeted Succssfully";
     }
 }
