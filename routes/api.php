@@ -26,7 +26,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('users', UserController::class);
+// Route::apiResource('users', UserController::class);
+Route::apiResource('users', UserController::class)->except(['create', 'edit']);
+
 Route::apiResource('tourists', TouristController::class);
 Route::apiResource('tourguides', TourguideController::class);
 Route::apiResource('languages', LanguageController::class);
