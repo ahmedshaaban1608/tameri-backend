@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\api;
+
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Tourist;
@@ -13,7 +14,7 @@ class TouristController extends Controller
      */
     public function index()
     {
-        
+
         $tourists = Tourist::all();
 
         return response()->json([
@@ -24,32 +25,33 @@ class TouristController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
- 
-    $validator = Validator::make($request->all(), [
-        'id' => 'required|unique:tourists',
-        'country' => 'required',
-        'gender' => 'required',
-        'phone' => 'required|unique:tourists',
-    ]);
+    public function store(Request $request)
+    {
 
-    if ($validator->fails()) {
-        return response()->json([
-            'errors' => $validator->errors(),
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|unique:tourists',
+            'country' => 'required',
+            'gender' => 'required',
+            'phone' => 'required|unique:tourists',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ]);
+        }
+
+        $tourist = Tourist::create($request->all());
+
+        return response()->json(['data' => $tourist]);
     }
-
-    $tourist = Tourist::create($request->all());
-
-    return response()->json(['data' => $tourist]);
-}
 
     /**
      * Display the specified resource.
      */
     public function show(Tourist $tourist)
     {
-        
+
         // Return the tourist
         return response()->json([
             'data' => $tourist,
@@ -61,7 +63,7 @@ class TouristController extends Controller
      */
     public function update(Request $request, Tourist $tourist)
     {
-        
+
         // Validate the request data
         $validator = Validator::make($request->all(), [
             'country' => 'required',
@@ -93,12 +95,12 @@ class TouristController extends Controller
      */
     public function destroy(Tourist $tourist)
     {
-         // Delete the tourist
-         $tourist->delete();
+        // Delete the tourist
+        $tourist->delete();
 
-         // Return a success message
-         return response()->json([
-             'message' => 'Tourist deleted successfully.',
-         ]);
+        // Return a success message
+        return response()->json([
+            'message' => 'Tourist deleted successfully.',
+        ]);
     }
 }

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tourguide;
 use App\Models\Language;
 use Illuminate\Http\Request;
-use  Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator;
 
 class TourguideController extends Controller
 {
@@ -17,7 +17,7 @@ class TourguideController extends Controller
     {
         //
 
-        $tourguide  = Tourguide::all();
+        $tourguide = Tourguide::all();
         return $tourguide;
     }
 
@@ -30,7 +30,7 @@ class TourguideController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id' => 'required', 
+            'id' => 'required',
             'gender' => 'required',
             'birth_date' => 'required|date',
             'bio' => 'required',
@@ -39,18 +39,18 @@ class TourguideController extends Controller
             'day_price' => 'required',
             'phone' => 'required',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
-    
+
         $tourguide = Tourguide::create($request->all());
-    
+
         return $tourguide;
     }
-    
-    
-    
+
+
+
 
     /**
      * Display the specified resource.
@@ -68,16 +68,16 @@ class TourguideController extends Controller
     {
         //
         $validator = Validator::make($request->all(), [
-           
+
             'gender' => 'required',
             'birth_date' => 'required|date',
             'bio' => 'required',
             'description' => 'required',
-            'profile_img'=>'required',
-            'day_price'=>'required',
-            'phone'=>'required',
+            'profile_img' => 'required',
+            'day_price' => 'required',
+            'phone' => 'required',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }

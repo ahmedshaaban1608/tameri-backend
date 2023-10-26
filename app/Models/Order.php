@@ -8,10 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
-    function tourguide(){
+
+
+
+
+
+
+    protected $fillable = ['tourist_id', 'guide_id', 'comment', 'phone', 'from', 'to', 'total', 'city', 'status'];
+
+    function tourguide()
+    {
         return $this->belongsTo(Tourguide::class);
     }
-    function tourist(){
+    function tourist()
+    {
         return $this->belongsTo(Tourist::class);
     }
 }
