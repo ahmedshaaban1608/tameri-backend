@@ -14,6 +14,9 @@ class ReviewController extends Controller
     public function index()
     {
         //
+        $review = Review::all();
+
+        return  $review;
     }
 
     /**
@@ -22,6 +25,25 @@ class ReviewController extends Controller
     public function store(Request $request)
     {
         //
+
+$validator = Validator::make($request->all(), [
+    'title' => 'required',
+    'comment' => 'required',
+    'stars' => 'required',
+
+]);
+
+if ($validator->fails()) {
+
+    return response( $vaidator->errors()->all(), 422);
+}
+
+$review = Review::create($request->all());
+return $review;
+
+
+
+
     }
 
     /**
@@ -30,6 +52,7 @@ class ReviewController extends Controller
     public function show(Review $review)
     {
         //
+        return $review;
     }
 
     /**
@@ -38,6 +61,20 @@ class ReviewController extends Controller
     public function update(Request $request, Review $review)
     {
         //
+
+$validator = Validator::make($request->all(), [
+    'title' => 'required',
+    'comment' => 'required',
+    'stars' => 'required',
+
+]);
+
+if ($validator->fails()) {
+
+    return response( $vaidator->errors()->all(), 422);
+}
+$review->update($request->all());
+return $review;
     }
 
     /**
@@ -46,5 +83,7 @@ class ReviewController extends Controller
     public function destroy(Review $review)
     {
         //
+        $review->delete();
+        return "deleted successfully";
     }
 }

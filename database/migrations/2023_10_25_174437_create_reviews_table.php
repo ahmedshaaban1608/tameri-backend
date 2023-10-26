@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
+            $table->integer('tourist_id');
+            $table->integer('guide_id');
+
+            $table->string('title');
+            $table->text('comment');
+            $table->enum('stars', ['1','2', '3', '4', '5']);
+
+            $table->timestamp('date')->nullable();
+            $table->enum('status', ['pending', 'confirmed','declined']);
             $table->timestamps();
         });
     }
