@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('languages', function (Blueprint $table) {
             $table->id();
+         $table->foreignId("tourguide_id")->constrained('tourguides')->onUdate("cascade")->onDelete("cascade");
+         $table->string("image")->nullable();
             $table->timestamps();
         });
     }

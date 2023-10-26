@@ -12,8 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tourguides', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedInteger('user_id')->primary();
+            $table->string("gender");
+            $table->date("birth_date");
+            $table->string("bio");
+            $table->string("description");
+            $table->string("avatar")->nullable();
+            $table->string("profile_img");
+            $table->integer("day_price");
+            $table->string("phone");
             $table->timestamps();
+            
+
+          
+        
         });
     }
 

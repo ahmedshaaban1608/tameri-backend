@@ -9,8 +9,21 @@ class Tourguide extends Model
 {
     use HasFactory;
 
-    function user(){
-        return $this->belongsTo(User::class);
+    protected $fillable = [
+ 'user_id',        
+'gender',
+'birth_date',
+'bio',
+'description',
+'avatar',
+'profile_img',
+'day_price',
+'phone',
+    ];
+ protected $primaryKey = 'user_id';
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     function language(){
