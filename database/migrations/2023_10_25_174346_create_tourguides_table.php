@@ -16,7 +16,7 @@ return new class extends Migration
             $table->enum('gender', ['male', 'female']);
             $table->date("birth_date");
             $table->string("bio");
-            $table->string("description");
+            $table->text("description");
             $table->string("avatar")->nullable();
             $table->string("profile_img")->nullable();
             $table->integer("day_price")->nullable();

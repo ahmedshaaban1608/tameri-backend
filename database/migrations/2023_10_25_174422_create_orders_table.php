@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId("tourist_id")->constrained('tourists')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId("tourguide_id")->constrained('tourguides')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('comment');
+            $table->text('comment');
             $table->timestamps();
             $table->string('phone', 20);
             $table->date('from');

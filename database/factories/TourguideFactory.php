@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Models\Tourguide;
+
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,7 +25,7 @@ class TourguideFactory extends Factory
         return [
             'id' => $user->id,
             'gender' => $this->faker->randomElement(['male', 'female']),
-            'date' => $this->faker->date,
+            'birth_date' => $this->faker->date,
             'bio'=> $this->faker->words(3, true),
             'description'=> $this->faker->paragraphs(2, true),
             'avatar'=> $this->faker->imageUrl(),
