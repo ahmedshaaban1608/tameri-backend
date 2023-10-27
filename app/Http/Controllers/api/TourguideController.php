@@ -18,8 +18,15 @@ class TourguideController extends Controller
     {
         //
 
-        $tourguide = Tourguide::all();
-        return $tourguide;
+       
+        
+        try {
+            $tourguide = Tourguide::all();
+            return response( ['data'=>$tourguide], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
+        }
     }
 
 
@@ -58,7 +65,7 @@ class TourguideController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['error' => 'An error occurred while storing the tour guide'], 500);        }
             
-        return response()->json(['message' => 'Tourguide created successfully', 'tourguide' => $tourguide], 201);
+        return response()->json(['message' => 'Tourguide created successfully', 'data' => $tourguide], 201);
     }
     
 
@@ -69,8 +76,7 @@ class TourguideController extends Controller
      */
     public function show(Tourguide $tourguide)
     {
-        //
-        return $tourguide;
+         return response()->json(['data' => $tourguide],200);
     }
 
     /**
@@ -81,9 +87,9 @@ class TourguideController extends Controller
         $validator = Validator::make($request->all(), [
             'gender' => 'required|string|in:male,female',
             'birth_date' => 'required|date',
-            'bio' => 'required',
-            'description' => 'required',
-            'profile_img' => 'required',
+            'bio' => 'required|string',
+            'description' => 'required|string',
+            'profile_img' => 'required|string',
             'day_price' => 'required|numeric',
             'phone' => 'required|unique:tourists|regex:/^\+?\d{7,14}$/',
         ]);
@@ -98,7 +104,7 @@ class TourguideController extends Controller
             return response()->json(['error' => 'An error occurred while updating the tour guide'], 500);
         }
         
-        return response()->json(['message' => 'Tourguide updated successfully', 'tourguide' => $tourguide], 200);
+        return response()->json(['message' => 'Tourguide updated successfully', 'data' => $tourguide], 200);
     }
     
 

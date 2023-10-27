@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Report;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,10 +18,10 @@ class ReportController extends Controller
         //
         try {
             $report = Report::all();
-            return response( $report, 200);
+            return response( ['data'=>$report], 200);
 
         } catch (\Exception $e) {
-            return response( "not valid", 500);
+            return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
         }
 
 
@@ -34,12 +35,12 @@ class ReportController extends Controller
     public function store(Request $request)
     {
         //
-        try {
+     
             $validator = Validator::make($request->all(), [
                 'user_id'=> 'required|numeric',
                 'subject' => 'required|string',
-                'problem' => 'required',
-                'image' => 'required',
+                'problem' => 'required|string',
+                'image' => 'required|string',
 
             ]);
 
@@ -47,12 +48,22 @@ class ReportController extends Controller
 
                 return response( $validator->errors()->all(), 422);
             }
-
+            try {
+                $user = User::findOrFail($request->user_id);
+                if($user['type']!=='tourist'){
+                    return response()->json(['message' => 'user is not a tourist.'], 403);
+                }
+            } catch (\Throwable $th) {
+                return response()->json(['message' => 'not valid user id.'], 403);
+            }
+            try {
             $report = Report::create($request->all());
-            return response( $report, 200);
+            return response( ['data'=>$report], 200);
 
 
-        }catch (\Exception $e) { return response( "not valid", 500);}
+        }catch (\Exception $e) { 
+            return response()->json(['message' => 'An error occurred while creating the report'], 500);
+        }
 
     }
 
@@ -63,10 +74,11 @@ class ReportController extends Controller
     {
         //
         try {
-            return response( $report, 200);
+            return response( ['data'=>$report], 200);
 
         } catch (\Exception $e) {
-            return response( "not valid", 500);
+            return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
+        
         }
 
 
@@ -77,20 +89,31 @@ class ReportController extends Controller
      */
     public function update(Request $request, Report $report)
     {
-    try {
+  
         $validator = Validator::make($request->all(), [
             'subject' => 'required|string',
-            'problem' => 'required',
-            'image' => 'required',
+            'problem' => 'required|string',
+            'image' => 'required|string',
         ]);
 
         if ($validator->fails()) {
             return response( $validator->errors()->all(), 422);
         }
+        try {
+            $user = User::findOrFail($request->user_id);
+            if($user['type']!=='tourist'){
+                return response()->json(['message' => 'user is not a tourist.'], 403);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'not valid user id.'], 403);
+        }
+        try {
         $report->update($request->all());
         return response( $report, 200);
 
-    }catch (\Exception $e) { return response( "not valid", 500);}
+    }catch (\Exception $e) {
+        return response()->json(['message' => 'An error occurred while updating the report'], 500);
+    }
 
 
         //
@@ -106,7 +129,7 @@ class ReportController extends Controller
             $report->delete();
             return response("deleted successfully", 200);
         } catch (\Exception $e) {
-            return response( "not valid", 500);
+            return response()->json(['message' => 'An error occurred while deleting the report'], 500);
         }
     
     }

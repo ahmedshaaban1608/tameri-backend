@@ -4,6 +4,8 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Review;
+use App\Models\Tourguide;
+use App\Models\Tourist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,10 +19,10 @@ class ReviewController extends Controller
         //
         try {
             $review = Review::all();
-            return response( $review, 200);
+            return response( ['data'=>$review], 200);
 
         } catch (\Exception $e) {
-            return response( "not valid", 500);
+            return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
         }
 
 
@@ -33,13 +35,13 @@ class ReviewController extends Controller
     public function store(Request $request)
     {
         //
-        try {
+     
                 $validator = Validator::make($request->all(), [
                     'tourist_id'=> 'required|numeric',
                     'tourguide_id'=> 'required|numeric',
-                    'title' => 'required',
+                    'title' => 'required|string',
                     'comment' => 'required|string',
-                    'stars' => 'required',
+                    'stars' => 'required|in:1,2,3,4,5',
 
                 ]);
 
@@ -47,17 +49,16 @@ class ReviewController extends Controller
 
                     return response( $validator->errors()->all(), 422);
                 }
-
-
+                
+                try {
+                    $tourguide = Tourguide::findOrFail($request->tourguide_id);
+                    $tourist = Tourist::findOrFail($request->tourist_id);
                     $review = Review::create($request->all());
-                    return response( $review, 200);
-            }catch (\Exception $e) { return response( "not valid", 500);}
-
-
-
-
-
-    }
+                    return response( ['data'=>$review], 200);
+            }catch (\Exception $e) { 
+                return response()->json(['message' => 'An error occurred while creating the review'], 500);
+            }
+          }   
 
     /**
      * Display the specified resource.
@@ -66,10 +67,10 @@ class ReviewController extends Controller
     {
         //
         try {
-            return response( $review, 200);
+            return response( ['data'=>$review], 200);
 
         } catch (\Exception $e) {
-            return response( "not valid", 500);
+            return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
         }
 
     }
@@ -80,7 +81,7 @@ class ReviewController extends Controller
     public function update(Request $request, Review $review)
     {
         //
-        try {
+        
             $validator = Validator::make($request->all(), [
                 'tourist_id'=> 'required|numeric',
                 'tourguide_id'=> 'required|numeric',
@@ -95,10 +96,14 @@ class ReviewController extends Controller
 
                 return response( $validator->errors()->all(), 422);
             }
-
+            try {
+                $tourguide = Tourguide::findOrFail($request->tourguide_id);
+                $tourist = Tourist::findOrFail($request->tourist_id);
             $review->update($request->all());
-            return response( $review, 200);
-    }catch (\Exception $e) { return response( "not valid", 500);}
+            return response( ['data'=>$review], 200);
+    }catch (\Exception $e) { 
+        return response()->json(['message' => 'An error occurred while updating the review'], 500);
+    }
 
 
 
@@ -115,7 +120,7 @@ class ReviewController extends Controller
             $review->delete();
             return response("deleted successfully", 200);
         } catch (\Exception $e) {
-            return response( "not valid", 500);
+            return response()->json(['message' => 'An error occurred while deleting the review'], 500);
         }
 
     }

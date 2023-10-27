@@ -16,9 +16,15 @@ class LanguageController extends Controller
      */
     public function index()
     {
-        //
-        $languages  = Language::all();
-        return $languages;
+        
+        
+        try {
+            $languages  = Language::all();
+            return response( ['data'=>$languages], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
+        }
 
 
     }
@@ -44,7 +50,7 @@ class LanguageController extends Controller
         return "not valid tourguide id";
     }
     $language = Language::create($request->all());
-    return response()->json(['message' => 'Language created successfully', 'language' => $language], 201);
+    return response()->json(['message' => 'Language created successfully', 'data' => $language], 201);
 
         }
 
@@ -53,8 +59,12 @@ class LanguageController extends Controller
      */
     public function show(Language $language)
     {
-        //
-        return $language;
+        
+        try {
+            return response()->json(['data' => $language], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
+        }
     }
 
     /**
@@ -76,7 +86,7 @@ class LanguageController extends Controller
     
             $language->update($request->all());
         
-            return response()->json(['message' => 'Language updated successfully', 'language' => $language], 200);
+            return response()->json(['message' => 'Language updated successfully', 'data' => $language], 200);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'An error occurred while updating the language'], 500);
         }
