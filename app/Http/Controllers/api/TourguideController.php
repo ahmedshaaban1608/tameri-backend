@@ -7,7 +7,7 @@ use App\Models\Tourguide;
 use App\Models\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
+use  Illuminate\Validation\Rule;
 class TourguideController extends Controller
 {
     /**
@@ -16,12 +16,15 @@ class TourguideController extends Controller
     public function index()
     {
         //
-
+        try {
         $tourguide = Tourguide::all();
-        return $tourguide;
-    }
+        return response()->json(['data' => $tourguide],200);
+        }catch (\Throwable $th) {
+            return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
+        }
 
 
+        }
 
 
     /**
@@ -33,17 +36,16 @@ class TourguideController extends Controller
             'id' => 'required|numeric|unique:tourguides',
             'gender' => 'required|string|in:male,female',
             'birth_date' => 'required|date',
-            'bio' => 'required',
-            'description' => 'required',
-            'profile_img' => 'required',
+            'bio' => 'required|string',
+            'description' => 'required|string',
+            'profile_img' => 'required|string',
             'day_price' => 'required|numeric',
-            'phone' => 'required|digits:12',
+            'phone' => 'required|unique:tourguides|regex:/^\+?\d{7,14}$/',
         ]);
     
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
-    
         try {
             $tourguide = Tourguide::create($request->all());
         } catch (QueryException $exception) {
@@ -55,8 +57,6 @@ class TourguideController extends Controller
     
         return response()->json(['message' => 'Tourguide created successfully', 'tourguide' => $tourguide], 201);
     }
-    
-
 
 
     /**
@@ -65,7 +65,8 @@ class TourguideController extends Controller
     public function show(Tourguide $tourguide)
     {
         //
-        return $tourguide;
+        return response()->json(['data' => $tourguide],200);
+     
     }
 
     /**
@@ -76,11 +77,11 @@ class TourguideController extends Controller
         $validator = Validator::make($request->all(), [
             'gender' => 'required|string|in:male,female',
             'birth_date' => 'required|date',
-            'bio' => 'required',
-            'description' => 'required',
-            'profile_img' => 'required',
+            'bio' => 'required|string',
+            'description' => 'required|string',
+            'profile_img' => 'required|string',
             'day_price' => 'required|numeric',
-            'phone' => 'required|digits:12',
+            'phone' => ['required','regex:/^\+?\d{7,14}$/',Rule::unique('tourguides')->ignore($tourguide)],
         ]);
     
         if ($validator->fails()) {
@@ -105,8 +106,16 @@ class TourguideController extends Controller
      */
     public function destroy(Tourguide $tourguide)
     {
+        try{
         //
         $tourguide->delete();
-        return "Dealeted Succssfully";
+        //return "Dealeted Succssfully";
+        return response()->json([
+            'message' => 'Tourguide deleted successfully.'],200);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'An error occurred while deleting the tourguide'], 500);
+}
     }
 }
+
+

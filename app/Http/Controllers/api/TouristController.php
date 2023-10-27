@@ -30,7 +30,6 @@ class TouristController extends Controller
      */
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'id' => 'required|unique:tourists|numeric',
             'country' => 'required|string',
