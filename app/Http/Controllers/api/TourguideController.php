@@ -48,19 +48,15 @@ class TourguideController extends Controller
             return response()->json(['errors' => $validator->errors()], 400);
         }
         try {
-            $user = User::findOrFail($request->id);
-            if($user['type']!=='tourist'){
-                return response()->json(['message' => 'user is not a tourist.'], 403);
-            }
-        } catch (\Throwable $th) {
-            return response()->json(['message' => 'not valid user id.'], 403);
-        }
-        try {
             $tourguide = Tourguide::create($request->all());
-        } catch (\Throwable $th) {
-            return response()->json(['error' => 'An error occurred while storing the tour guide'], 500);        }
-            
-        return response()->json(['message' => 'Tourguide created successfully', 'data' => $tourguide], 201);
+        } catch (QueryException $exception) {
+            if ($exception->errorInfo[1] === 1062) {
+                return response()->json(['error' => 'Duplicate entry for primary key'], 409);
+            }
+            return response()->json(['error' => 'An error occurred while storing the tourguide'], 500);
+        }
+    
+        return response()->json(['message' => 'Tourguide created successfully', 'tourguide' => $tourguide], 201);
     }
 
 
@@ -96,7 +92,7 @@ class TourguideController extends Controller
         try {
             $tourguide->update($request->all());
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'An error occurred while updating the tour guide'], 500);
+            return response()->json(['error' => 'An error occurred while updating the tourguide'], 500);
         }
         
         return response()->json(['message' => 'Tourguide updated successfully', 'data' => $tourguide], 200);
