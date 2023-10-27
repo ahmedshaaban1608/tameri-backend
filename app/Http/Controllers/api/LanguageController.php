@@ -62,15 +62,24 @@ class LanguageController extends Controller
      */
     public function update(Request $request, Language $language)
     {
-        $vaidator = Validator::make($request->all(),
-        [
-      "tourguide_id"=>"required",
-      "language"=>"required"]);
-      if($vaidator -> fails()){
-      return response( $vaidator->errors()->all(), 422);
-}
-        $language->update($request->all());
-        return $language;
+        $validator = Validator::make($request->all(), [
+            'tourguide_id' => 'required|numeric',
+            'language' => 'required'
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+    
+        try {
+            $tourguide = Tourguide::findOrFail($request->tourguide_id);
+    
+            $language->update($request->all());
+        
+            return response()->json(['message' => 'Language updated successfully', 'language' => $language], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'An error occurred while updating the language'], 500);
+        }
     }
 
     /**
