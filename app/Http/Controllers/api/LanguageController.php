@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Language;
+use App\Models\Tourguide;
 use Illuminate\Http\Request;
 use  Illuminate\Support\Facades\Validator;
 
@@ -30,13 +31,20 @@ class LanguageController extends Controller
         //
         $vaidator = Validator::make($request->all(),
      [
-        "tourguide_id"=>"required",
+        "tourguide_id"=>"required|numeric",
          "language"=>"required"]);
        if($vaidator -> fails()){
        return response( $vaidator->errors()->all(), 422);
 }
-        $language = Language::create($request -> all());
-        return $language;
+ try {
+    $tourguide = Tourguide::findOrFail($request->tourguide_id);
+   
+
+ } catch (\Throwable $th) {
+    return "not valid tourguide id";
+ }
+ $language = Language::create($request->all());
+ return response()->json(['message' => 'Language created successfully', 'language' => $language], 201);
 
     }
 
@@ -72,7 +80,12 @@ class LanguageController extends Controller
     {
         //
 
-        $language->delete();
-        return "Dealeted Succssfully";
+        try {
+            $language->delete();
+            return response("Dealeted Succssfully", 200);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'An error occurred while deleting the language.'], 500);
+        }
+        
     }
 }

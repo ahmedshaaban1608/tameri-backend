@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
+     
         Tourist::factory()->count(50)->create();
         Tourguide::factory()->count(50)->create();
         Area::factory()->count(200)->create();
