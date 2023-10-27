@@ -14,8 +14,12 @@ class AreaController extends Controller
      */
     public function index()
     {
-        $area = Area::all();
-        return $area;
+        try {
+            $areas = Area::all();
+            return response()->json($areas, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred.'], 500);
+        }
     }
 
     /**
@@ -23,15 +27,20 @@ class AreaController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'area' => 'required',
-            'tourguide_id' => 'required'
-        ]);
-        if ($validator->fails()) {
-            return response($validator->errors()->all(), 422);
+        try {
+            $validator = Validator::make($request->all(), [
+                'area' => 'required|string',
+                'tourguide_id' => 'required|numeric'
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+            $area = Area::create($request->all());
+
+            return response()->json(['message' => 'Area created successfully', 'area' => $area], 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while creating the area.'], 500);
         }
-        $area = Area::create($request->all());
-        return $area;
     }
 
     /**
@@ -39,7 +48,11 @@ class AreaController extends Controller
      */
     public function show(Area $area)
     {
-        return $area;
+        try {
+            return response()->json(['area' => $area], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while retrieving the area.'], 500);
+        }
     }
 
     /**
@@ -47,23 +60,38 @@ class AreaController extends Controller
      */
     public function update(Request $request, Area $area)
     {
-        $validator = Validator::make($request->all(), [
-            'area' => 'required',
-            'tourguide_id' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return response($validator->errors()->all(), 422);
+        try {
+            $validator = Validator::make($request->all(), [
+                'area' => 'required|string',
+                'tourguide_id' => 'required|numeric',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+            $area->update($request->all());
+
+            return response()->json(['message' => 'Area updated successfully', 'area' => $area], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while updating the area.'], 500);
         }
-        $area->update($request->all());
-        return $area;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Area $area)
+
+    public function destroy($id)
     {
-        $area->delete();
-        return "deleted";
+        $area = Area::find($id);
+        if (!$area) {
+            return response()->json(['message' => 'Area not found'], 404);
+        }
+        try {
+            $area->delete();
+            return response()->json(['message' => 'Area deleted successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while deleting the area.'], 500);
+        }
     }
+
 }
