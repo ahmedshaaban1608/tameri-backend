@@ -15,9 +15,16 @@ class ReportController extends Controller
     public function index()
     {
         //
-        $report = Report::all();
+        try {
+            $report = Report::all();
+            return response( $report, 200);
 
-        return  $report;
+        } catch (\Exception $e) {
+            return response( "not valid", 500);
+        }
+
+
+
 
     }
 
@@ -27,25 +34,25 @@ class ReportController extends Controller
     public function store(Request $request)
     {
         //
+        try {
+            $validator = Validator::make($request->all(), [
+                'user_id'=> 'required|numeric',
+                'subject' => 'required|string',
+                'problem' => 'required',
+                'image' => 'required',
 
-$validator = Validator::make($request->all(), [
-    'user_id'=> 'required',
-    'subject' => 'required',
-    'problem' => 'required',
-    'image' => 'required',
+            ]);
 
-]);
+            if ($validator->fails()) {
 
-if ($validator->fails()) {
+                return response( $validator->errors()->all(), 422);
+            }
 
-    return response( $validator->errors()->all(), 422);
-}
-
-$report = Report::create($request->all());
-return $report;
+            $report = Report::create($request->all());
+            return response( $report, 200);
 
 
-
+        }catch (\Exception $e) { return response( "not valid", 500);}
 
     }
 
@@ -55,7 +62,14 @@ return $report;
     public function show(Report $report)
     {
         //
-        return $report;
+        try {
+            return response( $report, 200);
+
+        } catch (\Exception $e) {
+            return response( "not valid", 500);
+        }
+
+
     }
 
     /**
@@ -63,8 +77,9 @@ return $report;
      */
     public function update(Request $request, Report $report)
     {
+    try {
         $validator = Validator::make($request->all(), [
-            'subject' => 'required',
+            'subject' => 'required|string',
             'problem' => 'required',
             'image' => 'required',
         ]);
@@ -73,7 +88,9 @@ return $report;
             return response( $validator->errors()->all(), 422);
         }
         $report->update($request->all());
-        return $report;
+        return response( $report, 200);
+
+    }catch (\Exception $e) { return response( "not valid", 500);}
 
 
         //
@@ -85,7 +102,12 @@ return $report;
     public function destroy(Report $report)
     {
         //
-        $report->delete();
-        return "deleted successfully";
+        try {
+            $report->delete();
+            return response("deleted successfully", 200);
+        } catch (\Exception $e) {
+            return response( "not valid", 500);
+        }
+    
     }
 }

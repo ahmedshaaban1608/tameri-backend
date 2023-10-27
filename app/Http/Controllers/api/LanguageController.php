@@ -29,24 +29,24 @@ class LanguageController extends Controller
     public function store(Request $request)
     {
         //
-        $vaidator = Validator::make($request->all(),
-     [
-        "tourguide_id"=>"required|numeric",
-         "language"=>"required"]);
-       if($vaidator -> fails()){
-       return response( $vaidator->errors()->all(), 422);
-}
- try {
-    $tourguide = Tourguide::findOrFail($request->tourguide_id);
-   
-
- } catch (\Throwable $th) {
-    return "not valid tourguide id";
- }
- $language = Language::create($request->all());
- return response()->json(['message' => 'Language created successfully', 'language' => $language], 201);
-
+            $vaidator = Validator::make($request->all(),
+        [
+            "tourguide_id"=>"required|numeric",
+            "language"=>"required"]);
+        if($vaidator -> fails()){
+        return response( $vaidator->errors()->all(), 422);
     }
+    try {
+        $tourguide = Tourguide::findOrFail($request->tourguide_id);
+
+
+    } catch (\Throwable $th) {
+        return "not valid tourguide id";
+    }
+    $language = Language::create($request->all());
+    return response()->json(['message' => 'Language created successfully', 'language' => $language], 201);
+
+        }
 
     /**
      * Display the specified resource.
@@ -72,7 +72,7 @@ class LanguageController extends Controller
         $language->update($request->all());
         return $language;
     }
-    
+
     /**
      * Remove the specified resource from storage.
      */
@@ -86,6 +86,6 @@ class LanguageController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['message' => 'An error occurred while deleting the language.'], 500);
         }
-        
+
     }
 }

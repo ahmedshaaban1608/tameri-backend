@@ -15,9 +15,16 @@ class ReviewController extends Controller
     public function index()
     {
         //
-        $review = Review::all();
+        try {
+            $review = Review::all();
+            return response( $review, 200);
 
-        return  $review;
+        } catch (\Exception $e) {
+            return response( "not valid", 500);
+        }
+
+
+
     }
 
     /**
@@ -26,23 +33,26 @@ class ReviewController extends Controller
     public function store(Request $request)
     {
         //
+        try {
+                $validator = Validator::make($request->all(), [
+                    'tourist_id'=> 'required|numeric',
+                    'tourguide_id'=> 'required|numeric',
+                    'title' => 'required',
+                    'comment' => 'required|string',
+                    'stars' => 'required',
 
-$validator = Validator::make($request->all(), [
-    'tourist_id'=> 'required',
-    'tourguide_id'=> 'required',
-    'title' => 'required',
-    'comment' => 'required',
-    'stars' => 'required',
+                ]);
 
-]);
+                if ($validator->fails()) {
 
-if ($validator->fails()) {
+                    return response( $validator->errors()->all(), 422);
+                }
 
-    return response( $validator->errors()->all(), 422);
-}
 
-$review = Review::create($request->all());
-return $review;
+                    $review = Review::create($request->all());
+                    return response( $review, 200);
+            }catch (\Exception $e) { return response( "not valid", 500);}
+
 
 
 
@@ -55,7 +65,13 @@ return $review;
     public function show(Review $review)
     {
         //
-        return $review;
+        try {
+            return response( $review, 200);
+
+        } catch (\Exception $e) {
+            return response( "not valid", 500);
+        }
+
     }
 
     /**
@@ -64,23 +80,28 @@ return $review;
     public function update(Request $request, Review $review)
     {
         //
+        try {
+            $validator = Validator::make($request->all(), [
+                'tourist_id'=> 'required|numeric',
+                'tourguide_id'=> 'required|numeric',
+                'title' => 'required',
+                'comment' => 'required|string',
+                'stars' => "required|in:'1','2', '3', '4', '5'",
+                'status' => "required|in:'pending', 'confirmed','declined'"
 
-$validator = Validator::make($request->all(), [
-    'tourist_id'=> 'required',
-    'tourguide_id'=> 'required',
-    'title' => 'required',
-    'comment' => 'required',
-    'stars' => 'required',
-    'status' => 'required'
+            ]);
 
-]);
+            if ($validator->fails()) {
 
-if ($validator->fails()) {
+                return response( $validator->errors()->all(), 422);
+            }
 
-    return response( $validator->errors()->all(), 422);
-}
-$review->update($request->all());
-return $review;
+            $review->update($request->all());
+            return response( $review, 200);
+    }catch (\Exception $e) { return response( "not valid", 500);}
+
+
+
     }
 
     /**
@@ -89,7 +110,13 @@ return $review;
     public function destroy(Review $review)
     {
         //
-        $review->delete();
-        return "deleted successfully";
+
+        try {
+            $review->delete();
+            return response("deleted successfully", 200);
+        } catch (\Exception $e) {
+            return response( "not valid", 500);
+        }
+
     }
 }
