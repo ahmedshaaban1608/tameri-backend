@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Report;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,9 +16,16 @@ class ReportController extends Controller
     public function index()
     {
         //
-        $report = Report::all();
+        try {
+            $report = Report::all();
+            return response( ['data'=>$report], 200);
 
-        return  $report;
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
+        }
+
+
+
 
     }
 
@@ -27,25 +35,35 @@ class ReportController extends Controller
     public function store(Request $request)
     {
         //
+     
+            $validator = Validator::make($request->all(), [
+                'user_id'=> 'required|numeric',
+                'subject' => 'required|string',
+                'problem' => 'required|string',
+                'image' => 'required|string',
 
-$validator = Validator::make($request->all(), [
-    'user_id'=> 'required',
-    'subject' => 'required',
-    'problem' => 'required',
-    'image' => 'required',
+            ]);
 
-]);
+            if ($validator->fails()) {
 
-if ($validator->fails()) {
+                return response( $validator->errors()->all(), 422);
+            }
+            try {
+                $user = User::findOrFail($request->user_id);
+                if($user['type']!=='tourist'){
+                    return response()->json(['message' => 'user is not a tourist.'], 403);
+                }
+            } catch (\Throwable $th) {
+                return response()->json(['message' => 'not valid user id.'], 403);
+            }
+            try {
+            $report = Report::create($request->all());
+            return response( ['data'=>$report], 200);
 
-    return response( $validator->errors()->all(), 422);
-}
 
-$report = Report::create($request->all());
-return $report;
-
-
-
+        }catch (\Exception $e) { 
+            return response()->json(['message' => 'An error occurred while creating the report'], 500);
+        }
 
     }
 
@@ -55,7 +73,15 @@ return $report;
     public function show(Report $report)
     {
         //
-        return $report;
+        try {
+            return response( ['data'=>$report], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
+        
+        }
+
+
     }
 
     /**
@@ -63,17 +89,31 @@ return $report;
      */
     public function update(Request $request, Report $report)
     {
+  
         $validator = Validator::make($request->all(), [
-            'subject' => 'required',
-            'problem' => 'required',
-            'image' => 'required',
+            'subject' => 'required|string',
+            'problem' => 'required|string',
+            'image' => 'required|string',
         ]);
 
         if ($validator->fails()) {
             return response( $validator->errors()->all(), 422);
         }
+        try {
+            $user = User::findOrFail($request->user_id);
+            if($user['type']!=='tourist'){
+                return response()->json(['message' => 'user is not a tourist.'], 403);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'not valid user id.'], 403);
+        }
+        try {
         $report->update($request->all());
-        return $report;
+        return response( $report, 200);
+
+    }catch (\Exception $e) {
+        return response()->json(['message' => 'An error occurred while updating the report'], 500);
+    }
 
 
         //
@@ -85,7 +125,12 @@ return $report;
     public function destroy(Report $report)
     {
         //
-        $report->delete();
-        return "deleted successfully";
+        try {
+            $report->delete();
+            return response("deleted successfully", 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while deleting the report'], 500);
+        }
+    
     }
 }
