@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Area;
+use App\Models\Tourguide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -30,11 +31,16 @@ class AreaController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'area' => 'required|string',
-                'tourguide_id' => 'required|numeric'
+                'tourguide_id' => 'required|numeric',
             ]);
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
             }
+            $tourguide = Tourguide::findOrFail($request->tourguide_id);
+            if (!$tourguide) {
+                return response()->json(['message' => 'Tourguide Id not found'], 404);
+            }
+
             $area = Area::create($request->all());
 
             return response()->json(['message' => 'Area created successfully', 'area' => $area], 201);
@@ -42,6 +48,8 @@ class AreaController extends Controller
             return response()->json(['message' => 'An error occurred while creating the area.'], 500);
         }
     }
+
+
 
     /**
      * Display the specified resource.
@@ -68,6 +76,11 @@ class AreaController extends Controller
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
             }
+            $tourguide = Tourguide::findOrFail($request->tourguide_id);
+            if (!$tourguide) {
+                return response()->json(['message' => 'Tourguide Id not found'], 404);
+            }
+
             $area->update($request->all());
 
             return response()->json(['message' => 'Area updated successfully', 'area' => $area], 200);
@@ -80,12 +93,8 @@ class AreaController extends Controller
      * Remove the specified resource from storage.
      */
 
-    public function destroy($id)
+    public function destroy(Area $area)
     {
-        $area = Area::find($id);
-        if (!$area) {
-            return response()->json(['message' => 'Area not found'], 404);
-        }
         try {
             $area->delete();
             return response()->json(['message' => 'Area deleted successfully'], 200);

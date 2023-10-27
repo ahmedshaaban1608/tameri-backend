@@ -4,6 +4,8 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Tourguide;
+use App\Models\Tourist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -34,16 +36,24 @@ class OrderController extends Controller
                 'tourist_id' => 'required|numeric',
                 'tourguide_id' => 'required|numeric',
                 'comment' => 'required|string',
-                'phone' => 'required',
-                // 'phone' => 'required|numeric|digits_between:10,12',
+                // 'phone' => 'required',
+                'phone' => 'required|numeric|digits_between:7,14',
                 'from' => 'required|date',
                 'to' => 'required|date',
                 'total' => 'required|numeric',
                 'city' => 'required|string',
             ]);
-
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            $tourguide = Tourguide::findOrFail($request->tourguide_id);
+            if (!$tourguide) {
+                return response()->json(['message' => 'Tourguide Id not found'], 404);
+            }
+            $tourist = Tourist::findOrFail($request->tourist_id);
+            if (!$tourist) {
+                return response()->json(['message' => 'Tourist Id not found'], 404);
             }
 
             $order = Order::create($request->all());
@@ -60,7 +70,7 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         try {
-            return response()->json(['area' => $order], 200);
+            return response()->json(['order' => $order], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the order.'], 500);
         }
@@ -76,8 +86,8 @@ class OrderController extends Controller
                 'tourist_id' => 'required|numeric',
                 'tourguide_id' => 'required|numeric',
                 'comment' => 'required|string',
-                'phone' => 'required',
-                // 'phone' => 'required|numeric|digits_between:10,12',
+                // 'phone' => 'required',
+                'phone' => 'required|numeric|digits_between:7,14',
                 'from' => 'required|date',
                 'to' => 'required|date',
                 'total' => 'required|numeric',
@@ -86,6 +96,15 @@ class OrderController extends Controller
 
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            $tourguide = Tourguide::findOrFail($request->tourguide_id);
+            if (!$tourguide) {
+                return response()->json(['message' => 'Tourguide Id not found'], 404);
+            }
+            $tourist = Tourist::findOrFail($request->tourist_id);
+            if (!$tourist) {
+                return response()->json(['message' => 'Tourist Id not found'], 404);
             }
 
             $order->update($request->all());
@@ -100,12 +119,8 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Order $order)
     {
-        $order = Order::find($id);
-        if (!$order) {
-            return response()->json(['message' => 'Order not found'], 404);
-        }
         try {
             $order->delete();
             return response()->json(['message' => 'Order deleted successfully'], 200);
