@@ -15,8 +15,12 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $order = Order::all();
-        return $order;
+        try {
+            $orders = Order::all();
+            return response()->json($orders, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred.'], 500);
+        }
 
     }
 
@@ -25,22 +29,29 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'tourist_id' => 'required',
-            'tourguide_id' => 'required',
-            'comment' => 'required',
-            'phone' => 'required',
-            'from' => 'required',
-            'to' => 'required',
-            'total' => 'required',
-            'city' => 'required',
+        try {
+            $validator = Validator::make($request->all(), [
+                'tourist_id' => 'required|numeric',
+                'tourguide_id' => 'required|numeric',
+                'comment' => 'required|string',
+                'phone' => 'required',
+                // 'phone' => 'required|numeric|digits_between:10,12',
+                'from' => 'required|date',
+                'to' => 'required|date',
+                'total' => 'required|numeric',
+                'city' => 'required|string',
+            ]);
 
-        ]);
-        if ($validator->fails()) {
-            return response($validator->errors()->all(), 422);
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            $order = Order::create($request->all());
+
+            return response()->json(['order' => $order], 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while creating the order.'], 500);
         }
-        $order = Order::create($request->all());
-        return $order;
     }
 
     /**
@@ -48,7 +59,11 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        return $order;
+        try {
+            return response()->json(['area' => $order], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while retrieving the order.'], 500);
+        }
     }
 
     /**
@@ -56,32 +71,46 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        $validator = Validator::make($request->all(), [
-            'tourist_id' => 'required',
-            'tourguide_id' => 'required',
-            'comment' => 'required',
-            'phone' => 'required',
-            'from' => 'required',
-            'to' => 'required',
-            'total' => 'required',
-            'city' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return response($validator->errors()->all(), 422);
+        try {
+            $validator = Validator::make($request->all(), [
+                'tourist_id' => 'required|numeric',
+                'tourguide_id' => 'required|numeric',
+                'comment' => 'required|string',
+                'phone' => 'required',
+                // 'phone' => 'required|numeric|digits_between:10,12',
+                'from' => 'required|date',
+                'to' => 'required|date',
+                'total' => 'required|numeric',
+                'city' => 'required|string',
+            ]);
 
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            $order->update($request->all());
+
+            return response()->json(['message' => 'Order updated successfully', 'order' => $order], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while updating the order.'], 500);
         }
-        $order->update($request->all());
-        return $order;
 
     }
-
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Order $order)
+    public function destroy($id)
     {
-        $order->delete();
-        return "deleted";
+        $order = Order::find($id);
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
+        try {
+            $order->delete();
+            return response()->json(['message' => 'Order deleted successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while deleting the order.'], 500);
+        }
     }
 }
