@@ -71,11 +71,15 @@ class LanguageController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
     
-        $tourguide = Tourguide::findOrFail($request->tourguide_id);
+        try {
+            $tourguide = Tourguide::findOrFail($request->tourguide_id);
     
-        $language->update($request->all());
-    
-        return response()->json(['message' => 'Language updated successfully', 'language' => $language], 200);
+            $language->update($request->all());
+        
+            return response()->json(['message' => 'Language updated successfully', 'language' => $language], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'An error occurred while updating the language'], 500);
+        }
     }
     
     /**
