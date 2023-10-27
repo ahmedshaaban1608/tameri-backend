@@ -14,59 +14,48 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        {
+    public function index(){
+        try {
             $users = User::all();
-    
-            return response()->json([
-                'data' => $users,
-            ]);
-        }
-        }
+            return response()->json(['data' => $users],200);
+         } catch (\Throwable $th) {
+            return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
+        }       
+    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-       
-        
-$validator = Validator::make($request->all(), [
-    'name' => 'required',
-    'email' => 'required|email|unique:users',
-    'password' => 'required|min:6',
-    'type' => 'required|string',
-]);
-
-if ($validator->fails()) {
-    return response()->json([
-        'errors' => $validator->errors(),
+    public function store(Request $request){
+              
+        $validator = Validator::make($request->all(), [
+        'name' => 'required|string',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|min:6',
+        'type' => 'required|string|in:tourist,hotel,tourguide,admin',
     ]);
-}
 
-// Create a new user
-$user = User::create([
-    'name' => $request->name,
-    'email' => $request->email,
-    'password' => Hash::make($request->password),
-    'type' => $request->type,
-]);
-
-// Return the user
-return response()->json([
-    'data' => $user,
-]);
-}
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ]);
+        }
+        try {
+            // Create a new user
+        $user = User::create($request->all());
+        // Return the user
+            return response()->json(['data' => $user],200);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'An error occurred while creating the user'], 500);
+        }
+    }
 
     /**
      * Display the specified resource.
      */
     public function show(User $user)
     {
-        return response()->json([
-            'data' => $user,
-        ]);
+        return response()->json(['data' => $user],200);
     }
 
     /**
@@ -77,9 +66,10 @@ return response()->json([
         //
          // Validate the request data
          $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'name' => 'required|string',
+            'email' => ['required','email',Rule::unique('users')->ignore($user)],
             'password' => 'required|min:6',
+            'type' => 'required|string|in:tourist,hotel,tourguide,admin',
         ]);
 
         if ($validator->fails()) {
@@ -88,17 +78,14 @@ return response()->json([
             ]);
         }
 
-        // Update the user
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        // Return the user
-        return response()->json([
-            'data' => $user,
-        ]);
+       try {
+         // Update the user
+         $user->update($request->all());
+         // Return the user
+         return response()->json(['data' => $user],200);
+       } catch (\Throwable $th) {
+        return response()->json(['message' => 'An error occurred while updating the user'], 500);
+       }
     }
 
     /**
@@ -106,13 +93,14 @@ return response()->json([
      */
     public function destroy(User $user)
     {
-        // Delete the user
-        $user->delete();
-
-        // Return a success message
-        return response()->json([
-            'message' => 'User deleted successfully.',
-        ]);
+       try {
+         // Delete the user
+         $user->delete();
+         // Return a success message
+         return response()->json(['message' => 'User is deleted successfully.']);
+       } catch (\Throwable $th) {
+        return response()->json(['message' => 'An error occurred while deleting the user'], 500);
+       }
     
     }
 }
