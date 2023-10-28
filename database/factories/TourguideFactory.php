@@ -24,6 +24,7 @@ class TourguideFactory extends Factory
         $user = User::factory()->state(['type' => 'tourguide'])->create();
         return [
             'id' => $user->id,
+            'name' => $this->faker->name(),
             'gender' => $this->faker->randomElement(['male', 'female']),
             'birth_date' => $this->faker->date,
             'bio'=> $this->faker->words(3, true),

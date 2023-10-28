@@ -29,16 +29,16 @@ class Tourguide extends Model
         return $this->belongsTo(User::class);
     }
 
-    function language(){
+    function languages(){
         return $this->hasMany(Language::class);
     }
-    function area(){
+    function areas(){
         return $this->hasMany(Area::class);
     }
-    function review(){
+    function reviews(){
         return $this->hasMany(Review::class);
     }
-    function order(){
+    function orders(){
         return $this->hasMany(Order::class);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ReportResource;
 use App\Models\Report;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,8 +18,8 @@ class ReportController extends Controller
     {
         //
         try {
-            $report = Report::all();
-            return response( ['data'=>$report], 200);
+            $report = ReportResource::collection(Report::all());
+            return response()->json( ['data'=>$report], 200);
 
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
@@ -58,7 +59,7 @@ class ReportController extends Controller
             }
             try {
             $report = Report::create($request->all());
-            return response( ['data'=>$report], 200);
+            return response()->json( ['message' => 'Report Created successfully','data'=>new ReportResource($report)], 200);
 
 
         }catch (\Exception $e) { 
@@ -74,7 +75,7 @@ class ReportController extends Controller
     {
         //
         try {
-            return response( ['data'=>$report], 200);
+            return response()->json( new ReportResource($report), 200);
 
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
@@ -109,7 +110,7 @@ class ReportController extends Controller
         }
         try {
         $report->update($request->all());
-        return response( $report, 200);
+        return response()->json(['message' => 'Report updated successfully', 'data' => new ReportResource($report)], 200);
 
     }catch (\Exception $e) {
         return response()->json(['message' => 'An error occurred while updating the report'], 500);
@@ -127,7 +128,7 @@ class ReportController extends Controller
         //
         try {
             $report->delete();
-            return response("deleted successfully", 200);
+            return response()->json("deleted successfully", 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while deleting the report'], 500);
         }

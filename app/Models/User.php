@@ -55,7 +55,7 @@ class User extends Authenticatable
         return $this->hasOne(Tourguide::class);
     }
 
-    function report(){
+    function reports(){
         return $this->hasMany(Report::class);
     }
 }

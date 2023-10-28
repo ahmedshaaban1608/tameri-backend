@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('tourguides', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->primary();
+            $table->string('name');
             $table->enum('gender', ['male', 'female']);
             $table->date("birth_date");
             $table->string("bio");

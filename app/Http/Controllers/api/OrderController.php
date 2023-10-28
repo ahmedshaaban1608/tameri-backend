@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Tourguide;
 use App\Models\Tourist;
@@ -18,7 +19,7 @@ class OrderController extends Controller
     public function index()
     {
         try {
-            $orders = Order::all();
+            $orders = OrderResource::collection(Order::all());
             return response()->json(['data'=>$orders], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
@@ -58,7 +59,7 @@ class OrderController extends Controller
 
             $order = Order::create($request->all());
 
-            return response()->json(['data' => $order], 201);
+            return response()->json(['message'=>'Order created successfully','data' => new OrderResource($order)], 201);
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while creating the order.'], 500);
         }
@@ -70,7 +71,7 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         try {
-            return response()->json(['data' => $order], 200);
+            return response()->json(new OrderResource($order), 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the order.'], 500);
         }
@@ -109,7 +110,7 @@ class OrderController extends Controller
 
             $order->update($request->all());
 
-            return response()->json(['message' => 'Order updated successfully', 'data' => $order], 200);
+            return response()->json(['message' => 'Order updated successfully', 'data' => new OrderResource($order)], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while updating the order.'], 500);
         }

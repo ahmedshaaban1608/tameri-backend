@@ -14,6 +14,13 @@ class ReportResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            "id"=> $this->id,
+            "user_id"=> $this->user_id,
+            "subject"=> $this->subject,
+            "problem"=> $this->problem,
+            "image"=> $this->image? $this->image : null,
+            "date"=> $this->created_at
+        ];
     }
 }

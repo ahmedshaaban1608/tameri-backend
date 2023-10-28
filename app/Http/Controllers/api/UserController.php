@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\api;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 
 use App\Http\Controllers\Controller;
@@ -16,7 +17,7 @@ class UserController extends Controller
      */
     public function index(){
         try {
-            $users = User::all();
+            $users = UserResource::collection(User::all());
             return response()->json(['data' => $users],200);
          } catch (\Throwable $th) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
@@ -44,7 +45,7 @@ class UserController extends Controller
             // Create a new user
         $user = User::create($request->all());
         // Return the user
-            return response()->json(['data' => $user],200);
+            return response()->json(['data' => new UserResource($user)],200);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'An error occurred while creating the user'], 500);
         }
@@ -55,7 +56,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return response()->json(['data' => $user],200);
+        return response()->json(new UserResource($user),200);
     }
 
     /**
@@ -82,7 +83,7 @@ class UserController extends Controller
          // Update the user
          $user->update($request->all());
          // Return the user
-         return response()->json(['data' => $user],200);
+         return response()->json(["message"=>"user updated successfully",'data' => new UserResource($user)],200);
        } catch (\Throwable $th) {
         return response()->json(['message' => 'An error occurred while updating the user'], 500);
        }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ReviewResource;
 use App\Models\Review;
 use App\Models\Tourguide;
 use App\Models\Tourist;
@@ -18,8 +19,8 @@ class ReviewController extends Controller
     {
         //
         try {
-            $review = Review::all();
-            return response( ['data'=>$review], 200);
+            $review = ReviewResource::collection(Review::all());
+            return response()->json(['data'=>$review], 200);
 
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
@@ -54,7 +55,7 @@ class ReviewController extends Controller
                     $tourguide = Tourguide::findOrFail($request->tourguide_id);
                     $tourist = Tourist::findOrFail($request->tourist_id);
                     $review = Review::create($request->all());
-                    return response( ['data'=>$review], 200);
+                    return response()->json( ["message"=>"Review created successfully",'data'=>new ReviewResource($review)], 200);
             }catch (\Exception $e) { 
                 return response()->json(['message' => 'An error occurred while creating the review'], 500);
             }
@@ -67,7 +68,7 @@ class ReviewController extends Controller
     {
         //
         try {
-            return response( ['data'=>$review], 200);
+            return response()->json(new ReviewResource($review), 200);
 
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
@@ -87,8 +88,8 @@ class ReviewController extends Controller
                 'tourguide_id'=> 'required|numeric',
                 'title' => 'required',
                 'comment' => 'required|string',
-                'stars' => "required|in:'1','2', '3', '4', '5'",
-                'status' => "required|in:'pending', 'confirmed','declined'"
+                'stars' => "required|in:1,2, 3, 4, 5",
+                'status' => "required|in:pending,confirmed,declined"
 
             ]);
 
@@ -100,7 +101,7 @@ class ReviewController extends Controller
                 $tourguide = Tourguide::findOrFail($request->tourguide_id);
                 $tourist = Tourist::findOrFail($request->tourist_id);
             $review->update($request->all());
-            return response( ['data'=>$review], 200);
+            return response()->json(["message"=>"Review updated successfully",'data'=>new ReviewResource($review)], 200);
     }catch (\Exception $e) { 
         return response()->json(['message' => 'An error occurred while updating the review'], 500);
     }
@@ -118,7 +119,7 @@ class ReviewController extends Controller
 
         try {
             $review->delete();
-            return response("deleted successfully", 200);
+            return response()->json("deleted successfully", 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while deleting the review'], 500);
         }

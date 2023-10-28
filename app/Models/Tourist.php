@@ -19,11 +19,11 @@ class Tourist extends Model
     {
         return $this->belongsTo(User::class);
     }
-    function review()
+    function reviews()
     {
         return $this->hasMany(Review::class);
     }
-    function order()
+    function orders()
     {
         return $this->hasMany(Order::class);
     }

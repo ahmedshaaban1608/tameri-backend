@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\LanguageResource;
 use App\Models\Language;
 use App\Models\Tourguide;
 use Illuminate\Http\Request;
@@ -19,8 +20,8 @@ class LanguageController extends Controller
         
         
         try {
-            $languages  = Language::all();
-            return response( ['data'=>$languages], 200);
+            $languages  = LanguageResource::collection(Language::all());
+            return response()->json(['data'=>$languages], 200);
 
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
@@ -50,7 +51,7 @@ class LanguageController extends Controller
         return "not valid tourguide id";
     }
     $language = Language::create($request->all());
-    return response()->json(['message' => 'Language created successfully', 'data' => $language], 201);
+    return response()->json(['message' => 'Language created successfully', 'data' => new LanguageResource($language)], 201);
 
         }
 
@@ -61,7 +62,7 @@ class LanguageController extends Controller
     {
         
         try {
-            return response()->json(['data' => $language], 200);
+            return response()->json(new LanguageResource($language), 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
         }
@@ -86,7 +87,7 @@ class LanguageController extends Controller
     
             $language->update($request->all());
         
-            return response()->json(['message' => 'Language updated successfully', 'data' => $language], 200);
+            return response()->json(['message' => 'Language updated successfully', 'data' => new LanguageResource($language)], 200);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'An error occurred while updating the language'], 500);
         }
@@ -101,7 +102,7 @@ class LanguageController extends Controller
 
         try {
             $language->delete();
-            return response("Dealeted Succssfully", 200);
+            return response()->json("Dealeted Succssfully", 200);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'An error occurred while deleting the language.'], 500);
         }

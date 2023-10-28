@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AreaResource;
 use App\Models\Area;
 use App\Models\Tourguide;
 use Illuminate\Http\Request;
@@ -17,8 +18,8 @@ class AreaController extends Controller
     {
            //
            try {
-            $areas = Area::all();
-            return response( ['data'=>$areas], 200);
+            $areas = AreaResource::collection(Area::all());
+            return response()->json(['data'=>$areas], 200);
 
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
@@ -47,7 +48,7 @@ class AreaController extends Controller
 
             $area = Area::create($request->all());
 
-            return response()->json(['message' => 'Area created successfully', 'data' => $area], 201);
+            return response()->json(['message' => 'Area created successfully', 'data' => new AreaResource($area)], 201);
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while creating the area.'], 500);
         }
@@ -61,7 +62,7 @@ class AreaController extends Controller
     public function show(Area $area)
     {
         try {
-            return response()->json(['data' => $area], 200);
+            return response()->json(new AreaResource($area), 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the area.'], 500);
         }
@@ -88,7 +89,7 @@ class AreaController extends Controller
 
             $area->update($request->all());
 
-            return response()->json(['message' => 'Area updated successfully', 'data' => $area], 200);
+            return response()->json(['message' => 'Area updated successfully', 'data' => new AreaResource($area)], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while updating the area.'], 500);
         }

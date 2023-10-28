@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TourguideDataResource;
+use App\Http\Resources\TourguideResource;
 use App\Models\Tourguide;
-use App\Models\Language;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use  Illuminate\Validation\Rule;
@@ -18,7 +18,7 @@ class TourguideController extends Controller
     {
         //
         try {
-        $tourguide = Tourguide::all();
+        $tourguide = TourguideResource::collection(Tourguide::all());
         return response()->json(['data' => $tourguide],200);
         }catch (\Throwable $th) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
@@ -54,7 +54,7 @@ class TourguideController extends Controller
             return response()->json(['error' => 'An error occurred while storing the tourguide'], 500);
         }
     
-        return response()->json(['message' => 'Tourguide created successfully', 'tourguide' => $tourguide], 201);
+        return response()->json(['message' => 'Tourguide created successfully', 'tourguide' => new TourguideResource($tourguide)], 201);
     }
 
 
@@ -64,7 +64,7 @@ class TourguideController extends Controller
     public function show(Tourguide $tourguide)
     {
         //
-        return response()->json(['data' => $tourguide],200);
+        return response()->json(new TourguideDataResource($tourguide),200);
      
     }
 
@@ -93,7 +93,7 @@ class TourguideController extends Controller
             return response()->json(['error' => 'An error occurred while updating the tourguide'], 500);
         }
         
-        return response()->json(['message' => 'Tourguide updated successfully', 'data' => $tourguide], 200);
+        return response()->json(['message' => 'Tourguide updated successfully', 'data' => new TourguideResource($tourguide)], 200);
     }
     
 

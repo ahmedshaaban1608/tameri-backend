@@ -24,6 +24,7 @@ class TouristFactory extends Factory
 
         return [
             'id' => $user->id,
+            'name' => $this->faker->name(),
             'country' => $this->faker->country,
             'gender' => $this->faker->randomElement(['male', 'female']),
             'avatar'=> $this->faker->imageUrl(),
