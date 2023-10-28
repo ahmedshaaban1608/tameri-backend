@@ -20,6 +20,7 @@ class UserFactory extends Factory
     {
         return [
             'type' =>$this->faker->randomElement(['tourist', 'tourguide']),
+            'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'password' => bcrypt('123456'), // password
         ];

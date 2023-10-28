@@ -16,6 +16,7 @@ class TourguideResource extends JsonResource
     {
         return [
             "id"=> $this->id,
+            "name"=> $this->name,
             "gender"=> $this->gender,
             "birth_date"=> $this->birth_date,
             "bio"=> $this->bio,
