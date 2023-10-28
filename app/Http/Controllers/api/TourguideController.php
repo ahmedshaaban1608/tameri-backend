@@ -49,10 +49,8 @@ class TourguideController extends Controller
         }
         try {
             $tourguide = Tourguide::create($request->all());
-        } catch (QueryException $exception) {
-            if ($exception->errorInfo[1] === 1062) {
-                return response()->json(['error' => 'Duplicate entry for primary key'], 409);
-            }
+        } catch (\Exception $exception) {
+    
             return response()->json(['error' => 'An error occurred while storing the tourguide'], 500);
         }
     
