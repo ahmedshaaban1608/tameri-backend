@@ -12,8 +12,19 @@ class TourguideResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+
+
+     public function getStars($reviews){
+        $stars = [];
+        foreach ($reviews as $key => $value) {
+          array_push($stars, $value['stars']);
+        }
+        return $stars;
+     }
     public function toArray(Request $request): array
     {
+        $reviews = ReviewResource::collection($this->reviews);
+        
         return [
             "id"=> $this->id,
             "name"=> $this->user->name,
@@ -27,6 +38,8 @@ class TourguideResource extends JsonResource
             "profile_img"=>$this->profile_img ? $this->profile_img : null,
             "day_price"=>$this->day_price ? $this->day_price : 0,
             "phone"=>$this->phone,
+            "languages"=> LanguageResource::collection($this->languages),
+            "reviews" => $this->getStars($reviews)
         ];
     }
 }

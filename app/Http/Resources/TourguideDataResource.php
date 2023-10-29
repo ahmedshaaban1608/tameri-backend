@@ -28,7 +28,7 @@ class TourguideDataResource extends JsonResource
             "day_price"=>$this->day_price ? $this->day_price : 0,
             "phone"=>$this->phone,
             "areas"=> AreaResource::collection($this->areas),
-            "language"=> LanguageResource::collection($this->languages),
+            "languages"=> LanguageResource::collection($this->languages),
             "reviews"=> ReviewResource::collection($this->reviews),
             "orders"=> OrderResource::collection($this->orders),
         ];
