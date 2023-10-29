@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Http\Resources\TouristDataResource;
 use App\Http\Resources\TouristResource;
 use App\Models\User;
 use  Illuminate\Validation\Rule;
@@ -55,7 +56,7 @@ class TouristController extends Controller
       try {
         $tourist = Tourist::create($request->all());
 
-        return response()->json(['data' => new TouristResource($tourist)], 200);
+        return response()->json(['data' => new TouristDataResource($tourist)], 200);
       } catch (\Throwable $th) {
         return response()->json(['message' => 'An error occurred while creating the tourist'], 500);
       }
@@ -68,7 +69,7 @@ class TouristController extends Controller
     {
 
         // Return the tourist
-        return response()->json(new TouristResource($tourist),200);
+        return response()->json(new TouristDataResource($tourist),200);
     }
 
     /**
@@ -95,7 +96,7 @@ class TouristController extends Controller
            $tourist->update($request->all());
 
            // Return the tourist
-           return response()->json(['data' => new TouristResource($tourist)],200);
+           return response()->json(['data' => new TouristDataResource($tourist)],200);
     } catch (\Throwable $th) {
         return response()->json(['message' => 'An error occurred while updating the tourist'], 500);
     }

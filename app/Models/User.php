@@ -48,11 +48,11 @@ class User extends Authenticatable
     ];
 
     function tourist(){
-        return $this->hasOne(Tourist::class);
+        return $this->hasOne(Tourist::class,'id');
     }
 
     function tourguide(){
-        return $this->hasOne(Tourguide::class);
+        return $this->hasOne(Tourguide::class, 'id');
     }
 
     function reports(){

@@ -14,6 +14,18 @@ class TouristDataResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            "id"=> $this->id,
+            "name"=> $this->user->name,
+            "type"=> $this->user->type,
+            "email"=> $this->user->email,
+            "country"=> $this->country,
+            "gender"=> $this->gender,
+            "avatar"=> $this->avatar ? $this->avatar : null,
+            "phone"=> $this->phone,
+            "reviews"=> ReviewResource::collection($this->reviews),
+            "orders"=> OrderResource::collection($this->orders),
+
+        ];
     }
 }

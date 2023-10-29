@@ -16,7 +16,9 @@ class TourguideDataResource extends JsonResource
     {
         return [
             "id"=> $this->id,
-            "name"=> $this->name,
+            "name"=> $this->user->name,
+            "type"=> $this->user->type,
+            "email"=> $this->user->email,
             "gender"=> $this->gender,
             "birth_date"=> $this->birth_date,
             "bio"=> $this->bio,
@@ -28,6 +30,7 @@ class TourguideDataResource extends JsonResource
             "areas"=> AreaResource::collection($this->areas),
             "language"=> LanguageResource::collection($this->languages),
             "reviews"=> ReviewResource::collection($this->reviews),
+            "orders"=> OrderResource::collection($this->orders),
         ];
     }
 }

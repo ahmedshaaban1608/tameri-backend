@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,9 +18,9 @@ class OrderResource extends JsonResource
         return [
             "id"=> $this->id,
             "tourist_id"=> $this->tourist_id,
-            "tourist_name"=> $this->tourist->name,
+            "tourist_name" => User::find($this->tourist_id)->name,
             "tourguide_id"=> $this->tourguide_id,
-            "tourguide_name"=> $this->tourguide->name,
+            "tourguide_name" => User::find($this->tourguide_id)->name,
             "status"=> $this->status,
             "comment"=> $this->comment,
             "phone"=> $this->phone,

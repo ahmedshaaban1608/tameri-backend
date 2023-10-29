@@ -17,7 +17,7 @@ class Tourist extends Model
     // public $incrementing = false;
     function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'id');
     }
     function reviews()
     {

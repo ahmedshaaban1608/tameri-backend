@@ -16,6 +16,9 @@ class TouristResource extends JsonResource
     {
         return [
             "id"=> $this->id,
+            "name"=> $this->user->name,
+            "type"=> $this->user->type,
+            "email"=> $this->user->email,
             "country"=> $this->country,
             "gender"=> $this->gender,
             "avatar"=> $this->avatar ? $this->avatar : null,

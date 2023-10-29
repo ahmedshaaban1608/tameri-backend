@@ -54,7 +54,7 @@ class TourguideController extends Controller
             return response()->json(['error' => 'An error occurred while storing the tourguide'], 500);
         }
     
-        return response()->json(['message' => 'Tourguide created successfully', 'tourguide' => new TourguideResource($tourguide)], 201);
+        return response()->json(['message' => 'Tourguide created successfully', 'tourguide' => new TourguideDataResource($tourguide)], 201);
     }
 
 
@@ -93,7 +93,7 @@ class TourguideController extends Controller
             return response()->json(['error' => 'An error occurred while updating the tourguide'], 500);
         }
         
-        return response()->json(['message' => 'Tourguide updated successfully', 'data' => new TourguideResource($tourguide)], 200);
+        return response()->json(['message' => 'Tourguide updated successfully', 'data' => new TourguideDataResource($tourguide)], 200);
     }
     
 
