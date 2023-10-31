@@ -14,13 +14,17 @@ class TourguideResource extends JsonResource
      */
 
 
-     public function getStars($reviews){
-        $stars = [];
-        foreach ($reviews as $key => $value) {
-          array_push($stars, $value['stars']);
+     public function getAvgStars($reviews){
+        $stars = 0;
+        $avg = 0;
+        foreach ($reviews as $value) {
+            if (isset($value['stars'])) {
+                $stars += $value['stars'];
+                $avg = $stars/count($reviews);
+            }
         }
-        return $stars;
-     }
+        return ['avg'=>$avg];
+    }
     public function toArray(Request $request): array
     {
         $reviews = ReviewResource::collection($this->reviews);
@@ -39,7 +43,7 @@ class TourguideResource extends JsonResource
             "day_price"=>$this->day_price ? $this->day_price : 0,
             "phone"=>$this->phone,
             "languages"=> LanguageResource::collection($this->languages),
-            "reviews" => $this->getStars($reviews)
+            "reviews" => $this->getAvgStars($reviews)
         ];
     }
 }
