@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tourist extends Model
 {
-
+  
     use HasFactory;
     use SoftDeletes;
     public $incrementing = false;

@@ -15,12 +15,18 @@ class ReviewController extends Controller
     /**
      * Display a listing of the resource.
      */
+    function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
+        ;
+
+    }
     public function index()
     {
         //
         try {
             $review = ReviewResource::collection(Review::all());
-            return response()->json(['data'=>$review], 200);
+            return response()->json(['data' => $review], 200);
 
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
@@ -36,30 +42,35 @@ class ReviewController extends Controller
     public function store(Request $request)
     {
         //
-     
-                $validator = Validator::make($request->all(), [
-                    'tourist_id'=> 'required|numeric',
-                    'tourguide_id'=> 'required|numeric',
-                    'title' => 'required|string',
-                    'comment' => 'required|string',
-                    'stars' => 'required|in:1,2,3,4,5',
 
-                ]);
+        $validator = Validator::make($request->all(), [
+            'tourist_id' => 'required|numeric',
+            'tourguide_id' => 'required|numeric',
+            'title' => 'required|string',
+            'comment' => 'required|string',
+            'stars' => 'required|in:1,2,3,4,5',
 
-                if ($validator->fails()) {
+        ]);
 
-                    return response( $validator->errors()->all(), 422);
-                }
-                
-                try {
-                    $tourguide = Tourguide::findOrFail($request->tourguide_id);
-                    $tourist = Tourist::findOrFail($request->tourist_id);
-                    $review = Review::create($request->all());
-                    return response()->json( ["message"=>"Review created successfully",'data'=>new ReviewResource($review)], 200);
-            }catch (\Exception $e) { 
-                return response()->json(['message' => 'An error occurred while creating the review'], 500);
+        if ($validator->fails()) {
+
+            return response($validator->errors()->all(), 422);
+        }
+
+        try {
+            $user = auth()->user();
+            if ($user->type === 'tourist') {
+                $tourguide = Tourguide::findOrFail($request->tourguide_id);
+                $tourist = Tourist::findOrFail($request->tourist_id);
+                $review = Review::create($request->all());
+                return response()->json(["message" => "Review created successfully", 'data' => new ReviewResource($review)], 200);
+            } else {
+                return response()->json(['message' => 'Only tourists are allowed to create reviews.'], 403);
             }
-          }   
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while creating the review'], 500);
+        }
+    }
 
     /**
      * Display the specified resource.
@@ -81,33 +92,37 @@ class ReviewController extends Controller
      */
     public function update(Request $request, Review $review)
     {
-        //
-        
-            $validator = Validator::make($request->all(), [
-                'tourist_id'=> 'required|numeric',
-                'tourguide_id'=> 'required|numeric',
-                'title' => 'required',
-                'comment' => 'required|string',
-                'stars' => "required|in:1,2, 3, 4, 5",
-                'status' => "required|in:pending,confirmed,declined"
+        $validator = Validator::make($request->all(), [
+            'tourist_id' => 'required|numeric',
+            'tourguide_id' => 'required|numeric',
+            'title' => 'required',
+            'comment' => 'required|string',
+            'stars' => "required|in:1,2, 3, 4, 5",
+            'status' => "required|in:pending,confirmed,declined"
 
-            ]);
+        ]);
 
-            if ($validator->fails()) {
+        if ($validator->fails()) {
 
-                return response( $validator->errors()->all(), 422);
+            return response($validator->errors()->all(), 422);
+        }
+        try {
+            $user = auth()->user();
+            if ($user->type === 'tourist') {
+                if ($user->id === $review->tourist_id) {
+                    $tourguide = Tourguide::findOrFail($request->tourguide_id);
+                    $tourist = Tourist::findOrFail($request->tourist_id);
+                    $review->update($request->all());
+                    return response()->json(["message" => "Review updated successfully", 'data' => new ReviewResource($review)], 200);
+                } else {
+                    return response()->json(['message' => 'You are not allowed to update this review.'], 403);
+                }
+            } else {
+                return response()->json(['message' => 'Only tourists are allowed to update reviews.'], 403);
             }
-            try {
-                $tourguide = Tourguide::findOrFail($request->tourguide_id);
-                $tourist = Tourist::findOrFail($request->tourist_id);
-            $review->update($request->all());
-            return response()->json(["message"=>"Review updated successfully",'data'=>new ReviewResource($review)], 200);
-    }catch (\Exception $e) { 
-        return response()->json(['message' => 'An error occurred while updating the review'], 500);
-    }
-
-
-
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while updating the review'], 500);
+        }
     }
 
     /**
@@ -118,8 +133,17 @@ class ReviewController extends Controller
         //
 
         try {
-            $review->delete();
-            return response()->json("deleted successfully", 200);
+            $user = auth()->user();
+            if ($user->type === 'tourist') {
+                if ($user->id === $review->tourist_id) {
+                    $review->delete();
+                    return response()->json("deleted successfully", 200);
+                } else {
+                    return response()->json(['message' => 'You are not allowed to delete this review.'], 403);
+                }
+            } else {
+                return response()->json(['message' => 'Only tourists are allowed to delete reviews.'], 403);
+            }
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while deleting the review'], 500);
         }
