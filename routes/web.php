@@ -1,7 +1,14 @@
 <?php
 
+use App\Http\Controllers\AreaController;
+use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\TourguideController;
+use App\Http\Controllers\TouristController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\api\UserController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +28,11 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::resource('users', UserController::class);
+Route::resource('tourists', TouristController::class);
+Route::resource('tourguides', TourguideController::class);
+Route::resource('orders', OrderController::class);
+Route::resource('reports', ReportController::class);
+Route::resource('reviews', ReviewController::class);
+Route::resource('areas', AreaController::class);
+Route::resource('languages', LanguageController::class);
