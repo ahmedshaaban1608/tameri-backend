@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Corona Admin</title>
+    <title>Dashboard Admin</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="../../assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="../../assets/vendors/css/vendor.bundle.base.css">
@@ -24,7 +24,8 @@
       <!-- partial:../../partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-          <a class="sidebar-brand brand-logo" href="../../index.html"><img src="../../assets/images/logo.svg" alt="logo" /></a>
+          {{-- <a class="sidebar-brand brand-logo" href="../../index.html"><img src="../../assets/images/logo.svg" alt="logo" /></a> --}}
+         <a class="sidebar-brand brand-logo" href="../../index.html"><img src="../../assets/images/logo.png" alt="logo" /></a>
           <a class="sidebar-brand brand-logo-mini" href="../../index.html"><img src="../../assets/images/logo-mini.svg" alt="logo" /></a>
         </div>
         <ul class="nav">
@@ -36,7 +37,7 @@
                   <span class="count bg-success"></span>
                 </div>
                 <div class="profile-name">
-                  <h5 class="mb-0 font-weight-normal">Henry Klein</h5>
+                  <h5 class="mb-0 font-weight-normal">rawan ramadan</h5>
                   <span>Gold Member</span>
                 </div>
               </div>
@@ -93,7 +94,7 @@
               <span class="menu-icon">
                 <i class="mdi mdi-laptop"></i>
               </span>
-              <span class="menu-title">Basic UI Elements</span>
+              <span class="menu-title">Tourguides</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="ui-basic">
@@ -109,7 +110,7 @@
               <span class="menu-icon">
                 <i class="mdi mdi-playlist-play"></i>
               </span>
-              <span class="menu-title">Form Elements</span>
+              <span class="menu-title">Tourists</span>
             </a>
           </li>
           <li class="nav-item menu-items">
@@ -117,7 +118,7 @@
               <span class="menu-icon">
                 <i class="mdi mdi-table-large"></i>
               </span>
-              <span class="menu-title">Tables</span>
+              <span class="menu-title">Reviews</span>
             </a>
           </li>
           <li class="nav-item menu-items">
@@ -125,17 +126,17 @@
               <span class="menu-icon">
                 <i class="mdi mdi-chart-bar"></i>
               </span>
-              <span class="menu-title">Charts</span>
+              <span class="menu-title">Orders</span>
             </a>
           </li>
-          <li class="nav-item menu-items">
+          {{-- <li class="nav-item menu-items">
             <a class="nav-link" href="../../pages/icons/mdi.html">
               <span class="menu-icon">
                 <i class="mdi mdi-contacts"></i>
               </span>
               <span class="menu-title">Icons</span>
             </a>
-          </li>
+          </li> --}}
           <li class="nav-item menu-items">
             <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
               <span class="menu-icon">
@@ -154,14 +155,14 @@
               </ul>
             </div>
           </li>
-          <li class="nav-item menu-items">
+          {{-- <li class="nav-item menu-items">
             <a class="nav-link" href="http://www.bootstrapdash.com/demo/corona-free/jquery/documentation/documentation.html">
               <span class="menu-icon">
                 <i class="mdi mdi-file-document-box"></i>
               </span>
               <span class="menu-title">Documentation</span>
             </a>
-          </li>
+          </li> --}}
         </ul>
       </nav>
       <!-- partial -->
@@ -321,7 +322,7 @@
                 <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                   <div class="navbar-profile">
                     <img class="img-xs rounded-circle" src="../../assets/images/faces/face15.jpg" alt="">
-                    <p class="mb-0 d-none d-sm-block navbar-profile-name">Henry Klein</p>
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name">rawan ramadan</p>
                     <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                   </div>
                 </a>
@@ -367,8 +368,8 @@
           <!-- partial:../../partials/_footer.html -->
           <footer class="footer">
             <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin templates</a> from Bootstrapdash.com</span>
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © Ta-meri.com 2023</span>
+              {{-- <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin templates</a> from Bootstrapdash.com</span> --}}
             </div>
           </footer>
           <!-- partial -->

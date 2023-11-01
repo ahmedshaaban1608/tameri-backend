@@ -9,6 +9,7 @@ use App\Http\Controllers\TourguideController;
 use App\Http\Controllers\TouristController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,3 +37,5 @@ Route::resource('reports', ReportController::class);
 Route::resource('reviews', ReviewController::class);
 Route::resource('areas', AreaController::class);
 Route::resource('languages', LanguageController::class);
+Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+
