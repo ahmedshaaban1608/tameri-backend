@@ -4,6 +4,10 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 
+use App\Http\Requests\StoreTourguideRequest;
+use App\Http\Requests\UpdateTourguideRequest;
+use App\Http\Resources\TourguideDataResource;
+use App\Http\Resources\TourguideResource;
 use App\Models\Tourguide;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -27,25 +31,9 @@ class TourguideController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(StoreTourguideRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|regex:/^[a-zA-Z]{3,}(?:\s[a-zA-Z]{3,})*$/',
-            'email' => 'required|unique:users|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
-            'password' => 'required|min:6|max:15',
-            'birth_date' => 'required|date',
-            'gender' => 'required|string|in:male,female',
-            'phone' => 'required|unique:tourguides|regex:/^\+?\d{7,14}$/',
-            'bio' => 'required|min:10|max:50',
-            'description' => 'required|min:100|max:1000',
-            'day_price' => 'required|numeric',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors(),
-            ],422);
-        }
+      
         $data = $request->all();
 
         try {
@@ -73,22 +61,8 @@ class TourguideController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tourguide $tourguide)
+    public function update(UpdateTourguideRequest $request, Tourguide $tourguide)
     {
-        $validator = Validator::make($request->all(), [
-            'gender' => 'required|string|in:male,female',
-            'birth_date' => 'required|date',
-            'bio' => 'required|string',
-            'description' => 'required|string',
-            'profile_img' => 'required|string',
-            'day_price' => 'required|numeric',
-            'phone' => ['required', 'regex:/^\+?\d{7,14}$/', Rule::unique('tourguides')->ignore($tourguide)],
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
-
         try {
             if (Gate::allows('is-tourguide')) {
                 $user = auth()->user();

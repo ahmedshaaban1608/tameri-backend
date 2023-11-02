@@ -23,9 +23,9 @@ class UpdateTouristRequest extends FormRequest
     {
         return [
             //
-                'country' => 'required|string',
-                'gender' => 'required|string|in:male,female',
-                'phone' => ['required','regex:/^\+?\d{7,14}$/',Rule::unique('tourists')->ignore($tourist)],
+            'country' => 'required|string',
+            'gender' => 'required|string|in:male,female',
+            'phone' => ['required', 'regex:/^\+?\d{7,14}$/', Rule::unique('tourists')->ignore($this->tourist)],
         ];
     }
 }

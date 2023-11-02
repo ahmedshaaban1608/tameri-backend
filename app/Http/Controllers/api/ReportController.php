@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreReportRequest;
+use App\Http\Requests\UpdateReportRequest;
 use App\Http\Resources\ReportResource;
 use App\Models\Report;
 use App\Models\User;
@@ -10,8 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Requests\StoreReportRequest;
-use App\Http\Requests\UpdateReportRequest;
+
 class ReportController extends Controller
 {
     function __construct()
@@ -30,17 +31,8 @@ class ReportController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(StoreReportRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'subject' => 'required|string',
-            'problem' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response($validator->errors()->all(), 422);
-        }
-
         try {
             $user = User::id();
             $request->merge(['user_id' => User::id()]);
@@ -69,19 +61,9 @@ class ReportController extends Controller
         }
     }
 
-    public function update(Request $request, Report $report)
+    public function update(UpdateReportRequest $request, Report $report)
     {
-        $validator = Validator::make($request->all(), [
-            'subject' => 'required|string',
-            'problem' => 'required|string',
-            'image' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response($validator->errors()->all(), 422);
-        }
-
-        try {
+       try {
             if (Gate::allows('is-admin')) {
                 $report->update($request->all());
                 return response()->json(['message' => 'Report updated successfully', 'data' => new ReportResource($report)], 200);

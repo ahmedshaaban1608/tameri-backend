@@ -22,8 +22,7 @@ class StoreReviewRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tourist_id'=> 'required|numeric',
-            'tourguide_id'=> 'required|numeric',
+            'tourguide_id' => 'required|numeric',
             'title' => 'required|string',
             'comment' => 'required|string',
             'stars' => 'required|in:1,2,3,4,5',

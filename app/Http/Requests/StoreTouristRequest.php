@@ -23,7 +23,9 @@ class StoreTouristRequest extends FormRequest
     {
         return [
             //
-            'id' => 'required|unique:tourists|numeric',
+            'name' => 'required|regex:/^[a-zA-Z]{3,}(?:\s[a-zA-Z]{3,})*$/',
+            'email' => 'required|unique:users|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
+            'password' => 'required|min:6|max:15',
             'country' => 'required|string',
             'gender' => 'required|string|in:male,female',
             'phone' => 'required|unique:tourists|regex:/^\+?\d{7,14}$/',

@@ -22,9 +22,7 @@ class StoreLanguageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
-            "tourguide_id"=>"required|numeric",
-            "language"=>"required"
+            'language' => 'required'
         ];
     }
 }

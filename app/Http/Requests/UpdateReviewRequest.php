@@ -22,13 +22,11 @@ class UpdateReviewRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
-                'tourist_id'=> 'required|numeric',
-                'tourguide_id'=> 'required|numeric',
-                'title' => 'required',
-                'comment' => 'required|string',
-                'stars' => "required|in:1,2, 3, 4, 5",
-                'status' => "required|in:pending,confirmed,declined"
+            'tourguide_id' => 'required|numeric',
+            'title' => 'required|string',
+            'comment' => 'required|string',
+            'stars' => 'required|in:1,2,3,4,5',
+            'status' => "required|in:pending,confirmed,declined"
 
         ];
     }

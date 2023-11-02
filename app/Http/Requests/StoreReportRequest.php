@@ -23,10 +23,8 @@ class StoreReportRequest extends FormRequest
     {
         return [
             //
-            'user_id'=> 'required|numeric',
             'subject' => 'required|string',
             'problem' => 'required|string',
-            'image' => 'required|string',
         ];
     }
 }

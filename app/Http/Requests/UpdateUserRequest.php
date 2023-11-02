@@ -22,12 +22,9 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
-            
             'name' => 'required|string',
-            'email' => ['required','email',Rule::unique('users')->ignore($user)],
+            'email' => ['required', 'email', Rule::unique('users')->ignore($this->user)],
             'password' => 'required|min:6',
-            'type' => 'required|string|in:tourist,hotel,tourguide,admin',
         ];
     }
 }

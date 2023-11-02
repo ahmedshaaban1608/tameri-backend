@@ -23,10 +23,8 @@ class StoreOrderRequest extends FormRequest
     {
         return [
             //
-            'tourist_id' => 'required|numeric',
             'tourguide_id' => 'required|numeric',
             'comment' => 'required|string',
-            // 'phone' => 'required',
             'phone' => 'required|unique:tourists|regex:/^\+?\d{7,14}$/',
             'from' => 'required|date',
             'to' => 'required|date',

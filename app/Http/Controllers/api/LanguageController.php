@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreLanguageRequest;
+use App\Http\Requests\UpdateLanguageRequest;
 use App\Http\Resources\LanguageResource;
 use App\Models\Language;
-use App\Models\Tourguide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
@@ -27,15 +28,9 @@ class LanguageController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(StoreLanguageRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-
-            "language" => "required"
-        ]);
-        if ($validator->fails()) {
-            return response($validator->errors()->all(), 422);
-        }
+       
         try {
             if (Gate::allows('is-tourguide')) {
                 $user = auth()->user();
@@ -59,17 +54,9 @@ class LanguageController extends Controller
         }
     }
 
-    public function update(Request $request, Language $language)
+    public function update(UpdateLanguageRequest $request, Language $language)
     {
-        $validator = Validator::make($request->all(), [
-            'language' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        try {
+       try {
             if (Gate::allows('is-tourguide')) {
                 $user = auth()->user();
                 if ($language->tourguide_id === $user->id) {

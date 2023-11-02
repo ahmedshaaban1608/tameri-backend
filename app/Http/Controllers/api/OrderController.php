@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreOrderRequest;
+use App\Http\Requests\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Tourguide;
-use App\Models\Tourist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Requests\StoreOrderRequest;
-use App\Http\Requests\UpdateOrderRequest;
 
 
 class OrderController extends Controller
@@ -39,20 +38,9 @@ class OrderController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(StoreOrderRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'tourguide_id' => 'required|numeric',
-            'comment' => 'required|string',
-            'phone' => 'required|unique:tourists|regex:/^\+?\d{7,14}$/',
-            'from' => 'required|date',
-            'to' => 'required|date',
-            'total' => 'required|numeric',
-            'city' => 'required|string',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
+       
         try {
             if (Gate::allows('is-tourist')) {
                 $user = auth()->user();
@@ -94,15 +82,9 @@ class OrderController extends Controller
         }
     }
 
-    public function update(Request $request, Order $order)
+    public function update(UpdateOrderRequest $request, Order $order)
     {
-        $validator = Validator::make($request->all(), [            
-            'status' => 'required|string|in:accepted,rejected, pending',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
+       
         try {
             if (Gate::allows('is-tourguide')) {
                 $user = auth()->user();

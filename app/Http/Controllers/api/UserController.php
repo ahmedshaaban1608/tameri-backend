@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 
@@ -31,16 +33,8 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-            'type' => 'required|string|in:tourist,hotel,tourguide',
-        ]);
-
         try {
             // Create a new user
             $user = User::create($request->all());
@@ -64,15 +58,6 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        //
-        // Validate the request data
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'email' => ['required', 'email', Rule::unique('users')->ignore($user)],
-            'password' => 'required|min:6',
-        ]);
-
-
         try {
             $user->update($request->all());
             // Return the user

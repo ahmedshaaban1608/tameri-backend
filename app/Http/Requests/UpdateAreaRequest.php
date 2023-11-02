@@ -22,9 +22,7 @@ class UpdateAreaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
             'area' => 'required|string',
-            'tourguide_id' => 'required|numeric',
 
         ];
     }

@@ -23,9 +23,8 @@ class UpdateReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-                'subject' => 'required|string',
-                'problem' => 'required|string',
-                'image' => 'required|string',
+            'subject' => 'required|string',
+            'problem' => 'required|string',
             //
         ];
     }

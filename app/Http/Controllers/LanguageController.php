@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\LanguageResource;
 use App\Models\Language;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreAreaRequest;
 use App\Http\Requests\UpdateAreaRequest;
+use Illuminate\Support\Facades\Gate;
 
 class LanguageController extends Controller
 {
     /**
      * Display a listing of the resource.
-     */
+     */ 
+    function __construct(){
+        $this->middleware('auth');
+    }
     public function index()
     {
         //
@@ -36,31 +41,18 @@ class LanguageController extends Controller
      */
     public function store(StoreAreaRequest $request)
     {
-        //
-        {
-            $validator = Validator::make($request->all(), [
-                // "tourguide_id" => "required|numeric",
-                "language" => "required"
-            ]);
-            if ($validator->fails()) {
-                return response($validator->errors()->all(), 422);
-            }
-            try {
-                if (Gate::allows('is-tourguide')) {
-                    $user = auth()->user();
-                    // $tourguide = Tourguide::findOrFail($request->tourguide_id);
-                    $request->merge(['tourguide_id' => $user->id]);
-                    $language = Language::create($request->all());
-                    return response()->json(['message' => 'Language created successfully', 'data' => new LanguageResource($language)], 201);
-                } else {
-                    return response()->json(['message' => 'Only tourguides are allowed to create languages.'], 403);
-                }
-            } catch (\Exception $e) {
-                return response()->json(['message' => 'An error occurred while creating the language.'], 500);
+       
+            // try {
+            //     if (Gate::allows('is-admin')) {
+            //         $language = Language::create($request->all());
+            //         return response()->json(['message' => 'Language created successfully', 'data' => new LanguageResource($language)], 201);
+            //     } else {
+            //         return response()->json(['message' => 'Only admins are allowed to create languages.'], 403);
+            //     }
+            // } catch (\Exception $e) {
+            //     return response()->json(['message' => 'An error occurred while creating the language.'], 500);
 
-            }
-
-        }
+            // }
     }
 
     /**
@@ -89,34 +81,19 @@ class LanguageController extends Controller
      */
     public function update(UpdateAreaRequest $request, Language $language)
     {
-        //
-        {
-            $validator = Validator::make($request->all(), [
-                // 'tourguide_id' => 'required|numeric',
-                'language' => 'required'
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 422);
-            }
-
+       
             try {
-                if (Gate::allows('is-tourguide')) {
-                    $user = auth()->user();
-                    if ($language->tourguide_id === $user->id) {
-                        // $tourguide = Tourguide::findOrFail($request->tourguide_id);
+                if (Gate::allows('is-admin')) {
+             
                         $language->update($request->all());
                         return response()->json(['message' => 'Language updated successfully', 'data' => new LanguageResource($language)], 200);
                     } else {
                         return response()->json(['message' => 'You are not allowed to update this languages.'], 403);
                     }
-                } else {
-                    return response()->json(['message' => 'You are not allowed to update this languages.'], 403);
-                }
             } catch (\Exception $e) {
                 return response()->json(['message' => 'An error occurred while updating the language.'], 500);
             }
-        }
+        
     }
 
     /**
@@ -125,17 +102,14 @@ class LanguageController extends Controller
     public function destroy(Language $language)
     { {
         try {
-            if (Gate::allows('is-tourguide')) {
-                $user = auth()->user();
-                if ($language->tourguide_id === $user->id) {
+            if (Gate::allows('is-admin')) {
+
                     $language->delete();
                     return response()->json("Deleted Succssfully", 200);
                 } else {
                     return response()->json(['message' => 'You are not allowed to delete this language.'], 403);
                 }
-            } else {
-                return response()->json(['message' => 'You are not allowed to delete this language.'], 403);
-            }
+
 
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while deleteing the language.'], 500);

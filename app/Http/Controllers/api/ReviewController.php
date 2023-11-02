@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreReviewRequest;
+use App\Http\Requests\UpdateReviewRequest;
 use App\Http\Resources\ReviewResource;
 use App\Models\Review;
 use App\Models\Tourguide;
-use App\Models\Tourist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Requests\StoreReviewRequest;
-use App\Http\Requests\UpdateReviewRequest;
+
 
 class ReviewController extends Controller
 {
@@ -29,17 +29,9 @@ class ReviewController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(StoreReviewRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'tourguide_id' => 'required|numeric',
-            'title' => 'required|string',
-            'comment' => 'required|string',
-            'stars' => 'required|in:1,2,3,4,5',
-        ]);
-        if ($validator->fails()) {
-            return response($validator->errors()->all(), 422);
-        }
+       
         try {
             if (Gate::allows('is-tourist')) {
                 $user = auth()->user();
@@ -63,17 +55,9 @@ class ReviewController extends Controller
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
         }
     }
-    public function update(Request $request, Review $review)
+    public function update(UpdateReviewRequest $request, Review $review)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required',
-            'comment' => 'required|string',
-            'stars' => "required|in:1,2, 3, 4, 5",
-            'status' => "required|in:pending,confirmed,declined"
-        ]);
-        if ($validator->fails()) {
-            return response($validator->errors()->all(), 422);
-        }
+      
         try {
             if (Gate::allows('is-admin')) {
                 $review->update($request->all());

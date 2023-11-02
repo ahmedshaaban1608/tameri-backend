@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreAreaRequest;
+use App\Http\Requests\UpdateAreaRequest;
 use App\Http\Resources\AreaResource;
 use App\Models\Area;
-use App\Models\Tourguide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
@@ -26,14 +27,8 @@ class AreaController extends Controller
         }
 
     }
-    public function store(Request $request)
+    public function store(StoreAreaRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'area' => 'required|string',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
         try {
             if (Gate::allows('is-tourguide')) {
                 $user = auth()->user();
@@ -60,15 +55,8 @@ class AreaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Area $area)
+    public function update(UpdateAreaRequest $request, Area $area)
     {
-
-        $validator = Validator::make($request->all(), [
-            'area' => 'required|string',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
         try {
             if (Gate::allows('is-tourguide')) {
                 $user = auth()->user();

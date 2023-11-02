@@ -23,7 +23,6 @@ class StoreAreaRequest extends FormRequest
     {
         return [
             'area' => 'required|string',
-            'tourguide_id' => 'required|numeric',
             //
         ];
     }

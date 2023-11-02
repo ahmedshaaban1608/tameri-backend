@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ReportResource;
 use App\Models\Report;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreAreaRequest;
 use App\Http\Requests\UpdateAreaRequest;
+use Illuminate\Support\Facades\Gate;
 
 class ReportController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    function __construct(){
+        $this->middleware('auth');
+    }
     public function index()
     {
         //
@@ -36,29 +41,16 @@ class ReportController extends Controller
      */
     public function store(StoreAreaRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'user_id' => 'required|numeric',
-            'subject' => 'required|string',
-            'problem' => 'required|string',
-            'image' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response($validator->errors()->all(), 422);
-        }
-
-        try {
-            $user = User::findOrFail($request->user_id);
-
-            if ($user->type !== 'tourist' && $user->type !== 'tourguide') {
-                return response()->json(['message' => 'User is not a tourist or a tour guide.'], 403);
-            }
-
-            $report = Report::create($request->all());
-            return response()->json(['message' => 'Report created successfully', 'data' => new ReportResource($report)], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'An error occurred while creating the report'], 500);
-        }
+      
+        // try {
+        //     if (Gate::allows('is-admin')) {
+        //         $report = Report::create($request->all());
+        //         return response()->json(['message' => 'Report created successfully', 'data' => new ReportResource($report)], 200);
+        //     }
+           
+        // } catch (\Exception $e) {
+        //     return response()->json(['message' => 'An error occurred while creating the report'], 500);
+        // }
     }
 
     /**
@@ -89,17 +81,6 @@ class ReportController extends Controller
      */
     public function update(UpdateAreaRequest $request, Report $report)
     {
-        $validator = Validator::make($request->all(), [
-            'subject' => 'required|string',
-            'problem' => 'required|string',
-            'image' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response($validator->errors()->all(), 422);
-        }
-
-
         try {
             if (Gate::allows('is-admin')) {
                 $report->update($request->all());

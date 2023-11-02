@@ -2,16 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TourguideDataResource;
+use App\Http\Resources\TourguideResource;
 use App\Models\Tourguide;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreAreaRequest;
 use App\Http\Requests\UpdateAreaRequest;
+use Illuminate\Support\Facades\Gate;
 
 class TourguideController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    function __construct(){
+        $this->middleware('auth');
+    }
     public function index()
     {
         //
@@ -36,44 +43,23 @@ class TourguideController extends Controller
      */
     public function store(StoreAreaRequest $request)
     {
-        //
-        {
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|regex:/^[a-zA-Z]{3,}(?:\s[a-zA-Z]{3,})*$/',
-                'email' => 'required|unique:users|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
-                'password' => 'required|min:6|max:15',
-                'birth_date' => 'required|date',
-                'gender' => 'required|string|in:male,female',
-                'phone' => 'required|unique:tourguides|regex:/^\+?\d{7,14}$/',
-                'bio' => 'required|min:10|max:50',
-                'description' => 'required|min:100|max:1000',
-                'day_price' => 'required|numeric',
-            ]);
+        
+            // $data = $request->all();
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'errors' => $validator->errors(),
-                ],422);
-            }
-            $data = $request->all();
+            // try {
 
-            try {
-
-                $user = User::create([
-                    'type' => 'tourguide',
-                    'name' => $data['name'],
-                    'email' => $data['email'],
-                    'password' => $data['password']
-                ]);
-                $data['id'] = $user->id;
-                $tourist = Tourguide::create($data);
-                return response()->json(['data' => new TourguideDataResource($tourist)], 200);
-            } catch (\Throwable $th) {
-                return response()->json(['message' => 'An error occurred while creating the tourist', 'error'=> $th], 500);
-            }
-
-
-        }
+            //     $user = User::create([
+            //         'type' => 'tourguide',
+            //         'name' => $data['name'],
+            //         'email' => $data['email'],
+            //         'password' => $data['password']
+            //     ]);
+            //     $data['id'] = $user->id;
+            //     $tourist = Tourguide::create($data);
+            //     return response()->json(['data' => new TourguideDataResource($tourist)], 200);
+            // } catch (\Throwable $th) {
+            //     return response()->json(['message' => 'An error occurred while creating the tourist', 'error'=> $th], 500);
+            // }
 
     }
 
@@ -84,10 +70,10 @@ class TourguideController extends Controller
     // {
     //     //
     // }
-    public function show()
+    public function show(Tourguide $tourguide)
     {
-        $tourguides = Tourguide::all();
-        return view('Dashboard.tourguides', ['tourguides' => $tourguides]);
+
+        return view('Dashboard.tourguides', ['tourguides' => $tourguide]);
     }
  
     /**
@@ -103,42 +89,22 @@ class TourguideController extends Controller
      */
     public function update(UpdateAreaRequest $request, Tourguide $tourguide)
     {
-        //
-        {
-            $validator = Validator::make($request->all(), [
-                'gender' => 'required|string|in:male,female',
-                'birth_date' => 'required|date',
-                'bio' => 'required|string',
-                'description' => 'required|string',
-                'profile_img' => 'required|string',
-                'day_price' => 'required|numeric',
-                'phone' => ['required', 'regex:/^\+?\d{7,14}$/', Rule::unique('tourguides')->ignore($tourguide)],
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
-            }
-
+        
 
             try {
-                if (Gate::allows('is-tourguide')) {
-                    $user = auth()->user();
-                    if ($tourguide->id === $user->id) {
+                if (Gate::allows('is-admin')) {
+
 
                         $tourguide->update($request->all());
+                        return response()->json(['message' => 'Tourguide updated successfully', 'data' => new TourguideDataResource($tourguide)], 200);
 
                     } else {
                         return response()->json(['message' => 'You are not allowed to update this tourguide.'], 403);
                     }
-                } else {
-                    return response()->json(['message' => 'You are not allowed to update this tourguide.'], 403);
-                }
+
             } catch (\Throwable $th) {
                 return response()->json(['error' => 'An error occurred while updating the tourguide'], 500);
             }
-
-            return response()->json(['message' => 'Tourguide updated successfully', 'data' => new TourguideDataResource($tourguide)], 200);
-        }
 
     }
 
@@ -149,9 +115,7 @@ class TourguideController extends Controller
     {
         //
         try {
-            if (Gate::allows('is-tourguide')) {
-                $user = auth()->user();
-                if ($tourguide->id === $user->id) {
+            if (Gate::allows('is-admin')) {
 
                     $tourguide->delete();
                     return response()->json([
@@ -160,9 +124,6 @@ class TourguideController extends Controller
                 } else {
                     return response()->json(['message' => 'You are not allowed to delete this tourguide.'], 403);
                 }
-            } else {
-                return response()->json(['message' => 'You are not allowed to delete this tourguide.'], 403);
-            }
 
         } catch (\Throwable $th) {
             return response()->json(['message' => 'An error occurred while deleting the tourguide'], 500);

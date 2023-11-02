@@ -22,15 +22,7 @@ class UpdateOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-                'tourist_id' => 'required|numeric',
-                'tourguide_id' => 'required|numeric',
-                'comment' => 'required|string',
-                // 'phone' => 'required',
-                'phone' => 'required|unique:tourists|regex:/^\+?\d{7,14}$/',
-                'from' => 'required|date',
-                'to' => 'required|date',
-                'total' => 'required|numeric',
-                'city' => 'required|string',
+            'status' => 'required|string|in:accepted,rejected, pending',
         ];
     }
 }
