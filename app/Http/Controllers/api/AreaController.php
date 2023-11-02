@@ -77,7 +77,7 @@ class AreaController extends Controller
         try {
             if (Gate::allows('is-tourguide')) {
                 $user = auth()->user();
-                if ($language->tourguide_id === $user->id) {
+                if ($area->tourguide_id === $user->id) {
                     // $tourguide = Tourguide::findOrFail($request->tourguide_id);
                     // if (!$tourguide) {
                     //     return response()->json(['message' => 'Tourguide Id not found'], 404);
@@ -100,7 +100,7 @@ class AreaController extends Controller
         try {
             if (Gate::allows('is-tourguide')) {
                 $user = auth()->user();
-                if ($language->tourguide_id === $user->id) {
+                if ($area->tourguide_id === $user->id) {
                     $area->delete();
                     return response()->json(['message' => 'Area deleted successfully'], 200);
                 } else {
