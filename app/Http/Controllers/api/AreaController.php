@@ -11,36 +11,32 @@ use Illuminate\Support\Facades\Validator;
 
 class AreaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    function __construct()
+    {
+        $this->middleware('auth:sanctum');
+    }
     public function index()
     {
-           //
-           try {
+        try {
             $areas = AreaResource::collection(Area::all());
-            return response()->json(['data'=>$areas], 200);
+            return response()->json(['data' => $areas], 200);
 
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
         }
 
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        
-            $validator = Validator::make($request->all(), [
-                'area' => 'required|string',
-                'tourguide_id' => 'required|numeric',
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 422);
-            }
-            try {
+
+        $validator = Validator::make($request->all(), [
+            'area' => 'required|string',
+            'tourguide_id' => 'required|numeric',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        try {
             $tourguide = Tourguide::findOrFail($request->tourguide_id);
             if (!$tourguide) {
                 return response()->json(['message' => 'Tourguide Id not found'], 404);
@@ -73,15 +69,15 @@ class AreaController extends Controller
      */
     public function update(Request $request, Area $area)
     {
-        
-            $validator = Validator::make($request->all(), [
-                'area' => 'required|string',
-                'tourguide_id' => 'required|numeric',
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 422);
-            }
-            try {
+
+        $validator = Validator::make($request->all(), [
+            'area' => 'required|string',
+            'tourguide_id' => 'required|numeric',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        try {
             $tourguide = Tourguide::findOrFail($request->tourguide_id);
             if (!$tourguide) {
                 return response()->json(['message' => 'Tourguide Id not found'], 404);

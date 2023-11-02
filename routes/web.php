@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,4 +39,12 @@ Route::resource('reviews', ReviewController::class);
 Route::resource('areas', AreaController::class);
 Route::resource('languages', LanguageController::class);
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+
+Route::get('/tourists', function () {
+    return view('Dashboard.tourists');
+})->name('tourists');
+Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+Route::get('/users', [AdminController::class, 'showUsers'])->name('users');
+Route::get('/tourists', [AdminController::class, 'showTourists'])->name('tourists');
+Route::get('/order', [AdminController::class, 'showOrders'])->name('orders');
 

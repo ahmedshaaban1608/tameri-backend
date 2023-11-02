@@ -106,11 +106,13 @@
             </div>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="../../pages/forms/basic_elements.html">
-              <span class="menu-icon">
-                <i class="mdi mdi-playlist-play"></i>
-              </span>
-              <span class="menu-title">Tourists</span>
+            
+              <a class="nav-link" href="{{ route('tourists') }}">
+                {{-- <a class="nav-link" href=""> --}}
+                <span class="menu-icon">
+                    <i class="mdi mdi-playlist-play"></i>
+                </span>
+                <span class="menu-title">Tourists</span>
             </a>
           </li>
           <li class="nav-item menu-items">
@@ -122,52 +124,29 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="../../pages/charts/chartjs.html">
+            <a class="nav-link" href="{{ route('orders') }}">
               <span class="menu-icon">
                 <i class="mdi mdi-chart-bar"></i>
               </span>
               <span class="menu-title">Orders</span>
             </a>
           </li>
-          {{-- <li class="nav-item menu-items">
-            <a class="nav-link" href="../../pages/icons/mdi.html">
-              <span class="menu-icon">
-                <i class="mdi mdi-contacts"></i>
-              </span>
-              <span class="menu-title">Icons</span>
-            </a>
-          </li> --}}
+         
           <li class="nav-item menu-items">
-            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <a class="nav-link" href="{{ route('users') }}">  
+                {{-- <a class="nav-link" href=""> --}}
               <span class="menu-icon">
-                <i class="mdi mdi-security"></i>
-              </span>
-              <span class="menu-title">User Pages</span>
-              <i class="menu-arrow"></i>
+                    <i class="mdi mdi-security"></i>
+                </span>
+                <span class="menu-title">User Pages</span>
+                <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="auth">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="../../pages/samples/blank-page.html"> Blank Page </a></li>
-                <li class="nav-item"> <a class="nav-link" href="../../pages/samples/error-404.html"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="../../pages/samples/error-500.html"> 500 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="../../pages/samples/login.html"> Login </a></li>
-                <li class="nav-item"> <a class="nav-link" href="../../pages/samples/register.html"> Register </a></li>
-              </ul>
-            </div>
-          </li>
-          {{-- <li class="nav-item menu-items">
-            <a class="nav-link" href="http://www.bootstrapdash.com/demo/corona-free/jquery/documentation/documentation.html">
-              <span class="menu-icon">
-                <i class="mdi mdi-file-document-box"></i>
-              </span>
-              <span class="menu-title">Documentation</span>
-            </a>
-          </li> --}}
+         
+        </li>
         </ul>
       </nav>
-      <!-- partial -->
+  
       <div class="container-fluid page-body-wrapper">
-        <!-- partial:../../partials/_navbar.html -->
         <nav class="navbar p-0 fixed-top d-flex flex-row">
           <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
             <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="../../assets/images/logo-mini.svg" alt="logo" /></a>
@@ -363,7 +342,18 @@
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
-          </div>
+             @if(isset($users))
+    @include('Dashboard.users')
+@endif
+
+@if(isset($tourists))
+    @include('Dashboard.tourists')
+@endif
+@if(isset($orders))
+    @include('Dashboard.order')
+@endif
+
+           </div> 
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.html -->
           <footer class="footer">
@@ -385,11 +375,35 @@
     <!-- Plugin js for this page -->
     <!-- End plugin js for this page -->
     <!-- inject:js -->
+    {{-- <script>
+      const adminUsersRoute = "{{ route('admin.users') }}";
+  </script> --}}
+  
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#tourists').on('click', function(e) {
+            e.preventDefault();
+            $.get("{{ route('tourists') }}", function(data) {
+                $('#displayContent').html(data);
+            });
+        });
+
+        $('#users').on('click', function(e) {
+            e.preventDefault();
+            $.get("{{ route('users') }}", function(data) {
+                $('#displayContent').html(data);
+            });
+        });
+    });
+</script>
     <script src="../../assets/js/off-canvas.js"></script>
     <script src="../../assets/js/hoverable-collapse.js"></script>
     <script src="../../assets/js/misc.js"></script>
     <script src="../../assets/js/settings.js"></script>
     <script src="../../assets/js/todolist.js"></script>
+    {{-- <script src="../../assets/js/fetchUsers.js"></script> --}}
+
     <!-- endinject -->
     <!-- Custom js for this page -->
     <!-- End custom js for this page -->
