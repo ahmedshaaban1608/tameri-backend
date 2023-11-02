@@ -37,10 +37,10 @@ Route::apiResource('areas', AreaController::class);
 Route::apiResource('orders', OrderController::class);
 Route::apiResource('reviews', ReviewController::class);
 Route::apiResource('reports', ReportController::class);
-<<<<<<< HEAD
+
 
 Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->get('logout', [AuthController::class, 'logout']);
-=======
+
 Route::get('/showUsers', [App\Http\Controllers\AdminController::class, 'getUsers']);
->>>>>>> main
+
