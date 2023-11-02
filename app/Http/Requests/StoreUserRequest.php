@@ -11,7 +11,7 @@ class StoreUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +23,10 @@ class StoreUserRequest extends FormRequest
     {
         return [
             //
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
+            'type' => 'required|string|in:tourist,hotel,tourguide,admin',
         ];
     }
 }

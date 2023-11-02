@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\TourguideDataResource;
-use App\Http\Resources\TourguideResource;
+
 use App\Models\Tourguide;
 use App\Models\User;
 use Illuminate\Http\Request;

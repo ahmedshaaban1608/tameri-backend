@@ -11,7 +11,7 @@ class UpdateAreaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +23,9 @@ class UpdateAreaRequest extends FormRequest
     {
         return [
             //
+            'area' => 'required|string',
+            'tourguide_id' => 'required|numeric',
+
         ];
     }
 }

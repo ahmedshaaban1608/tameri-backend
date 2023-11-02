@@ -11,7 +11,7 @@ class StoreTourguideRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +23,14 @@ class StoreTourguideRequest extends FormRequest
     {
         return [
             //
+            'id' => 'required|numeric|unique:tourguides',
+            'gender' => 'required|string|in:male,female',
+            'birth_date' => 'required|date',
+            'bio' => 'required|string',
+            'description' => 'required|string',
+            'profile_img' => 'required|string',
+            'day_price' => 'required|numeric',
+            'phone' => 'required|unique:tourguides|regex:/^\+?\d{7,14}$/',
         ];
     }
 }

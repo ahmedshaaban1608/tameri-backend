@@ -11,7 +11,7 @@ class StoreLanguageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +23,8 @@ class StoreLanguageRequest extends FormRequest
     {
         return [
             //
+            "tourguide_id"=>"required|numeric",
+            "language"=>"required"
         ];
     }
 }

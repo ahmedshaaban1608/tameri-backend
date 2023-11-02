@@ -41,11 +41,6 @@ class UserController extends Controller
             'type' => 'required|string|in:tourist,hotel,tourguide',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors(),
-            ]);
-        }
         try {
             // Create a new user
             $user = User::create($request->all());
@@ -67,7 +62,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
         //
         // Validate the request data
@@ -77,11 +72,6 @@ class UserController extends Controller
             'password' => 'required|min:6',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors(),
-            ]);
-        }
 
         try {
             $user->update($request->all());

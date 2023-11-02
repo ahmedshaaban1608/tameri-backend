@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
-
+use App\Http\Requests\StoreReportRequest;
+use App\Http\Requests\UpdateReportRequest;
 class ReportController extends Controller
 {
     function __construct()

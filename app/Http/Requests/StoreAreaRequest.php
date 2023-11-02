@@ -11,7 +11,7 @@ class StoreAreaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,6 +22,8 @@ class StoreAreaRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'area' => 'required|string',
+            'tourguide_id' => 'required|numeric',
             //
         ];
     }

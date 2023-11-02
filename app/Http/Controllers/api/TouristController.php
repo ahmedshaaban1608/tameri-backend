@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Tourist;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreTouristRequest;
+use App\Http\Requests\UpdateTouristRequest;
 
 class TouristController extends Controller
 {
@@ -32,7 +34,7 @@ class TouristController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTouristRequest $request)
     {
 
         $validator = Validator::make($request->all(), [
@@ -84,10 +86,24 @@ class TouristController extends Controller
             'phone' => ['required', 'regex:/^\+?\d{7,14}$/', Rule::unique('tourists')->ignore($tourist)],
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors(),
-            ]);
+
+
+
+        try {
+            if (Gate::allows('is-tourist')) {
+                $user = auth()->user();
+                if ($tourist->id === $user->id) {
+                    $tourist->update($request->all());
+                    // Return the tourist
+                    return response()->json(['data' => new TouristDataResource($tourist)], 200);
+                } else {
+                    return response()->json(['message' => 'You are not allowed to update this tourist.'], 403);
+                }
+            } else {
+                return response()->json(['message' => 'You are not allowed to update this tourist.'], 403);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'An error occurred while updating the tourist'], 500);
         }
 
         try {
