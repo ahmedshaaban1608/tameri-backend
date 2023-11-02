@@ -5,7 +5,8 @@ namespace App\Http\Controllers\api;
 use App\Http\Resources\TouristDataResource;
 use App\Http\Resources\TouristResource;
 use App\Models\User;
-use  Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Tourist;
@@ -13,15 +14,16 @@ use Illuminate\Http\Request;
 
 class TouristController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['index', 'show', 'store']);
+    }
     public function index()
     {
 
         try {
             $tourists = TouristResource::collection(Tourist::all());
-        return response()->json(['data' => $tourists],200);
+            return response()->json(['data' => $tourists], 200);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
         }
@@ -45,7 +47,7 @@ class TouristController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
-            ],422);
+            ], 422);
         }
         $data = $request->all();
 
@@ -60,7 +62,7 @@ class TouristController extends Controller
             $tourist = Tourist::create($data);
             return response()->json(['data' => new TouristDataResource($tourist)], 200);
         } catch (\Throwable $th) {
-            return response()->json(['message' => 'An error occurred while creating the tourist', 'error'=> $th], 500);
+            return response()->json(['message' => 'An error occurred while creating the tourist', 'error' => $th], 500);
         }
     }
 
@@ -71,7 +73,7 @@ class TouristController extends Controller
     {
 
         // Return the tourist
-        return response()->json(new TouristDataResource($tourist),200);
+        return response()->json(new TouristDataResource($tourist), 200);
     }
 
     /**
@@ -84,7 +86,7 @@ class TouristController extends Controller
         $validator = Validator::make($request->all(), [
             'country' => 'required|string',
             'gender' => 'required|string|in:male,female',
-            'phone' => ['required','regex:/^\+?\d{7,14}$/',Rule::unique('tourists')->ignore($tourist)],
+            'phone' => ['required', 'regex:/^\+?\d{7,14}$/', Rule::unique('tourists')->ignore($tourist)],
         ]);
 
         if ($validator->fails()) {
@@ -93,15 +95,18 @@ class TouristController extends Controller
             ]);
         }
 
-    try {
-           // Update the tourist
-           $tourist->update($request->all());
+        try {
+            if (Gate::allows('action-by-tourist', $tourist)) {
+                $tourist->update($request->all());
 
-           // Return the tourist
-           return response()->json(['data' => new TouristDataResource($tourist)],200);
-    } catch (\Throwable $th) {
-        return response()->json(['message' => 'An error occurred while updating the tourist'], 500);
-    }
+                // Return the tourist
+                return response()->json(['data' => new TouristDataResource($tourist)], 200);
+            } else {
+                return response()->json(['message' => 'You are not allowed to update this tourist.'], 403);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'An error occurred while updating the tourist'], 500);
+        }
     }
 
     /**
@@ -111,11 +116,17 @@ class TouristController extends Controller
     {
         try {
             // Delete the tourist
-        $tourist->delete();
+            if (Gate::allows('action-by-tourist', $tourist)) {
 
-        // Return a success message
-        return response()->json([
-            'message' => 'Tourist deleted successfully.'],200);
+                $tourist->delete();
+
+                // Return a success message
+                return response()->json([
+                    'message' => 'Tourist deleted successfully.'
+                ], 200);
+            } else {
+                return response()->json(['message' => 'You are not allowed to delete this tourist.'], 403);
+            }
         } catch (\Throwable $th) {
             return response()->json(['message' => 'An error occurred while deleting the tourist'], 500);
         }

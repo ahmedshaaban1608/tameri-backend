@@ -34,11 +34,16 @@ class TourguideController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Tourguide $tourguide)
+    // public function show(Tourguide $tourguide)
+    // {
+    //     //
+    // }
+    public function show()
     {
-        //
+        $tourguides = Tourguide::all();
+        return view('Dashboard.tourguides', ['tourguides' => $tourguides]);
     }
-
+ 
     /**
      * Show the form for editing the specified resource.
      */
