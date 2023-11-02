@@ -36,3 +36,4 @@ Route::apiResource('areas', AreaController::class);
 Route::apiResource('orders', OrderController::class);
 Route::apiResource('reviews', ReviewController::class);
 Route::apiResource('reports', ReportController::class);
+Route::get('/showUsers', [App\Http\Controllers\AdminController::class, 'getUsers']);

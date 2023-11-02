@@ -34,10 +34,16 @@ class TouristController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Tourist $tourist)
+    // public function show(Tourist $tourist)
+    // {
+    //     //
+    // }
+    public function show()
     {
-        //
+        $tourists = Tourist::all();
+        return view('Dashboard.tourists', ['tourists' => $tourists]);
     }
+ 
 
     /**
      * Show the form for editing the specified resource.

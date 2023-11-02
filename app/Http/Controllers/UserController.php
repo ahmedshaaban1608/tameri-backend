@@ -36,10 +36,17 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
-    {
-        //
-    }
+    // public function show(User $user)
+    // {
+    //     //
+    // }
+    public function show()
+{
+    $users = User::all(); 
+
+    return view('Dashboard.users', ['users' => $users]);
+}
+
 
     /**
      * Show the form for editing the specified resource.

@@ -34,11 +34,17 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Order $order)
-    {
-        //
-    }
-
+    // public function show(Order $order)
+    // {
+    //     //
+    // }
+   
+public function show()
+{
+    
+    $orders = Order::all();
+    return view('Dashboard.order', ['orders' => $orders]); 
+}
     /**
      * Show the form for editing the specified resource.
      */
