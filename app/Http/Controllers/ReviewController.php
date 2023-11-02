@@ -34,10 +34,16 @@ class ReviewController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Review $review)
-    {
-        //
-    }
+    // public function show(Review $review)
+    // {
+    //     //
+    // }
+  public function show()
+{
+    $reviews = Review::all();
+    return view('Dashboard.reviews', ['reviews' => $reviews]);
+}
+
 
     /**
      * Show the form for editing the specified resource.

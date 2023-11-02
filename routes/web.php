@@ -47,4 +47,5 @@ Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 Route::get('/users', [AdminController::class, 'showUsers'])->name('users');
 Route::get('/tourists', [AdminController::class, 'showTourists'])->name('tourists');
 Route::get('/order', [AdminController::class, 'showOrders'])->name('orders');
-
+Route::get('/reviews', [AdminController::class, 'showReviews'])->name('reviews');
+Route::get('/tourguides', [AdminController::class, 'showTourguides'])->name('tourguides');
