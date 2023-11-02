@@ -32,8 +32,11 @@ class TouristController extends Controller
      */
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
-            'id' => 'required|unique:tourists|numeric',
+            'name' => 'required|regex:/^[a-zA-Z]{3,}(?:\s[a-zA-Z]{3,})*$/',
+            'email' => 'required|unique:users|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
+            'password' => 'required|min:6|max:15',
             'country' => 'required|string',
             'gender' => 'required|string|in:male,female',
             'phone' => 'required|unique:tourists|regex:/^\+?\d{7,14}$/',
@@ -42,24 +45,23 @@ class TouristController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
-            ]);
+            ],422);
         }
+        $data = $request->all();
 
         try {
-            $user = User::findOrFail($request->id);
-            if($user['type']!=='tourist'){
-                return response()->json(['message' => 'user is not a tourist.'], 403);
-            }
+            $user = User::create([
+                'type' => 'tourist',
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => $data['password']
+            ]);
+            $data['id'] = $user->id;
+            $tourist = Tourist::create($data);
+            return response()->json(['data' => new TouristDataResource($tourist)], 200);
         } catch (\Throwable $th) {
-            return response()->json(['message' => 'not valid user id.'], 403);
+            return response()->json(['message' => 'An error occurred while creating the tourist', 'error'=> $th], 500);
         }
-      try {
-        $tourist = Tourist::create($request->all());
-
-        return response()->json(['data' => new TouristDataResource($tourist)], 200);
-      } catch (\Throwable $th) {
-        return response()->json(['message' => 'An error occurred while creating the tourist'], 500);
-      }
     }
 
     /**
