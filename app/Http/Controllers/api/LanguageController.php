@@ -72,10 +72,15 @@ class LanguageController extends Controller
         }
 
         try {
-            if (Gate::allows('action-by-tourguide', $language)) {
-                // $tourguide = Tourguide::findOrFail($request->tourguide_id);
-                $language->update($request->all());
-                return response()->json(['message' => 'Language updated successfully', 'data' => new LanguageResource($language)], 200);
+            if (Gate::allows('is-tourguide')) {
+                $user = auth()->user();
+                if ($language->tourguide_id === $user->id) {
+                    // $tourguide = Tourguide::findOrFail($request->tourguide_id);
+                    $language->update($request->all());
+                    return response()->json(['message' => 'Language updated successfully', 'data' => new LanguageResource($language)], 200);
+                } else {
+                    return response()->json(['message' => 'You are not allowed to update this languages.'], 403);
+                }
             } else {
                 return response()->json(['message' => 'You are not allowed to update this languages.'], 403);
             }
@@ -87,9 +92,14 @@ class LanguageController extends Controller
     public function destroy(Language $language)
     {
         try {
-            if (Gate::allows('action-by-tourguide', $language)) {
-                $language->delete();
-                return response()->json("Deleted Succssfully", 200);
+            if (Gate::allows('is-tourguide')) {
+                $user = auth()->user();
+                if ($language->tourguide_id === $user->id) {
+                    $language->delete();
+                    return response()->json("Deleted Succssfully", 200);
+                } else {
+                    return response()->json(['message' => 'You are not allowed to delete this language.'], 403);
+                }
             } else {
                 return response()->json(['message' => 'You are not allowed to delete this language.'], 403);
             }

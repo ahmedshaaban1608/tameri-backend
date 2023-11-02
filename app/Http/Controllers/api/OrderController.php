@@ -76,6 +76,8 @@ class OrderController extends Controller
         }
     }
 
+
+
     public function show(Order $order)
     {
         try {
@@ -114,8 +116,9 @@ class OrderController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
         try {
-            if (Gate::allows('action-by-tourist', $order)) {
-                if ($order->status === 'pending') {
+            if (Gate::allows('is-tourist')) {
+                $user = auth()->user();
+                if ($order->tourist_id === $user->id && $order->status === 'pending') {
                     // $tourguide = Tourguide::findOrFail($request->tourguide_id);
                     // if (!$tourguide) {
                     //     return response()->json(['message' => 'Tourguide Id not found'], 404);
@@ -137,9 +140,14 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         try {
-            if (Gate::allows('action-by-tourist', $order)) {
-                $order->delete();
-                return response()->json(['message' => 'Order deleted successfully'], 200);
+            if (Gate::allows('is-tourist')) {
+                $user = auth()->user();
+                if ($order->tourist_id === $user->id) {
+                    $order->delete();
+                    return response()->json(['message' => 'Order deleted successfully'], 200);
+                } else {
+                    return response()->json(['message' => 'only the Owner Of The order is Allowed to Delete.'], 403);
+                }
             } else {
                 return response()->json(['message' => 'only the Owner Of The order is Allowed to Delete.'], 403);
             }

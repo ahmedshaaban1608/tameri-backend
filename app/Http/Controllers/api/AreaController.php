@@ -75,13 +75,18 @@ class AreaController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
         try {
-            if (Gate::allows('action-by-tourguide', $area)) {
-                // $tourguide = Tourguide::findOrFail($request->tourguide_id);
-                // if (!$tourguide) {
-                //     return response()->json(['message' => 'Tourguide Id not found'], 404);
-                // }
-                $area->update($request->all());
-                return response()->json(['message' => 'Area updated successfully', 'data' => new AreaResource($area)], 200);
+            if (Gate::allows('is-tourguide')) {
+                $user = auth()->user();
+                if ($language->tourguide_id === $user->id) {
+                    // $tourguide = Tourguide::findOrFail($request->tourguide_id);
+                    // if (!$tourguide) {
+                    //     return response()->json(['message' => 'Tourguide Id not found'], 404);
+                    // }
+                    $area->update($request->all());
+                    return response()->json(['message' => 'Area updated successfully', 'data' => new AreaResource($area)], 200);
+                } else {
+                    return response()->json(['message' => 'You are not allowed to update this area.'], 403);
+                }
             } else {
                 return response()->json(['message' => 'You are not allowed to update this area.'], 403);
             }
@@ -93,9 +98,14 @@ class AreaController extends Controller
     public function destroy(Area $area)
     {
         try {
-            if (Gate::allows('action-by-tourguide', $area)) {
-                $area->delete();
-                return response()->json(['message' => 'Area deleted successfully'], 200);
+            if (Gate::allows('is-tourguide')) {
+                $user = auth()->user();
+                if ($language->tourguide_id === $user->id) {
+                    $area->delete();
+                    return response()->json(['message' => 'Area deleted successfully'], 200);
+                } else {
+                    return response()->json(['message' => 'You are not allowed to delete this area.'], 403);
+                }
             } else {
                 return response()->json(['message' => 'You are not allowed to delete this area.'], 403);
             }

@@ -20,21 +20,14 @@ class TourguideController extends Controller
     }
     public function index()
     {
-        //
         try {
             $tourguide = TourguideResource::collection(Tourguide::all());
             return response()->json(['data' => $tourguide], 200);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
         }
-
-
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -75,9 +68,7 @@ class TourguideController extends Controller
 
     public function show(Tourguide $tourguide)
     {
-        //
         return response()->json(new TourguideDataResource($tourguide), 200);
-
     }
 
     /**
@@ -100,10 +91,15 @@ class TourguideController extends Controller
         }
 
         try {
-            if (Gate::allows('action-by-tourguide', $tourguide)) {
+            if (Gate::allows('is-tourguide')) {
+                $user = auth()->user();
+                if ($tourguide->id === $user->id) {
 
-                $tourguide->update($request->all());
+                    $tourguide->update($request->all());
 
+                } else {
+                    return response()->json(['message' => 'You are not allowed to update this tourguide.'], 403);
+                }
             } else {
                 return response()->json(['message' => 'You are not allowed to update this tourguide.'], 403);
             }
@@ -116,14 +112,18 @@ class TourguideController extends Controller
 
     public function destroy(Tourguide $tourguide)
     {
-
         try {
-            if (Gate::allows('action-by-tourguide', $tourguide)) {
+            if (Gate::allows('is-tourguide')) {
+                $user = auth()->user();
+                if ($tourguide->id === $user->id) {
 
-                $tourguide->delete();
-                return response()->json([
-                    'message' => 'Tourguide deleted successfully.'
-                ], 200);
+                    $tourguide->delete();
+                    return response()->json([
+                        'message' => 'Tourguide deleted successfully.'
+                    ], 200);
+                } else {
+                    return response()->json(['message' => 'You are not allowed to delete this tourguide.'], 403);
+                }
             } else {
                 return response()->json(['message' => 'You are not allowed to delete this tourguide.'], 403);
             }

@@ -66,9 +66,7 @@ class TouristController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(Tourist $tourist)
     {
 
@@ -76,9 +74,6 @@ class TouristController extends Controller
         return response()->json(new TouristDataResource($tourist), 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Tourist $tourist)
     {
 
@@ -96,11 +91,15 @@ class TouristController extends Controller
         }
 
         try {
-            if (Gate::allows('action-by-tourist', $tourist)) {
-                $tourist->update($request->all());
-
-                // Return the tourist
-                return response()->json(['data' => new TouristDataResource($tourist)], 200);
+            if (Gate::allows('is-tourist')) {
+                $user = auth()->user();
+                if ($tourist->id === $user->id) {
+                    $tourist->update($request->all());
+                    // Return the tourist
+                    return response()->json(['data' => new TouristDataResource($tourist)], 200);
+                } else {
+                    return response()->json(['message' => 'You are not allowed to update this tourist.'], 403);
+                }
             } else {
                 return response()->json(['message' => 'You are not allowed to update this tourist.'], 403);
             }
@@ -109,21 +108,23 @@ class TouristController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Tourist $tourist)
     {
         try {
             // Delete the tourist
-            if (Gate::allows('action-by-tourist', $tourist)) {
+            if (Gate::allows('is-tourist')) {
+                $user = auth()->user();
+                if ($tourist->id === $user->id) {
 
-                $tourist->delete();
+                    $tourist->delete();
 
-                // Return a success message
-                return response()->json([
-                    'message' => 'Tourist deleted successfully.'
-                ], 200);
+                    // Return a success message
+                    return response()->json([
+                        'message' => 'Tourist deleted successfully.'
+                    ], 200);
+                } else {
+                    return response()->json(['message' => 'You are not allowed to delete this tourist.'], 403);
+                }
             } else {
                 return response()->json(['message' => 'You are not allowed to delete this tourist.'], 403);
             }
