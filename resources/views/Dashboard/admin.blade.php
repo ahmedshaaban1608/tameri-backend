@@ -90,20 +90,14 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-              <span class="menu-icon">
+            <a class="nav-link" href="{{ route('tourguides') }}">
+             <span class="menu-icon">
                 <i class="mdi mdi-laptop"></i>
               </span>
               <span class="menu-title">Tourguides</span>
               <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="ui-basic">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/buttons.html">Buttons</a></li>
-                <li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/dropdowns.html">Dropdowns</a></li>
-                <li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/typography.html">Typography</a></li>
-              </ul>
-            </div>
+            
           </li>
           <li class="nav-item menu-items">
             
@@ -116,7 +110,7 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="../../pages/tables/basic-table.html">
+            <a class="nav-link" href="{{ route('reviews') }}">  
               <span class="menu-icon">
                 <i class="mdi mdi-table-large"></i>
               </span>
@@ -342,18 +336,26 @@
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
-             @if(isset($users))
-    @include('Dashboard.users')
+            @if(isset($users))
+                @include('Dashboard.users')
+            @endif
+        
+            @if(isset($tourists))
+                @include('Dashboard.tourists')
+            @endif
+        
+            @if(isset($orders))
+                @include('Dashboard.order')
+            @endif
+        
+          @if(isset($reviews))
+        @include('Dashboard.reviews')
+    @endif
+    @if(isset($tourguides))
+    @include('Dashboard.tourguide')
 @endif
-
-@if(isset($tourists))
-    @include('Dashboard.tourists')
-@endif
-@if(isset($orders))
-    @include('Dashboard.order')
-@endif
-
-           </div> 
+        </div>
+        
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.html -->
           <footer class="footer">
