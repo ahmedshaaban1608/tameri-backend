@@ -37,7 +37,6 @@ class TouristController extends Controller
     public function store(StoreTouristRequest $request)
     {
 
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|regex:/^[a-zA-Z]{3,}(?:\s[a-zA-Z]{3,})*$/',
             'email' => 'required|unique:users|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
@@ -53,7 +52,6 @@ class TouristController extends Controller
             ], 422);
         }
         $data = $request->all();
-
 
         try {
             $user = User::create([
@@ -78,7 +76,6 @@ class TouristController extends Controller
         return response()->json(new TouristDataResource($tourist), 200);
     }
 
-
     public function update(Request $request, Tourist $tourist)
     {
 
@@ -90,7 +87,24 @@ class TouristController extends Controller
         ]);
 
 
-    
+
+
+        try {
+            if (Gate::allows('is-tourist')) {
+                $user = auth()->user();
+                if ($tourist->id === $user->id) {
+                    $tourist->update($request->all());
+                    // Return the tourist
+                    return response()->json(['data' => new TouristDataResource($tourist)], 200);
+                } else {
+                    return response()->json(['message' => 'You are not allowed to update this tourist.'], 403);
+                }
+            } else {
+                return response()->json(['message' => 'You are not allowed to update this tourist.'], 403);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'An error occurred while updating the tourist'], 500);
+        }
 
         try {
             if (Gate::allows('is-tourist')) {

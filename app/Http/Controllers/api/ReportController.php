@@ -28,10 +28,6 @@ class ReportController extends Controller
     }
 
 
-    /**
-     * Store a newly created resource in storage.
-     */
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -66,16 +62,8 @@ class ReportController extends Controller
             return response()->json(new ReportResource($report), 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
-
-
-
         }
     }
-
-
-    /**
-     * Update the specified resource in storage.
-     */
 
     public function update(Request $request, Report $report)
     {
@@ -88,7 +76,6 @@ class ReportController extends Controller
         if ($validator->fails()) {
             return response($validator->errors()->all(), 422);
         }
-
 
         try {
             if (Gate::allows('is-admin')) {

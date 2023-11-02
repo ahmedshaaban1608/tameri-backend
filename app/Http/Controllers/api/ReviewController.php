@@ -23,18 +23,11 @@ class ReviewController extends Controller
     {
         try {
             $review = ReviewResource::collection(Review::all());
-
             return response()->json(['data' => $review], 200);
-
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
         }
     }
-
-
-    /**
-     * Store a newly created resource in storage.
-     */
 
     public function store(Request $request)
     {
@@ -64,7 +57,6 @@ class ReviewController extends Controller
         }
     }
 
-
     public function show(Review $review)
     {
         try {
@@ -73,12 +65,6 @@ class ReviewController extends Controller
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
         }
     }
-
-
-    /**
-     * Update the specified resource in storage.
-     */
-
     public function update(Request $request, Review $review)
     {
         $validator = Validator::make($request->all(), [
@@ -105,7 +91,6 @@ class ReviewController extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while updating the review'], 500);
         }
-
     }
 
     public function destroy(Review $review)

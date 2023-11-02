@@ -7,10 +7,6 @@ use App\Http\Resources\LanguageResource;
 use App\Models\Language;
 use App\Models\Tourguide;
 use Illuminate\Http\Request;
-
-
-
-
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,7 +19,6 @@ class LanguageController extends Controller
     }
     public function index()
     {
-
         try {
             $languages = LanguageResource::collection(Language::all());
             return response()->json(['data' => $languages], 200);
@@ -31,11 +26,6 @@ class LanguageController extends Controller
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
         }
     }
-
-
-    /**
-     * Store a newly created resource in storage.
-     */
 
     public function store(Request $request)
     {
@@ -58,26 +48,17 @@ class LanguageController extends Controller
             }
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while creating the language.'], 500);
-
         }
 
     }
     public function show(Language $language)
     {
-
-
-
         try {
             return response()->json(new LanguageResource($language), 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
         }
     }
-
-
-    /**
-     * Update the specified resource in storage.
-     */
 
     public function update(Request $request, Language $language)
     {

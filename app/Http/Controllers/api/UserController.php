@@ -31,7 +31,6 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-
     public function store(Request $request)
     {
 
@@ -41,7 +40,6 @@ class UserController extends Controller
             'password' => 'required|min:6',
             'type' => 'required|string|in:tourist,hotel,tourguide,admin',
         ]);
-
 
 
         try {
@@ -65,10 +63,9 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
         //
-
         // Validate the request data
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
@@ -76,8 +73,6 @@ class UserController extends Controller
             'password' => 'required|min:6',
             'type' => 'required|string|in:tourist,hotel,tourguide,admin',
         ]);
-
-
 
 
         try {
@@ -95,7 +90,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-
         try {
             // Delete the user
             $user->delete();
@@ -104,7 +98,6 @@ class UserController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['message' => 'An error occurred while deleting the user'], 500);
         }
-
 
     }
 }

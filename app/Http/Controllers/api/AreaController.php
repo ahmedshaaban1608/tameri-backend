@@ -18,9 +18,7 @@ class AreaController extends Controller
     }
     public function index()
     {
-
         try {
-
             $areas = AreaResource::collection(Area::all());
             return response()->json(['data' => $areas], 200);
         } catch (\Exception $e) {
@@ -28,7 +26,6 @@ class AreaController extends Controller
         }
 
     }
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -51,7 +48,6 @@ class AreaController extends Controller
             } else {
                 return response()->json(['message' => 'Only tourguides are allowed to create area.'], 403);
             }
-
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while creating the area.'], 500);
         }
@@ -81,7 +77,7 @@ class AreaController extends Controller
         try {
             if (Gate::allows('is-tourguide')) {
                 $user = auth()->user();
-                if ($language->tourguide_id === $user->id) {
+                if ($area->tourguide_id === $user->id) {
                     // $tourguide = Tourguide::findOrFail($request->tourguide_id);
                     // if (!$tourguide) {
                     //     return response()->json(['message' => 'Tourguide Id not found'], 404);
@@ -104,7 +100,7 @@ class AreaController extends Controller
         try {
             if (Gate::allows('is-tourguide')) {
                 $user = auth()->user();
-                if ($language->tourguide_id === $user->id) {
+                if ($area->tourguide_id === $user->id) {
                     $area->delete();
                     return response()->json(['message' => 'Area deleted successfully'], 200);
                 } else {

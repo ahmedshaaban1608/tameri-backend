@@ -82,6 +82,7 @@ class TouristController extends Controller
         $tourists = Tourist::all();
         return view('Dashboard.tourists', ['tourists' => $tourists]);
     }
+ 
 
 
     /**

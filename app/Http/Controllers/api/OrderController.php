@@ -40,11 +40,6 @@ class OrderController extends Controller
         }
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     */
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -67,9 +62,11 @@ class OrderController extends Controller
                 if (!$tourguide) {
                     return response()->json(['message' => 'Tourguide Id not found'], 404);
                 }
-             
+                // $tourist = Tourist::findOrFail($request->tourist_id);
+                // if (!$tourist) {
+                //     return response()->json(['message' => 'Tourist Id not found'], 404);
+                // }
                 $request->merge(['tourist_id' => $user->id]);
-
 
                 $order = Order::create($request->all());
                 return response()->json(['message' => 'Order created successfully', 'data' => new OrderResource($order)], 201);
@@ -102,11 +99,6 @@ class OrderController extends Controller
             return response()->json(['message' => 'An error occurred while retrieving the order.'], 500);
         }
     }
-
-
-    /**
-     * Update the specified resource in storage.
-     */
 
     public function update(Request $request, Order $order)
     {
@@ -143,7 +135,6 @@ class OrderController extends Controller
             } else {
                 return response()->json(['message' => 'You are not allowed to update this order.'], 403);
             }
-
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while updating the order.'], 500);
         }

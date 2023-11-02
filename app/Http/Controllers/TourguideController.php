@@ -89,7 +89,7 @@ class TourguideController extends Controller
         $tourguides = Tourguide::all();
         return view('Dashboard.tourguides', ['tourguides' => $tourguides]);
     }
-
+ 
     /**
      * Show the form for editing the specified resource.
      */

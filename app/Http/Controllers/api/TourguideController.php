@@ -9,9 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
-
 use Illuminate\Validation\Rule;
-
 
 class TourguideController extends Controller
 {
@@ -28,7 +26,6 @@ class TourguideController extends Controller
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
         }
     }
-
 
     public function store(Request $request)
     {
@@ -66,14 +63,11 @@ class TourguideController extends Controller
             return response()->json(['message' => 'An error occurred while creating the tourist', 'error'=> $th], 500);
         }
 
-
     }
 
     public function show(Tourguide $tourguide)
     {
-
         return response()->json(new TourguideDataResource($tourguide), 200);
-
     }
 
     /**
@@ -95,7 +89,6 @@ class TourguideController extends Controller
             return response()->json(['errors' => $validator->errors()], 400);
         }
 
-
         try {
             if (Gate::allows('is-tourguide')) {
                 $user = auth()->user();
@@ -116,8 +109,6 @@ class TourguideController extends Controller
         return response()->json(['message' => 'Tourguide updated successfully', 'data' => new TourguideDataResource($tourguide)], 200);
     }
 
-
-
     public function destroy(Tourguide $tourguide)
     {
         try {
@@ -135,7 +126,6 @@ class TourguideController extends Controller
             } else {
                 return response()->json(['message' => 'You are not allowed to delete this tourguide.'], 403);
             }
-
         } catch (\Throwable $th) {
             return response()->json(['message' => 'An error occurred while deleting the tourguide'], 500);
         }
