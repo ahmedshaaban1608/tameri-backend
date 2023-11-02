@@ -41,7 +41,6 @@ class UserController extends Controller
             'type' => 'required|string|in:tourist,hotel,tourguide,admin',
         ]);
 
-
         try {
             // Create a new user
             $user = User::create($request->all());

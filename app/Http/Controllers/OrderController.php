@@ -90,6 +90,7 @@ class OrderController extends Controller
     //     //
     // }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 public function show()
 {
@@ -97,12 +98,17 @@ public function show()
     $orders = Order::all();
     return view('Dashboard.order', ['orders' => $orders]);
 =======
+=======
+>>>>>>> 38bd3d0f367c13bd4e027d09a89b2a0ba795fe16
    
 public function show()
 {
     
     $orders = Order::all();
     return view('Dashboard.order', ['orders' => $orders]); 
+<<<<<<< HEAD
+>>>>>>> 38bd3d0f367c13bd4e027d09a89b2a0ba795fe16
+=======
 >>>>>>> 38bd3d0f367c13bd4e027d09a89b2a0ba795fe16
 }
     /**

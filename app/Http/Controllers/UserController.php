@@ -66,7 +66,13 @@ class UserController extends Controller
     public function show()
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     return response()->json(new UserResource($user), 200);
+=======
+    $users = User::all(); 
+
+    return view('Dashboard.users', ['users' => $users]);
+>>>>>>> 38bd3d0f367c13bd4e027d09a89b2a0ba795fe16
 =======
     $users = User::all(); 
 
