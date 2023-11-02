@@ -11,7 +11,7 @@ class StoreTouristRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +23,10 @@ class StoreTouristRequest extends FormRequest
     {
         return [
             //
+            'id' => 'required|unique:tourists|numeric',
+            'country' => 'required|string',
+            'gender' => 'required|string|in:male,female',
+            'phone' => 'required|unique:tourists|regex:/^\+?\d{7,14}$/',
         ];
     }
 }

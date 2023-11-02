@@ -9,6 +9,8 @@ use App\Models\Tourguide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use  Illuminate\Validation\Rule;
+use App\Http\Requests\StoreTourguideRequest;
+use App\Http\Requests\UpdateTourguideRequest;
 class TourguideController extends Controller
 {
     /**
@@ -31,29 +33,29 @@ class TourguideController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTourguideRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'id' => 'required|numeric|unique:tourguides',
-            'gender' => 'required|string|in:male,female',
-            'birth_date' => 'required|date',
-            'bio' => 'required|string',
-            'description' => 'required|string',
-            'profile_img' => 'required|string',
-            'day_price' => 'required|numeric',
-            'phone' => 'required|unique:tourguides|regex:/^\+?\d{7,14}$/',
-        ]);
-    
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
+        // $validator = Validator::make($request->all(), [
+        //     'id' => 'required|numeric|unique:tourguides',
+        //     'gender' => 'required|string|in:male,female',
+        //     'birth_date' => 'required|date',
+        //     'bio' => 'required|string',
+        //     'description' => 'required|string',
+        //     'profile_img' => 'required|string',
+        //     'day_price' => 'required|numeric',
+        //     'phone' => 'required|unique:tourguides|regex:/^\+?\d{7,14}$/',
+        // ]);
+
+        // if ($validator->fails()) {
+        //     return response()->json(['errors' => $validator->errors()], 400);
+        // }
         try {
             $tourguide = Tourguide::create($request->all());
         } catch (\Exception $exception) {
-    
+
             return response()->json(['error' => 'An error occurred while storing the tourguide'], 500);
         }
-    
+
         return response()->json(['message' => 'Tourguide created successfully', 'tourguide' => new TourguideDataResource($tourguide)], 201);
     }
 
@@ -65,44 +67,44 @@ class TourguideController extends Controller
     {
         //
         return response()->json(new TourguideDataResource($tourguide),200);
-     
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tourguide $tourguide)
+    public function update(UpdateTourguideRequest $request, Tourguide $tourguide)
     {
-        $validator = Validator::make($request->all(), [
-            'gender' => 'required|string|in:male,female',
-            'birth_date' => 'required|date',
-            'bio' => 'required|string',
-            'description' => 'required|string',
-            'profile_img' => 'required|string',
-            'day_price' => 'required|numeric',
-            'phone' => ['required','regex:/^\+?\d{7,14}$/',Rule::unique('tourguides')->ignore($tourguide)],
-        ]);
-    
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
-    
+        // $validator = Validator::make($request->all(), [
+        //     'gender' => 'required|string|in:male,female',
+        //     'birth_date' => 'required|date',
+        //     'bio' => 'required|string',
+        //     'description' => 'required|string',
+        //     'profile_img' => 'required|string',
+        //     'day_price' => 'required|numeric',
+        //     'phone' => ['required','regex:/^\+?\d{7,14}$/',Rule::unique('tourguides')->ignore($tourguide)],
+        // ]);
+
+        // if ($validator->fails()) {
+        //     return response()->json(['errors' => $validator->errors()], 400);
+        // }
+
         try {
             $tourguide->update($request->all());
         } catch (\Throwable $th) {
             return response()->json(['error' => 'An error occurred while updating the tourguide'], 500);
         }
-        
+
         return response()->json(['message' => 'Tourguide updated successfully', 'data' => new TourguideDataResource($tourguide)], 200);
     }
-    
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Tourguide $tourguide)
     {
-      
+
         //
        try {
         $tourguide->delete();

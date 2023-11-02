@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Validation\Rule;
 class UpdateTourguideRequest extends FormRequest
 {
     /**
@@ -11,7 +11,7 @@ class UpdateTourguideRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +23,13 @@ class UpdateTourguideRequest extends FormRequest
     {
         return [
             //
+            'gender' => 'required|string|in:male,female',
+            'birth_date' => 'required|date',
+            'bio' => 'required|string',
+            'description' => 'required|string',
+            'profile_img' => 'required|string',
+            'day_price' => 'required|numeric',
+            'phone' => ['required','regex:/^\+?\d{7,14}$/',Rule::unique('tourguides')->ignore($tourguide)],
         ];
     }
 }

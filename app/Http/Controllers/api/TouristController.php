@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Tourist;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreTouristRequest;
+use App\Http\Requests\UpdateTouristRequest;
 
 class TouristController extends Controller
 {
@@ -30,20 +32,20 @@ class TouristController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTouristRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'id' => 'required|unique:tourists|numeric',
-            'country' => 'required|string',
-            'gender' => 'required|string|in:male,female',
-            'phone' => 'required|unique:tourists|regex:/^\+?\d{7,14}$/',
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'id' => 'required|unique:tourists|numeric',
+        //     'country' => 'required|string',
+        //     'gender' => 'required|string|in:male,female',
+        //     'phone' => 'required|unique:tourists|regex:/^\+?\d{7,14}$/',
+        // ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors(),
-            ]);
-        }
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'errors' => $validator->errors(),
+        //     ]);
+        // }
 
         try {
             $user = User::findOrFail($request->id);
@@ -75,21 +77,21 @@ class TouristController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tourist $tourist)
+    public function update(UpdateTouristRequest $request, Tourist $tourist)
     {
 
         // Validate the request data
-        $validator = Validator::make($request->all(), [
-            'country' => 'required|string',
-            'gender' => 'required|string|in:male,female',
-            'phone' => ['required','regex:/^\+?\d{7,14}$/',Rule::unique('tourists')->ignore($tourist)],
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'country' => 'required|string',
+        //     'gender' => 'required|string|in:male,female',
+        //     'phone' => ['required','regex:/^\+?\d{7,14}$/',Rule::unique('tourists')->ignore($tourist)],
+        // ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors(),
-            ]);
-        }
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'errors' => $validator->errors(),
+        //     ]);
+        // }
 
     try {
            // Update the tourist

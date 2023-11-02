@@ -8,7 +8,8 @@ use App\Models\Report;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
+use App\Http\Requests\StoreReportRequest;
+use App\Http\Requests\UpdateReportRequest;
 class ReportController extends Controller
 {
     /**
@@ -33,22 +34,22 @@ class ReportController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreReportRequest $request)
     {
         //
-     
-            $validator = Validator::make($request->all(), [
-                'user_id'=> 'required|numeric',
-                'subject' => 'required|string',
-                'problem' => 'required|string',
-                'image' => 'required|string',
 
-            ]);
+            // $validator = Validator::make($request->all(), [
+            //     'user_id'=> 'required|numeric',
+            //     'subject' => 'required|string',
+            //     'problem' => 'required|string',
+            //     'image' => 'required|string',
 
-            if ($validator->fails()) {
+            // ]);
 
-                return response( $validator->errors()->all(), 422);
-            }
+            // if ($validator->fails()) {
+
+            //     return response( $validator->errors()->all(), 422);
+            // }
             try {
                 $user = User::findOrFail($request->user_id);
                 if($user['type']!=='tourist'){
@@ -62,7 +63,7 @@ class ReportController extends Controller
             return response()->json( ['message' => 'Report Created successfully','data'=>new ReportResource($report)], 200);
 
 
-        }catch (\Exception $e) { 
+        }catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while creating the report'], 500);
         }
 
@@ -79,7 +80,7 @@ class ReportController extends Controller
 
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
-        
+
         }
 
 
@@ -88,18 +89,18 @@ class ReportController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Report $report)
+    public function update(UpdateReportRequest $request, Report $report)
     {
-  
-        $validator = Validator::make($request->all(), [
-            'subject' => 'required|string',
-            'problem' => 'required|string',
-            'image' => 'required|string',
-        ]);
 
-        if ($validator->fails()) {
-            return response( $validator->errors()->all(), 422);
-        }
+        // $validator = Validator::make($request->all(), [
+        //     'subject' => 'required|string',
+        //     'problem' => 'required|string',
+        //     'image' => 'required|string',
+        // ]);
+
+        // if ($validator->fails()) {
+        //     return response( $validator->errors()->all(), 422);
+        // }
         try {
             $user = User::findOrFail($request->user_id);
             if($user['type']!=='tourist'){
@@ -132,6 +133,6 @@ class ReportController extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while deleting the report'], 500);
         }
-    
+
     }
 }

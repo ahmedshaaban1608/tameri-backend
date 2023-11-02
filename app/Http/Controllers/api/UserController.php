@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use  Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
+
 class UserController extends Controller
 {
     /**
@@ -21,26 +24,26 @@ class UserController extends Controller
             return response()->json(['data' => $users],200);
          } catch (\Throwable $th) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
-        }       
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
-              
-        $validator = Validator::make($request->all(), [
-        'name' => 'required|string',
-        'email' => 'required|email|unique:users',
-        'password' => 'required|min:6',
-        'type' => 'required|string|in:tourist,hotel,tourguide,admin',
-    ]);
+    public function store(StoreUserRequest $request){
 
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors(),
-            ]);
-        }
+    //     $validator = Validator::make($request->all(), [
+    //     'name' => 'required|string',
+    //     'email' => 'required|email|unique:users',
+    //     'password' => 'required|min:6',
+    //     'type' => 'required|string|in:tourist,hotel,tourguide,admin',
+    // ]);
+
+    //     if ($validator->fails()) {
+    //         return response()->json([
+    //             'errors' => $validator->errors(),
+    //         ]);
+    //     }
         try {
             // Create a new user
         $user = User::create($request->all());
@@ -62,22 +65,22 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
         //
          // Validate the request data
-         $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'email' => ['required','email',Rule::unique('users')->ignore($user)],
-            'password' => 'required|min:6',
-            'type' => 'required|string|in:tourist,hotel,tourguide,admin',
-        ]);
+        //  $validator = Validator::make($request->all(), [
+        //     'name' => 'required|string',
+        //     'email' => ['required','email',Rule::unique('users')->ignore($user)],
+        //     'password' => 'required|min:6',
+        //     'type' => 'required|string|in:tourist,hotel,tourguide,admin',
+        // ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors(),
-            ]);
-        }
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'errors' => $validator->errors(),
+        //     ]);
+        // }
 
        try {
          // Update the user
@@ -102,6 +105,6 @@ class UserController extends Controller
        } catch (\Throwable $th) {
         return response()->json(['message' => 'An error occurred while deleting the user'], 500);
        }
-    
+
     }
 }
