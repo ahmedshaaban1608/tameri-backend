@@ -97,8 +97,6 @@ class TouristController extends Controller
                     $tourist->update($request->all());
                     // Return the tourist
                     return response()->json(['data' => new TouristDataResource($tourist)], 200);
-                } else {
-                    return response()->json(['message' => 'You are not allowed to update this tourist.'], 403);
                 }
             } else {
                 return response()->json(['message' => 'You are not allowed to update this tourist.'], 403);
@@ -112,7 +110,7 @@ class TouristController extends Controller
     {
         try {
             // Delete the tourist
-            if (Gate::allows('is-tourist')) {
+            if (Gate::allows('is-admin')) {
                 $user = auth()->user();
                 if ($tourist->id === $user->id) {
 
@@ -122,8 +120,6 @@ class TouristController extends Controller
                     return response()->json([
                         'message' => 'Tourist deleted successfully.'
                     ], 200);
-                } else {
-                    return response()->json(['message' => 'You are not allowed to delete this tourist.'], 403);
                 }
             } else {
                 return response()->json(['message' => 'You are not allowed to delete this tourist.'], 403);

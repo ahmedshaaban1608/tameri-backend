@@ -30,7 +30,6 @@ class ReviewController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            // 'tourist_id' => 'required|numeric',
             'tourguide_id' => 'required|numeric',
             'title' => 'required|string',
             'comment' => 'required|string',
@@ -43,7 +42,6 @@ class ReviewController extends Controller
             if (Gate::allows('is-tourist')) {
                 $user = auth()->user();
                 $tourguide = Tourguide::findOrFail($request->tourguide_id);
-                // $tourist = Tourist::findOrFail($request->tourist_id);
                 $request->merge(['tourist_id' => $user->id]);
                 $review = Review::create($request->all());
                 return response()->json(["message" => "Review created successfully", 'data' => new ReviewResource($review)], 200);
@@ -66,8 +64,6 @@ class ReviewController extends Controller
     public function update(Request $request, Review $review)
     {
         $validator = Validator::make($request->all(), [
-            // 'tourist_id' => 'required|numeric',
-            'tourguide_id' => 'required|numeric',
             'title' => 'required',
             'comment' => 'required|string',
             'stars' => "required|in:1,2, 3, 4, 5",
@@ -78,8 +74,6 @@ class ReviewController extends Controller
         }
         try {
             if (Gate::allows('is-admin')) {
-                $tourguide = Tourguide::findOrFail($request->tourguide_id);
-                // $tourist = Tourist::findOrFail($request->tourist_id);
                 $review->update($request->all());
                 return response()->json(["message" => "Review updated successfully", 'data' => new ReviewResource($review)], 200);
             } else {
@@ -95,16 +89,14 @@ class ReviewController extends Controller
     {
 
         try {
-            if (Gate::allows('is-tourist')) {
+            if (Gate::allows('is-admin')) {
                 $user = auth()->user();
                 if ($review->tourist_id === $user->id) {
                     $review->delete();
                     return response()->json("deleted successfully", 200);
-                } else {
-                    return response()->json(['message' => 'only the Owner Of The Review is Allowed to Delete.'], 403);
                 }
             } else {
-                return response()->json(['message' => 'only the Owner Of The Review is Allowed to Delete.'], 403);
+                return response()->json(['message' => 'only admins is Allowed to Delete.'], 403);
             }
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while deleting the review'], 500);

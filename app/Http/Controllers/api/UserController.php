@@ -38,7 +38,7 @@ class UserController extends Controller
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
-            'type' => 'required|string|in:tourist,hotel,tourguide,admin',
+            'type' => 'required|string|in:tourist,hotel,tourguide',
         ]);
 
         if ($validator->fails()) {
@@ -75,7 +75,6 @@ class UserController extends Controller
             'name' => 'required|string',
             'email' => ['required', 'email', Rule::unique('users')->ignore($user)],
             'password' => 'required|min:6',
-            'type' => 'required|string|in:tourist,hotel,tourguide,admin',
         ]);
 
         if ($validator->fails()) {
@@ -85,7 +84,6 @@ class UserController extends Controller
         }
 
         try {
-            // Update the user
             $user->update($request->all());
             // Return the user
             return response()->json(["message" => "user updated successfully", 'data' => new UserResource($user)], 200);

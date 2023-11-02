@@ -30,7 +30,6 @@ class AreaController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'area' => 'required|string',
-            // 'tourguide_id' => 'required|numeric',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -38,13 +37,10 @@ class AreaController extends Controller
         try {
             if (Gate::allows('is-tourguide')) {
                 $user = auth()->user();
-                // $tourguide = Tourguide::findOrFail($request->tourguide_id);
                 $request->merge(['tourguide_id' => $user->id]);
-                // if (!$tourguide) {
-                //     return response()->json(['message' => 'Tourguide Id not found'], 404);
-                // }
+
                 $area = Area::create($request->all());
-                return response()->json(['message' => 'Area created successfully', 'data' => new AreaResource($area)], 201);
+                return response()->json(['message' => 'Area created successfully', 'data' => new AreaResource($area)], 200);
             } else {
                 return response()->json(['message' => 'Only tourguides are allowed to create area.'], 403);
             }
@@ -69,7 +65,6 @@ class AreaController extends Controller
 
         $validator = Validator::make($request->all(), [
             'area' => 'required|string',
-            // 'tourguide_id' => 'required|numeric',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -78,15 +73,10 @@ class AreaController extends Controller
             if (Gate::allows('is-tourguide')) {
                 $user = auth()->user();
                 if ($area->tourguide_id === $user->id) {
-                    // $tourguide = Tourguide::findOrFail($request->tourguide_id);
-                    // if (!$tourguide) {
-                    //     return response()->json(['message' => 'Tourguide Id not found'], 404);
-                    // }
+
                     $area->update($request->all());
                     return response()->json(['message' => 'Area updated successfully', 'data' => new AreaResource($area)], 200);
-                } else {
-                    return response()->json(['message' => 'You are not allowed to update this area.'], 403);
-                }
+                } 
             } else {
                 return response()->json(['message' => 'You are not allowed to update this area.'], 403);
             }
@@ -103,9 +93,7 @@ class AreaController extends Controller
                 if ($area->tourguide_id === $user->id) {
                     $area->delete();
                     return response()->json(['message' => 'Area deleted successfully'], 200);
-                } else {
-                    return response()->json(['message' => 'You are not allowed to delete this area.'], 403);
-                }
+                } 
             } else {
                 return response()->json(['message' => 'You are not allowed to delete this area.'], 403);
             }

@@ -7,6 +7,7 @@ use App\Http\Resources\ReportResource;
 use App\Models\Report;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,7 +20,8 @@ class ReportController extends Controller
     public function index()
     {
         try {
-            $report = ReportResource::collection(Report::all());
+            
+            $report = ReportResource::collection(Report::where('tourist_id', Auth::id())->get());
             return response()->json(['data' => $report], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
@@ -30,10 +32,8 @@ class ReportController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|numeric',
             'subject' => 'required|string',
             'problem' => 'required|string',
-            'image' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -41,8 +41,8 @@ class ReportController extends Controller
         }
 
         try {
-            $user = User::findOrFail($request->user_id);
-
+            $user = User::id();
+            $request->merge(['user_id' => User::id()]);
             if ($user->type !== 'tourist' && $user->type !== 'tourguide') {
                 return response()->json(['message' => 'User is not a tourist or a tour guide.'], 403);
             }
@@ -58,7 +58,11 @@ class ReportController extends Controller
     public function show(Report $report)
     {
         try {
+            if($report->user_id === Auth::id()){
             return response()->json(new ReportResource($report), 200);
+        } else {
+            return response()->json(['message' => 'Not allowed.'], 403);
+        }
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
         }

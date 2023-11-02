@@ -97,8 +97,6 @@ class TourguideController extends Controller
 
                     $tourguide->update($request->all());
 
-                } else {
-                    return response()->json(['message' => 'You are not allowed to update this tourguide.'], 403);
                 }
             } else {
                 return response()->json(['message' => 'You are not allowed to update this tourguide.'], 403);
@@ -113,7 +111,7 @@ class TourguideController extends Controller
     public function destroy(Tourguide $tourguide)
     {
         try {
-            if (Gate::allows('is-tourguide')) {
+            if (Gate::allows('is-admin')) {
                 $user = auth()->user();
                 if ($tourguide->id === $user->id) {
 
@@ -121,9 +119,7 @@ class TourguideController extends Controller
                     return response()->json([
                         'message' => 'Tourguide deleted successfully.'
                     ], 200);
-                } else {
-                    return response()->json(['message' => 'You are not allowed to delete this tourguide.'], 403);
-                }
+                } 
             } else {
                 return response()->json(['message' => 'You are not allowed to delete this tourguide.'], 403);
             }
