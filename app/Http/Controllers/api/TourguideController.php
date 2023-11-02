@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\TourguideDataResource;
 use App\Http\Resources\TourguideResource;
 use App\Models\Tourguide;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use  Illuminate\Validation\Rule;
@@ -34,27 +35,37 @@ class TourguideController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id' => 'required|numeric|unique:tourguides',
-            'gender' => 'required|string|in:male,female',
+            'name' => 'required|regex:/^[a-zA-Z]{3,}(?:\s[a-zA-Z]{3,})*$/',
+            'email' => 'required|unique:users|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
+            'password' => 'required|min:6|max:15',
             'birth_date' => 'required|date',
-            'bio' => 'required|string',
-            'description' => 'required|string',
-            'profile_img' => 'required|string',
-            'day_price' => 'required|numeric',
+            'gender' => 'required|string|in:male,female',
             'phone' => 'required|unique:tourguides|regex:/^\+?\d{7,14}$/',
+            'bio' => 'required|min:10|max:50',
+            'description' => 'required|min:100|max:1000',
+            'day_price' => 'required|numeric',
         ]);
-    
+
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
+            return response()->json([
+                'errors' => $validator->errors(),
+            ],422);
         }
+        $data = $request->all();
+
         try {
-            $tourguide = Tourguide::create($request->all());
-        } catch (\Exception $exception) {
-    
-            return response()->json(['error' => 'An error occurred while storing the tourguide'], 500);
+            $user = User::create([
+                'type' => 'tourguide',
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => $data['password']
+            ]);
+            $data['id'] = $user->id;
+            $tourist = Tourguide::create($data);
+            return response()->json(['data' => new TourguideDataResource($tourist)], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'An error occurred while creating the tourist', 'error'=> $th], 500);
         }
-    
-        return response()->json(['message' => 'Tourguide created successfully', 'tourguide' => new TourguideDataResource($tourguide)], 201);
     }
 
 
