@@ -10,6 +10,7 @@ class Tourguide extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    public $incrementing = false;
     protected $dates = ['deleted_at']; 
 
     protected $fillable = [

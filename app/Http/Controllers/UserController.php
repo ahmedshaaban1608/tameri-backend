@@ -15,6 +15,12 @@ class UserController extends Controller
     public function index()
     {
         //
+        try {
+            $users = UserResource::collection(User::all());
+            return response()->json(['data' => $users], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
+        }
     }
 
     /**
@@ -31,15 +37,37 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
+            'type' => 'required|string|in:tourist,hotel,tourguide,admin',
+        ]);
+
+
+
+        try {
+            // Create a new user
+            $user = User::create($request->all());
+            // Return the user
+            return response()->json(['data' => new UserResource($user)], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'An error occurred while creating the user'], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
-    {
-        //
-    }
+    // public function show(User $user)
+    // {
+    //     //
+    // }
+    public function show()
+{
+    return response()->json(new UserResource($user), 200);
+}
+
 
     /**
      * Show the form for editing the specified resource.
@@ -55,6 +83,24 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'email' => ['required', 'email', Rule::unique('users')->ignore($user)],
+            'password' => 'required|min:6',
+            'type' => 'required|string|in:tourist,hotel,tourguide,admin',
+        ]);
+
+
+
+
+        try {
+            // Update the user
+            $user->update($request->all());
+            // Return the user
+            return response()->json(["message" => "user updated successfully", 'data' => new UserResource($user)], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'An error occurred while updating the user'], 500);
+        }
     }
 
     /**
@@ -63,5 +109,13 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         //
+        try {
+            // Delete the user
+            $user->delete();
+            // Return a success message
+            return response()->json(['message' => 'User is deleted successfully.']);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'An error occurred while deleting the user'], 500);
+        }
     }
 }
