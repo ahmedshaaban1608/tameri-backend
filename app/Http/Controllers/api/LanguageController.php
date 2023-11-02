@@ -7,60 +7,58 @@ use App\Http\Resources\LanguageResource;
 use App\Models\Language;
 use App\Models\Tourguide;
 use Illuminate\Http\Request;
-use  Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator;
 
 
 class LanguageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    function __construct()
+    {
+        $this->middleware('auth:sanctum');
+    }
     public function index()
     {
-        
-        
         try {
-            $languages  = LanguageResource::collection(Language::all());
-            return response()->json(['data'=>$languages], 200);
 
+            $languages = LanguageResource::collection(Language::all());
+            return response()->json(['data' => $languages], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
         }
-
-
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-            $vaidator = Validator::make($request->all(),
-        [
-            "tourguide_id"=>"required|numeric",
-            "language"=>"required"]);
-        if($vaidator -> fails()){
-        return response( $vaidator->errors()->all(), 422);
-    }
-    try {
-        $tourguide = Tourguide::findOrFail($request->tourguide_id);
-
-
-    } catch (\Throwable $th) {
-        return "not valid tourguide id";
-    }
-    $language = Language::create($request->all());
-    return response()->json(['message' => 'Language created successfully', 'data' => new LanguageResource($language)], 201);
-
+        $validator = Validator::make($request->all(), [
+            // "tourguide_id" => "required|numeric",
+            "language" => "required"
+        ]);
+        if ($validator->fails()) {
+            return response($validator->errors()->all(), 422);
         }
+        try {
+            $user = auth()->user();
+            if ($user->type === 'tourguide') {
+                // $tourguide = Tourguide::findOrFail($request->tourguide_id);
+                $request->merge(['tourguide_id' => $user->id]);
+
+                $language = Language::create($request->all());
+                return response()->json(['message' => 'Language created successfully', 'data' => new LanguageResource($language)], 201);
+            } else {
+                return response()->json(['message' => 'Only tourguides are allowed to create languages.'], 403);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while creating the language.'], 500);
+        }
+
+    }
 
     /**
      * Display the specified resource.
      */
     public function show(Language $language)
     {
-        
+
         try {
             return response()->json(new LanguageResource($language), 200);
         } catch (\Exception $e) {
@@ -74,37 +72,47 @@ class LanguageController extends Controller
     public function update(Request $request, Language $language)
     {
         $validator = Validator::make($request->all(), [
-            'tourguide_id' => 'required|numeric',
+            // 'tourguide_id' => 'required|numeric',
             'language' => 'required'
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-    
+
         try {
-            $tourguide = Tourguide::findOrFail($request->tourguide_id);
-    
-            $language->update($request->all());
-        
-            return response()->json(['message' => 'Language updated successfully', 'data' => new LanguageResource($language)], 200);
-        } catch (\Throwable $th) {
-            return response()->json(['message' => 'An error occurred while updating the language'], 500);
+            $user = auth()->user();
+            if ($user->type === 'tourguide' && $language->tourguide_id === $user->id) {
+
+                // $tourguide = Tourguide::findOrFail($request->tourguide_id);
+
+                $language->update($request->all());
+
+                return response()->json(['message' => 'Language updated successfully', 'data' => new LanguageResource($language)], 200);
+            } else {
+                return response()->json(['message' => 'You are not allowed to update this languages.'], 403);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while updating the language.'], 500);
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Language $language)
     {
-        //
-
         try {
-            $language->delete();
-            return response()->json("Dealeted Succssfully", 200);
-        } catch (\Throwable $th) {
-            return response()->json(['message' => 'An error occurred while deleting the language.'], 500);
+            $user = auth()->user();
+            if ($user->type === 'tourguide') {
+                if ($user->id === $language->tourguide_id) {
+                    $language->delete();
+                    return response()->json("Deleted Succssfully", 200);
+                } else {
+                    return response()->json(['message' => 'only the Owner Of The language is Allowed to Delete.'], 403);
+                }
+            } else {
+                return response()->json(['message' => 'Only tourguides are allowed to delete language.'], 403);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while deleteing the language.'], 500);
         }
 
     }
