@@ -114,9 +114,8 @@ class OrderController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
         try {
-            if (Gate::allows('is-tourist')) {
-                $user = auth()->user();
-                if ($order->tourist_id === $user->id && $order->status === 'pending') {
+            if (Gate::allows('action-by-tourist', $order)) {
+                if ($order->status === 'pending') {
                     // $tourguide = Tourguide::findOrFail($request->tourguide_id);
                     // if (!$tourguide) {
                     //     return response()->json(['message' => 'Tourguide Id not found'], 404);
@@ -125,7 +124,6 @@ class OrderController extends Controller
                     // if (!$tourist) {
                     //     return response()->json(['message' => 'Tourist Id not found'], 404);
                     // }
-
                     $order->update($request->all());
                     return response()->json(['message' => 'Order updated successfully', 'data' => new OrderResource($order)], 200);
                 }
@@ -139,16 +137,11 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         try {
-            if (Gate::allows('is-tourist')) {
-                $user = auth()->user();
-                if ($order->tourguide_id === $user->id) {
-                    $order->delete();
-                    return response()->json(['message' => 'Order deleted successfully'], 200);
-                } else {
-                    return response()->json(['message' => 'only the Owner Of The order is Allowed to Delete.'], 403);
-                }
+            if (Gate::allows('action-by-tourist', $order)) {
+                $order->delete();
+                return response()->json(['message' => 'Order deleted successfully'], 200);
             } else {
-                return response()->json(['message' => 'Only tourists are allowed to delete orders.'], 403);
+                return response()->json(['message' => 'only the Owner Of The order is Allowed to Delete.'], 403);
             }
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while deleting the order.'], 500);

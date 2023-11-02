@@ -7,66 +7,57 @@ use App\Http\Resources\ReportResource;
 use App\Models\Report;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class ReportController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    function __construct()
+    {
+        $this->middleware('auth:sanctum');
+    }
     public function index()
     {
         //
         try {
             $report = ReportResource::collection(Report::all());
-            return response()->json( ['data'=>$report], 200);
+            return response()->json(['data' => $report], 200);
 
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
         }
-
-
-
-
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-     
-            $validator = Validator::make($request->all(), [
-                'user_id'=> 'required|numeric',
-                'subject' => 'required|string',
-                'problem' => 'required|string',
-                'image' => 'required|string',
+        $validator = Validator::make($request->all(), [
+            // 'user_id' => 'required|numeric',
+            'subject' => 'required|string',
+            'problem' => 'required|string',
+            'image' => 'required|string',
+        ]);
 
-            ]);
-
-            if ($validator->fails()) {
-
-                return response( $validator->errors()->all(), 422);
-            }
-            try {
-                $user = User::findOrFail($request->user_id);
-                if($user['type']!=='tourist'){
-                    return response()->json(['message' => 'user is not a tourist.'], 403);
-                }
-            } catch (\Throwable $th) {
-                return response()->json(['message' => 'not valid user id.'], 403);
-            }
-            try {
-            $report = Report::create($request->all());
-            return response()->json( ['message' => 'Report Created successfully','data'=>new ReportResource($report)], 200);
-
-
-        }catch (\Exception $e) { 
-            return response()->json(['message' => 'An error occurred while creating the report'], 500);
+        if ($validator->fails()) {
+            return response($validator->errors()->all(), 422);
         }
 
+        try {
+            if (Gate::allows('create-report')) {
+                // $user = User::findOrFail($request->user_id);
+                // if (!in_array($user->type, ['tourist', 'tourguide'])) {
+                //     return response()->json(['message' => 'User is not a tourist or a tourguide.'], 403);
+                // }
+
+                $report = Report::create($request->all);
+                return response()->json(['message' => 'Report created successfully', 'data' => new ReportResource($report)], 200);
+            } else {
+                return response()->json(['message' => 'Only tourists and tourguides are allowed to create reports.'], 403);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while creating the report'], 500);
+        }
     }
+
 
     /**
      * Display the specified resource.
@@ -75,22 +66,19 @@ class ReportController extends Controller
     {
         //
         try {
-            return response()->json( new ReportResource($report), 200);
+            return response()->json(new ReportResource($report), 200);
 
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
-        
+
         }
 
 
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Report $report)
     {
-  
+
         $validator = Validator::make($request->all(), [
             'subject' => 'required|string',
             'problem' => 'required|string',
@@ -98,40 +86,38 @@ class ReportController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response( $validator->errors()->all(), 422);
+            return response($validator->errors()->all(), 422);
         }
         try {
             $user = User::findOrFail($request->user_id);
-            if($user['type']!=='tourist'){
+            if ($user['type'] !== 'tourist') {
                 return response()->json(['message' => 'user is not a tourist.'], 403);
             }
         } catch (\Throwable $th) {
             return response()->json(['message' => 'not valid user id.'], 403);
         }
         try {
-        $report->update($request->all());
-        return response()->json(['message' => 'Report updated successfully', 'data' => new ReportResource($report)], 200);
+            $report->update($request->all());
+            return response()->json(['message' => 'Report updated successfully', 'data' => new ReportResource($report)], 200);
 
-    }catch (\Exception $e) {
-        return response()->json(['message' => 'An error occurred while updating the report'], 500);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while updating the report'], 500);
+        }
+
     }
-
-
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Report $report)
     {
-        //
         try {
-            $report->delete();
-            return response()->json("deleted successfully", 200);
+            if (Gate::allows('is-admin')) {
+
+                $report->delete();
+                return response()->json("deleted successfully", 200);
+            } else {
+                return response()->json(['message' => 'Only admins are allowed to delete reports.'], 403);
+            }
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while deleting the report'], 500);
         }
-    
+
     }
 }

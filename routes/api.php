@@ -9,10 +9,8 @@ use App\Http\Controllers\api\ReviewController;
 use App\Http\Controllers\api\TourguideController;
 use App\Http\Controllers\api\TouristController;
 use App\Http\Controllers\api\UserController;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Validation\ValidationException;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,4 +43,3 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->get('logout', [AuthController::class, 'logout']);
 
 Route::get('/showUsers', [App\Http\Controllers\AdminController::class, 'getUsers']);
-
