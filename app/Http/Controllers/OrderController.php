@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
-use App\Models\Tourguide;
-use Illuminate\Http\Request;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
@@ -24,7 +21,7 @@ class OrderController extends Controller
 
         try {
 
-            $orders = OrderResource::collection(Order::all());
+            $orders = OrderResource::collection(Order::paginate(20));
             return view('Order.index', ['data' => $orders]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
@@ -61,16 +58,6 @@ class OrderController extends Controller
 
         }
 
-        // try {
-        //     if (Gate::allows('is-admin')) {
-        //         $order = Order::create($request->all());
-        //         return response()->json(['message' => 'Order created successfully', 'data' => new OrderResource($order)], 201);
-        //     } else {
-        //         return response()->json(['message' => 'Only admins are allowed to create orders.'], 403);
-        //     }
-        // } catch (\Exception $e) {
-        //     return response()->json(['message' => 'An error occurred while creating the order.'], 500);
-        // }
     }
 
 public function show(Order $order)

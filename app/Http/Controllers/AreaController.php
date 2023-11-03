@@ -21,9 +21,9 @@ class AreaController extends Controller
         //
         try {
 
-            $areas = AreaResource::collection(Area::all());
-
-        } catch (\Exception $e) {return view('Area.index', ['data' => $areas]);
+            $areas = AreaResource::collection(Area::paginate(20));
+            return view('Area.index', ['data' => $areas]);
+        } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
     }
 }

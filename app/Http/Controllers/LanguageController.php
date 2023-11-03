@@ -23,7 +23,7 @@ class LanguageController extends Controller
 
         try {
 
-            $languages = LanguageResource::collection(Language::all());
+            $languages = LanguageResource::collection(Language::paginate(20));
             return view('Language.index', ['data' => $languages]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
@@ -60,17 +60,7 @@ class LanguageController extends Controller
             return abort(500, 'An error occurred while creating the language.');
 
         }
-            // try {
-            //     if (Gate::allows('is-admin')) {
-            //         $language = Language::create($request->all());
-            //         return response()->json(['message' => 'Language created successfully', 'data' => new LanguageResource($language)], 201);
-            //     } else {
-            //         return response()->json(['message' => 'Only admins are allowed to create languages.'], 403);
-            //     }
-            // } catch (\Exception $e) {
-            //     return response()->json(['message' => 'An error occurred while creating the language.'], 500);
-
-            // }
+           
     }
 
     /**

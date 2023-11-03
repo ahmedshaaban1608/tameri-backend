@@ -10,8 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreTouristRequest;
 use App\Http\Requests\UpdateTouristRequest;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
+
 
 class TouristController extends Controller
 {
@@ -26,7 +25,7 @@ class TouristController extends Controller
         //
         try {
 
-            $tourists = TouristResource::collection(Tourist::all());
+            $tourists = TouristResource::collection(Tourist::paginate(20));
             return view('Tourist.index', ['data' => $tourists]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
@@ -50,7 +49,15 @@ class TouristController extends Controller
     {
         try {
             if (Gate::allows('is-admin')) {
-                $tourist = Tourist::create($request->all());
+                $data = $request->all();
+                $user = User::create([
+                    'type' => 'tourist',
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'password' => $data['password']
+                ]);
+                $data['id'] = $user->id;
+                $tourist = Tourist::create($data);
                 return to_route('Tourist.index');
             } else {
                 return abort(403, 'You are not allowed to create tourist.');
@@ -62,22 +69,6 @@ class TouristController extends Controller
 
         }
 
-        // $data = $request->all();
-
-
-        // try {
-        //     $user = User::create([
-        //         'type' => 'tourist',
-        //         'name' => $data['name'],
-        //         'email' => $data['email'],
-        //         'password' => $data['password']
-        //     ]);
-        //     $data['id'] = $user->id;
-        //     $tourist = Tourist::create($data);
-        //     return response()->json(['data' => new TouristDataResource($tourist)], 200);
-        // } catch (\Throwable $th) {
-        //     return response()->json(['message' => 'An error occurred while creating the tourist', 'error' => $th], 500);
-        // }
     }
 
     /**
@@ -91,7 +82,7 @@ class TouristController extends Controller
     {
 
         try {
-            return view('Tourist.show', ['data' => new TouristResource($tourist)]);
+            return view('Tourist.show', ['data' => new TouristDataResource($tourist)]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
         }

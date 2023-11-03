@@ -22,8 +22,8 @@ class ReviewController extends Controller
         //
         try {
 
-            $review = ReviewResource::collection(Review::all());
-            return view('Review.index', ['data' => $review]);
+            $reviews = ReviewResource::collection(Review::paginate(20));
+            return view('Review.index', ['data' => $reviews]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
     }
@@ -68,7 +68,7 @@ class ReviewController extends Controller
   public function show(Review $review)
 {
     try {
-        return view('Review.show', ['data' => new ReviewResource($reviews)]);
+        return view('Review.show', ['data' => new ReviewResource($review)]);
     } catch (\Exception $e) {
         return abort(500, 'An error occurred while retrieving the data.');
     }

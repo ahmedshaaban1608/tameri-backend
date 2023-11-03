@@ -22,8 +22,8 @@ class ReportController extends Controller
         //
         try {
 
-            $report = ReportResource::collection(Report::all());
-            return view('Report.index', ['data' => $report]);
+            $reports = ReportResource::collection(Report::paginate(20));
+            return view('Report.index', ['data' => $reports]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
     }
@@ -58,15 +58,6 @@ class ReportController extends Controller
             return abort(500, 'An error occurred while creating the report.');
 
         }
-        // try {
-        //     if (Gate::allows('is-admin')) {
-        //         $report = Report::create($request->all());
-        //         return response()->json(['message' => 'Report created successfully', 'data' => new ReportResource($report)], 200);
-        //     }
-
-        // } catch (\Exception $e) {
-        //     return response()->json(['message' => 'An error occurred while creating the report'], 500);
-        // }
     }
 
     /**

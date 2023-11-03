@@ -8,8 +8,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
+
 
 class UserController extends Controller
 {
@@ -23,7 +22,7 @@ class UserController extends Controller
     {
         //
         try {
-            $users = UserResource::collection(User::all());
+            $users = UserResource::collection(User::paginate(20));
             return view('User.index', ['data' => $users]);
 
 
@@ -129,7 +128,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
         try {
             if (Gate::allows('is-admin')) {
 

@@ -24,7 +24,7 @@ class TourguideController extends Controller
         //
         try {
 
-            $tourguide = TourguideResource::collection(Tourguide::all());
+            $tourguide = TourguideResource::collection(Tourguide::paginate(20));
             return view('Tourguide.index', ['data' => $tourguide]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
@@ -48,7 +48,15 @@ class TourguideController extends Controller
     {
         try {
             if (Gate::allows('is-admin')) {
-                $tourist = Tourguide::create($request->all());
+                $data = $request->all();
+                $user = User::create([
+                    'type' => 'tourguide',
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'password' => $data['password']
+                ]);
+                $data['id'] = $user->id;
+                $tourist = Tourguide::create($data);
                 return to_route('Tourguide.index');
             } else {
                 return abort(403, 'You are not allowed to create tourguide.');
@@ -59,24 +67,6 @@ class TourguideController extends Controller
             return abort(500, 'An error occurred while creating the tourguide.');
 
         }
-
-            // $data = $request->all();
-
-            // try {
-
-            //     $user = User::create([
-            //         'type' => 'tourguide',
-            //         'name' => $data['name'],
-            //         'email' => $data['email'],
-            //         'password' => $data['password']
-            //     ]);
-            //     $data['id'] = $user->id;
-            //     $tourist = Tourguide::create($data);
-            //     return response()->json(['data' => new TourguideDataResource($tourist)], 200);
-            // } catch (\Throwable $th) {
-            //     return response()->json(['message' => 'An error occurred while creating the tourist', 'error'=> $th], 500);
-            // }
-
     }
 
     /**
@@ -89,7 +79,7 @@ class TourguideController extends Controller
     public function show(Tourguide $tourguide)
     {
         try {
-            return view('Tourguide.show', ['data' => new TourguideResource($tourguide)]);
+            return view('Tourguide.show', ['data' => new TourguideDataResource($tourguide)]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
         }
