@@ -28,7 +28,6 @@ class StoreOrderRequest extends FormRequest
             'phone' => 'required|unique:tourists|regex:/^\+?\d{7,14}$/',
             'from' => 'required|date',
             'to' => 'required|date',
-            'total' => 'required|numeric',
             'city' => 'required|string',
         ];
     }
