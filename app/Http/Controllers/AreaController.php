@@ -22,8 +22,8 @@ class AreaController extends Controller
         try {
 
             $areas = AreaResource::collection(Area::all());
-            return view('Area.index', ['data' => $areas]);
-        } catch (\Exception $e) {
+
+        } catch (\Exception $e) {return view('Area.index', ['data' => $areas]);
             return abort(500, 'An error occurred while retrieving the data.');
     }
 }
@@ -41,7 +41,7 @@ class AreaController extends Controller
      */
     public function store(StoreAreaRequest $request)
     {
-        
+
             try {
                 if (Gate::allows('is-admin')) {
                     $area = Area::create($request->all());
@@ -55,7 +55,7 @@ class AreaController extends Controller
                 return abort(500, 'An error occurred while creating the area.');
 
             }
-        
+
     }
 
     /**
@@ -92,12 +92,12 @@ class AreaController extends Controller
      */
     public function update(UpdateAreaRequest $request, Area $area)
     {
-        
+
             try {
                 if (Gate::allows('is-admin')) {
                         $area->update($request->all());
                         return to_route('Area.index');
-                  
+
                 } else {
                     return abort(403, 'You are not allowed to update area.');
 

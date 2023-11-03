@@ -24,9 +24,12 @@ class UserController extends Controller
         //
         try {
             $users = UserResource::collection(User::all());
-            return response()->json(['data' => $users], 200);
+            return view('User.index', ['data' => $users]);
+
+
         } catch (\Throwable $th) {
-            return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
+            return abort(500, 'An error occurred while retrieving the data.');
+
         }
     }
 
@@ -36,6 +39,7 @@ class UserController extends Controller
     public function create()
     {
         //
+        return view('User.create');
     }
 
     /**
@@ -43,15 +47,21 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
+        try {
+            if (Gate::allows('is-admin')) {
+                $user = User::create($request->all());
+                return to_route('User.index');
+            } else {
+                return abort(403, 'You are not allowed to create User.');
 
-        // try {
-        //     // Create a new user
-        //     $user = User::create($request->all());
-        //     // Return the user
-        //     return response()->json(['data' => new UserResource($user)], 200);
-        // } catch (\Throwable $th) {
-        //     return response()->json(['message' => 'An error occurred while creating the user'], 500);
-        // }
+            }
+
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while creating the User.');
+
+        }
+
+
     }
 
     /**
@@ -61,11 +71,16 @@ class UserController extends Controller
     // {
     //     //
     // }
+
     public function show(User $user)
 {
 
+    try {
+        return view('User.show', ['data' => new UserResource($user)]);
+    } catch (\Exception $e) {
+        return abort(500, 'An error occurred while retrieving the data.');
+    }
 
-    return view('Dashboard.users', ['users' => $user]);
 
 }
 
@@ -76,6 +91,15 @@ class UserController extends Controller
     public function edit(User $user)
     {
         //
+        try {
+            if (Gate::allows('is-admin')) {
+                return view('User.edit', ['data'=> $user]);
+            } else{
+                return abort(403, 'You are not allowed to edit this user.');
+            }
+        } catch (\Throwable $th) {
+            return abort(500, 'An error occurred while retrieving the data.');
+        }
     }
 
     /**
@@ -83,17 +107,21 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-
         try {
             if (Gate::allows('is-admin')) {
-            // Update the user
-            $user->update($request->all());
-            // Return the user
-            return response()->json(["message" => "user updated successfully", 'data' => new UserResource($user)], 200);
+                    $user->update($request->all());
+                    return to_route('User.index');
+
+            } else {
+                return abort(403, 'You are not allowed to update user.');
+
             }
-        } catch (\Throwable $th) {
-            return response()->json(['message' => 'An error occurred while updating the user'], 500);
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while updating the user.');
+
         }
+
+
     }
 
     /**
@@ -104,13 +132,16 @@ class UserController extends Controller
         //
         try {
             if (Gate::allows('is-admin')) {
-            // Delete the user
-            $user->delete();
-            // Return a success message
-            return response()->json(['message' => 'User is deleted successfully.']);
+
+                    $user->delete();
+                    return to_route('User.index');
+            } else {
+                return abort(403, 'You are not allowed to delete user.');
+            }
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while deleting the user.');
+
         }
-        } catch (\Throwable $th) {
-            return response()->json(['message' => 'An error occurred while deleting the user'], 500);
-        }
+
     }
 }

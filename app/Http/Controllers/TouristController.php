@@ -7,8 +7,8 @@ use App\Http\Resources\TouristResource;
 use App\Models\Tourist;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreAreaRequest;
-use App\Http\Requests\UpdateAreaRequest;
+use App\Http\Requests\StoreTouristRequest;
+use App\Http\Requests\UpdateTouristRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -24,13 +24,14 @@ class TouristController extends Controller
     public function index()
     {
         //
-
         try {
+
             $tourists = TouristResource::collection(Tourist::all());
-            return response()->json(['data' => $tourists], 200);
-        } catch (\Throwable $th) {
-            return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
-        }
+            return view('Tourist.index', ['data' => $tourists]);
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while retrieving the data.');
+    }
+
     }
 
     /**
@@ -39,14 +40,28 @@ class TouristController extends Controller
     public function create()
     {
         //
+        return view('Tourist.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAreaRequest $request)
+    public function store(StoreTouristRequest $request)
     {
-     
+        try {
+            if (Gate::allows('is-admin')) {
+                $tourist = Tourist::create($request->all());
+                return to_route('Tourist.index');
+            } else {
+                return abort(403, 'You are not allowed to create tourist.');
+
+            }
+
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while creating the tourist.');
+
+        }
+
         // $data = $request->all();
 
 
@@ -74,36 +89,52 @@ class TouristController extends Controller
     // }
     public function show(Tourist $tourist)
     {
-        return view('Dashboard.tourists', ['tourists' => $tourist]);
+
+        try {
+            return view('Tourist.show', ['data' => new TouristResource($tourist)]);
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while retrieving the data.');
+        }
+
     }
- 
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Tourist $tourist)
     {
         //
+        try {
+            if (Gate::allows('is-admin')) {
+                return view('Tourist.edit', ['data'=> $tourist]);
+            } else{
+                return abort(403, 'You are not allowed to edit this tourist.');
+            }
+        } catch (\Throwable $th) {
+            return abort(500, 'An error occurred while retrieving the data.');
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAreaRequest $request, Tourist $tourist)
+    public function update(UpdateTouristRequest $request, Tourist $tourist)
     {
-       
         try {
             if (Gate::allows('is-admin')) {
-
                     $tourist->update($request->all());
-                    // Return the tourist
-                    return response()->json(['data' => new TouristDataResource($tourist)], 200);
-                } else {
-                    return response()->json(['message' => 'You are not allowed to update this tourist.'], 403);
-                }
+                    return to_route('Tourist.index');
 
-        } catch (\Throwable $th) {
-            return response()->json(['message' => 'An error occurred while updating the tourist'], 500);
+            } else {
+                return abort(403, 'You are not allowed to update tourist.');
+
+            }
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while updating the tourist.');
+
         }
+
+
     }
 
     /**
@@ -113,19 +144,18 @@ class TouristController extends Controller
     {
         //
         try {
-            // Delete the tourist
             if (Gate::allows('is-admin')) {
-                    $tourist->delete();
 
-                    // Return a success message
-                    return response()->json([
-                        'message' => 'Tourist deleted successfully.'
-                    ], 200);
-                } else {
-                    return response()->json(['message' => 'You are not allowed to delete this tourist.'], 403);
-                }
-        } catch (\Throwable $th) {
-            return response()->json(['message' => 'An error occurred while deleting the tourist'], 500);
+                    $tourist->delete();
+                    return to_route('Tourist.index');
+            } else {
+                return abort(403, 'You are not allowed to delete tourist.');
+            }
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while deleting the tourist.');
+
         }
+
+
     }
 }

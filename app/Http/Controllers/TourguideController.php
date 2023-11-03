@@ -7,8 +7,8 @@ use App\Http\Resources\TourguideResource;
 use App\Models\Tourguide;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreAreaRequest;
-use App\Http\Requests\UpdateAreaRequest;
+use App\Http\Requests\StoreTourguideRequest;
+use App\Http\Requests\UpdateTourguideRequest;
 use Illuminate\Support\Facades\Gate;
 
 class TourguideController extends Controller
@@ -23,11 +23,13 @@ class TourguideController extends Controller
     {
         //
         try {
+
             $tourguide = TourguideResource::collection(Tourguide::all());
-            return response()->json(['data' => $tourguide], 200);
-        } catch (\Throwable $th) {
-            return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
-        }
+            return view('Tourguide.index', ['data' => $tourguide]);
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while retrieving the data.');
+    }
+
     }
 
     /**
@@ -35,15 +37,29 @@ class TourguideController extends Controller
      */
     public function create()
     {
+        return view('Tourguide.create');
         //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAreaRequest $request)
+    public function store(StoreTourguideRequest $request)
     {
-        
+        try {
+            if (Gate::allows('is-admin')) {
+                $tourist = Tourguide::create($request->all());
+                return to_route('Tourguide.index');
+            } else {
+                return abort(403, 'You are not allowed to create tourguide.');
+
+            }
+
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while creating the tourguide.');
+
+        }
+
             // $data = $request->all();
 
             // try {
@@ -72,39 +88,51 @@ class TourguideController extends Controller
     // }
     public function show(Tourguide $tourguide)
     {
+        try {
+            return view('Tourguide.show', ['data' => new TourguideResource($tourguide)]);
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while retrieving the data.');
+        }
 
-        return view('Dashboard.tourguides', ['tourguides' => $tourguide]);
     }
- 
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Tourguide $tourguide)
     {
         //
+        try {
+            if (Gate::allows('is-admin')) {
+                return view('Tourguide.edit', ['data'=> $tourguide]);
+            } else{
+                return abort(403, 'You are not allowed to edit this tourguide.');
+            }
+        } catch (\Throwable $th) {
+            return abort(500, 'An error occurred while retrieving the data.');
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAreaRequest $request, Tourguide $tourguide)
+    public function update(UpdateTourguideRequest $request, Tourguide $tourguide)
     {
-        
 
-            try {
-                if (Gate::allows('is-admin')) {
+        try {
+            if (Gate::allows('is-admin')) {
+                    $tourguide->update($request->all());
+                    return to_route('Tourguide.index');
 
+            } else {
+                return abort(403, 'You are not allowed to update tourguide.');
 
-                        $tourguide->update($request->all());
-                        return response()->json(['message' => 'Tourguide updated successfully', 'data' => new TourguideDataResource($tourguide)], 200);
-
-                    } else {
-                        return response()->json(['message' => 'You are not allowed to update this tourguide.'], 403);
-                    }
-
-            } catch (\Throwable $th) {
-                return response()->json(['error' => 'An error occurred while updating the tourguide'], 500);
             }
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while updating the tourguide.');
+
+        }
+
 
     }
 
@@ -118,15 +146,13 @@ class TourguideController extends Controller
             if (Gate::allows('is-admin')) {
 
                     $tourguide->delete();
-                    return response()->json([
-                        'message' => 'Tourguide deleted successfully.'
-                    ], 200);
-                } else {
-                    return response()->json(['message' => 'You are not allowed to delete this tourguide.'], 403);
-                }
+                    return to_route('Tourguide.index');
+            } else {
+                return abort(403, 'You are not allowed to delete tourguide.');
+            }
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while deleting the tourguide.');
 
-        } catch (\Throwable $th) {
-            return response()->json(['message' => 'An error occurred while deleting the tourguide'], 500);
         }
     }
 }

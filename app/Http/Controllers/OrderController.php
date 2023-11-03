@@ -6,8 +6,8 @@ use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Tourguide;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreAreaRequest;
-use App\Http\Requests\UpdateAreaRequest;
+use App\Http\Requests\StoreOrderRequest;
+use App\Http\Requests\UpdateOrderRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
@@ -22,12 +22,14 @@ class OrderController extends Controller
     public function index()
     {
 
-            try {
-                    $orders = OrderResource::collection(Order::all());
-                    return response()->json(['data' => $orders], 200);
-            } catch (\Exception $e) {
-                return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
-            }
+        try {
+
+            $orders = OrderResource::collection(Order::all());
+            return view('Order.index', ['data' => $orders]);
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while retrieving the data.');
+    }
+        
     }
 
     /**
@@ -36,13 +38,28 @@ class OrderController extends Controller
     public function create()
     {
         //
+        return view('Order.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAreaRequest $request)
+    public function store(StoreOrderRequest $request)
     {
+
+        try {
+            if (Gate::allows('is-admin')) {
+                $order = Order::create($request->all());
+                return to_route('Order.index');
+            } else {
+                return abort(403, 'You are not allowed to create order.');
+
+            }
+
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while creating the order.');
+
+        }
 
         // try {
         //     if (Gate::allows('is-admin')) {
@@ -58,7 +75,12 @@ class OrderController extends Controller
 
 public function show(Order $order)
 {
-    return view('Dashboard.order', ['data' => $order]); 
+    try {
+        return view('Order.show', ['data' => new OrderResource($order)]);
+    } catch (\Exception $e) {
+        return abort(500, 'An error occurred while retrieving the data.');
+    }
+
 }
     /**
      * Show the form for editing the specified resource.
@@ -66,25 +88,37 @@ public function show(Order $order)
     public function edit(Order $order)
     {
         //
+        try {
+            if (Gate::allows('is-admin')) {
+                return view('Order.edit', ['data'=> $order]);
+            } else{
+                return abort(403, 'You are not allowed to edit this order.');
+            }
+        } catch (\Throwable $th) {
+            return abort(500, 'An error occurred while retrieving the data.');
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAreaRequest $request, Order $order)
+    public function update(UpdateOrderRequest $request, Order $order)
     {
-    
+
         try {
             if (Gate::allows('is-admin')) {
-                
                     $order->update($request->all());
-                    return response()->json(['message' => 'Order updated successfully', 'data' => new OrderResource($order)], 200);
-                }
-         
+                    return to_route('Order.index');
 
+            } else {
+                return abort(403, 'You are not allowed to update order.');
+
+            }
         } catch (\Exception $e) {
-            return response()->json(['message' => 'An error occurred while updating the order.'], 500);
+            return abort(500, 'An error occurred while updating the order.');
+
         }
+
     }
 
     /**
@@ -92,16 +126,21 @@ public function show(Order $order)
      */
     public function destroy(Order $order)
     {
+
         try {
-            if (Gate::allows('is-tourist')) {
-               
+            if (Gate::allows('is-admin')) {
+
                     $order->delete();
-                    return response()->json(['message' => 'Order deleted successfully'], 200);
-                } else {
-                    return response()->json(['message' => 'only the Owner Of The order is Allowed to Delete.'], 403);
-                }
+                    return to_route('Order.index');
+            } else {
+                return abort(403, 'You are not allowed to delete order.');
+            }
         } catch (\Exception $e) {
-            return response()->json(['message' => 'An error occurred while deleting the order.'], 500);
+            return abort(500, 'An error occurred while deleting the order.');
+
         }
+
+
+
     }
 }
