@@ -34,38 +34,72 @@ class TouristController extends Controller
     /**
      * Display the specified resource.
      */
-    // public function show(Tourist $tourist)
-    // {
-    //     //
-    // }
-    public function show()
+   
+    public function show($id)
     {
-        $tourists = Tourist::all();
-        return view('Dashboard.tourists', ['tourists' => $tourists]);
+        // $tourists = Tourist::all();
+        // return view('Dashboard.tourists', ['tourists' => $tourists]);
+        $tourist = Tourist::find($id);
+        return view('Dashboard.tourist.showTourist', ['tourist' => $tourist]);
     }
  
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Tourist $tourist)
+   
+     public function edit($id)
     {
-        //
+           $tourist = Tourist::find($id);
+        return view('Dashboard.tourist.editTourist', ['tourist' => $tourist]);
     }
+
+    public function update(Request $request, $id)
+    {
+        $tourist = Tourist::find($id);
+    
+        if ($tourist) {
+            $tourist->update([
+                'country' => $request->input('country'),
+                'gender' => $request->input('gender'),
+                'avatar' => $request->input('avatar'),
+                'phone' => $request->input('phone'),
+            ]);
+    
+            return redirect()->route('tourists')->with('success', 'Tourist updated successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Tourist not found.');
+        }
+    }
+    
+    
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tourist $tourist)
-    {
-        //
-    }
+    
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Tourist $tourist)
-    {
-        //
+
+ 
+   
+public function destroy($id)
+{
+    $tourist = Tourist::find($id);
+    
+    if ($tourist) {
+        $tourist->delete();
+        return redirect()->back()->with('success', 'Tourist data deleted successfully.');
+    } else {
+        return redirect()->back()->with('error', 'Tourist data not found.');
     }
+}
+// public function destroy(Tourist $tourist)
+// {
+//     $tourist->delete();
+//     return redirect()->back()->with('success', 'Tourist data deleted successfully.');
+// }
+
 }

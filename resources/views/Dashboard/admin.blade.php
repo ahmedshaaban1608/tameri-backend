@@ -33,7 +33,7 @@
             <div class="profile-desc">
               <div class="profile-pic">
                 <div class="count-indicator">
-                  <img class="img-xs rounded-circle " src="../../assets/images/faces/face15.jpg" alt="">
+                  <img class="img-xs rounded-circle " src="../../assets/images/faces/rawan.jpeg" alt="">
                   <span class="count bg-success"></span>
                 </div>
                 <div class="profile-name">
@@ -95,14 +95,14 @@
                 <i class="mdi mdi-laptop"></i>
               </span>
               <span class="menu-title">Tourguides</span>
-              <i class="menu-arrow"></i>
+              {{-- <i class="menu-arrow"></i> --}}
             </a>
             
           </li>
           <li class="nav-item menu-items">
             
               <a class="nav-link" href="{{ route('tourists') }}">
-                {{-- <a class="nav-link" href=""> --}}
+              
                 <span class="menu-icon">
                     <i class="mdi mdi-playlist-play"></i>
                 </span>
@@ -128,12 +128,11 @@
          
           <li class="nav-item menu-items">
               <a class="nav-link" href="{{ route('users') }}">  
-                {{-- <a class="nav-link" href=""> --}}
               <span class="menu-icon">
                     <i class="mdi mdi-security"></i>
                 </span>
                 <span class="menu-title">User Pages</span>
-                <i class="menu-arrow"></i>
+                {{-- <i class="menu-arrow"></i> --}}
             </a>
          
         </li>
@@ -294,7 +293,7 @@
               <li class="nav-item dropdown">
                 <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                   <div class="navbar-profile">
-                    <img class="img-xs rounded-circle" src="../../assets/images/faces/face15.jpg" alt="">
+                    <img class="img-xs rounded-circle" src="../../assets/images/faces/rawan.jpeg" alt="">
                     <p class="mb-0 d-none d-sm-block navbar-profile-name">rawan ramadan</p>
                     <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                   </div>
@@ -337,22 +336,22 @@
         <div class="main-panel">
           <div class="content-wrapper">
             @if(isset($users))
-                @include('Dashboard.users')
+                @include('Dashboard.user.users')
             @endif
         
             @if(isset($tourists))
-                @include('Dashboard.tourists')
+                @include('Dashboard.tourist.tourists')
             @endif
         
             @if(isset($orders))
-                @include('Dashboard.order')
+                @include('Dashboard.order.order')
             @endif
         
           @if(isset($reviews))
-        @include('Dashboard.reviews')
+        @include('Dashboard.review.reviews')
     @endif
     @if(isset($tourguides))
-    @include('Dashboard.tourguide')
+    @include('Dashboard.tourguide.tourguide')
 @endif
         </div>
         

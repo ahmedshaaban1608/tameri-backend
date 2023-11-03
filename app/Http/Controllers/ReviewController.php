@@ -38,29 +38,53 @@ class ReviewController extends Controller
     // {
     //     //
     // }
-  public function show()
+  public function show($id)
 {
-    $reviews = Review::all();
-    return view('Dashboard.reviews', ['reviews' => $reviews]);
+    // $reviews = Review::all();
+    // return view('Dashboard.reviews', ['reviews' => $reviews]);
+    $review = Review::find($id);
+    return view('Dashboard.review.showReview', ['review' => $review]);
 }
 
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Review $review)
-    {
-        //
-    }
+    // public function edit(Review $review)
+    // {
+    //     //
+    // }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Review $review)
+    // public function update(Request $request, Review $review)
+    // {
+    //     //
+    // }
+    public function edit($id)
     {
-        //
+           $review = Review::find($id);
+        return view('Dashboard.review.editReview', ['review' => $review]);
     }
 
+    public function update(Request $request, $id)
+    {
+        $review = Review::find($id);
+    
+        if ($review) {
+            $review->update([
+                'title' => $request->input('title'),
+                'comment' => $request->input('comment'),
+                // 'avatar' => $request->input('avatar'),
+                // 'phone' => $request->input('phone'),
+            ]);
+    
+            return redirect()->route('reviews')->with('success', 'reviews updated successfully.');
+        } else {
+            return redirect()->back()->with('error', 'reviews not found.');
+        }
+    }
     /**
      * Remove the specified resource from storage.
      */
