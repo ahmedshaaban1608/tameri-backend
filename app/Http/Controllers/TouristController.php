@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\TouristDataResource;
 use App\Http\Resources\TouristResource;
 use App\Models\Tourist;
 use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Requests\StoreTouristRequest;
 use App\Http\Requests\UpdateTouristRequest;
 use Illuminate\Support\Facades\Gate;
@@ -82,7 +80,7 @@ class TouristController extends Controller
     {
 
         try {
-            return view('Tourist.show', ['data' => new TouristDataResource($tourist)]);
+            return view('Tourist.show', ['data' => new TouristResource($tourist)]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
         }

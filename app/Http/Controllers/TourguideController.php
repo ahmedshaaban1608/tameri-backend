@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\TourguideDataResource;
 use App\Http\Resources\TourguideResource;
 use App\Models\Tourguide;
 use App\Models\User;
@@ -79,7 +78,7 @@ class TourguideController extends Controller
     public function show(Tourguide $tourguide)
     {
         try {
-            return view('Tourguide.show', ['data' => new TourguideDataResource($tourguide)]);
+            return view('Tourguide.show', ['data' => new TourguideResource($tourguide)]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
         }
