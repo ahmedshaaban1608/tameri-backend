@@ -22,18 +22,18 @@ class AreaController extends Controller
         try {
 
             $areas = AreaResource::collection(Area::all());
-            return response()->json(['data' => $areas], 200);
+            return view('Area.index', ['data' => $areas]);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'An error occurred while retrieving the data.'], 500);
-        }
+            return abort(500, 'An error occurred while retrieving the data.');
     }
+}
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        return view('Area.create');
     }
 
     /**
@@ -42,17 +42,19 @@ class AreaController extends Controller
     public function store(StoreAreaRequest $request)
     {
         
-            // try {
-            //     if (Gate::allows('is-admin')) {
-            //         $area = Area::create($request->all());
-            //         return response()->json(['message' => 'Area created successfully', 'data' => new AreaResource($area)], 201);
-            //     } else {
-            //         return response()->json(['message' => 'Only tourguides are allowed to create area.'], 403);
-            //     }
+            try {
+                if (Gate::allows('is-admin')) {
+                    $area = Area::create($request->all());
+                    return to_route('Area.index');
+                } else {
+                    return abort(403, 'You are not allowed to create area.');
 
-            // } catch (\Exception $e) {
-            //     return response()->json(['message' => 'An error occurred while creating the area.'], 500);
-            // }
+                }
+
+            } catch (\Exception $e) {
+                return abort(500, 'An error occurred while creating the area.');
+
+            }
         
     }
 
@@ -61,23 +63,28 @@ class AreaController extends Controller
      */
     public function show(Area $area)
     {
-        //
-        {
             try {
-                return response()->json(new AreaResource($area), 200);
+                return view('Area.show', ['data' => new AreaResource($area)]);
             } catch (\Exception $e) {
-                return response()->json(['message' => 'An error occurred while retrieving the area.'], 500);
+                return abort(500, 'An error occurred while retrieving the data.');
             }
         }
 
-    }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Area $area)
     {
-        //
+    try {
+        if (Gate::allows('is-admin')) {
+            return view('Area.edit', ['data'=> $area]);
+        } else{
+            return abort(403, 'You are not allowed to edit this area.');
+        }
+    } catch (\Throwable $th) {
+        return abort(500, 'An error occurred while retrieving the data.');
+    }
     }
 
     /**
@@ -89,13 +96,15 @@ class AreaController extends Controller
             try {
                 if (Gate::allows('is-admin')) {
                         $area->update($request->all());
-                        return response()->json(['message' => 'Area updated successfully', 'data' => new AreaResource($area)], 200);
+                        return to_route('Area.index');
                   
                 } else {
-                    return response()->json(['message' => 'You are not allowed to update this area.'], 403);
+                    return abort(403, 'You are not allowed to update area.');
+
                 }
             } catch (\Exception $e) {
-                return response()->json(['message' => 'An error occurred while updating the area.'], 500);
+                return abort(500, 'An error occurred while updating the area.');
+
             }
     }
 
@@ -109,12 +118,13 @@ class AreaController extends Controller
             if (Gate::allows('is-admin')) {
 
                     $area->delete();
-                    return response()->json(['message' => 'Area deleted successfully'], 200);
+                    return to_route('Area.index');
             } else {
-                return response()->json(['message' => 'You are not allowed to delete this area.'], 403);
+                return abort(403, 'You are not allowed to delete area.');
             }
         } catch (\Exception $e) {
-            return response()->json(['message' => 'An error occurred while deleting the area.'], 500);
+            return abort(500, 'An error occurred while deleting the area.');
+
         }
     }
 }
