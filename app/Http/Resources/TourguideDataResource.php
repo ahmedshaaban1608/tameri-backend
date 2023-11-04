@@ -29,7 +29,7 @@ class TourguideDataResource extends JsonResource
             "phone"=>$this->phone,
             "areas"=> AreaResource::collection($this->areas),
             "languages"=> LanguageResource::collection($this->languages),
-            "reviews"=> ReviewResource::collection($this->reviews),
+            'reviews' => ReviewResource::collection($this->reviews()->where('status', 'confirmed')->get()),
             "orders"=> OrderResource::collection($this->orders),
         ];
     }

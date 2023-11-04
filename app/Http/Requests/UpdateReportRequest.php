@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+
 class UpdateReportRequest extends FormRequest
 {
     /**
@@ -11,7 +12,7 @@ class UpdateReportRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,6 +23,8 @@ class UpdateReportRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'subject' => 'required|string',
+            'problem' => 'required|string',
             //
         ];
     }

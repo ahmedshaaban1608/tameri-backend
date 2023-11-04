@@ -11,7 +11,7 @@ class UpdateReviewRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class UpdateReviewRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'tourguide_id' => 'required|numeric',
+            'title' => 'required|string',
+            'comment' => 'required|string',
+            'stars' => 'required|in:1,2,3,4,5',
+            'status' => "required|in:pending,confirmed,declined"
+
         ];
     }
 }

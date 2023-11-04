@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreOrderRequest;
+use App\Http\Requests\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Tourguide;
-use App\Models\Tourist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -21,11 +23,11 @@ class OrderController extends Controller
     {
         try {
             $user = auth()->user();
-            if ($user->type === 'tourist') {
-                // $orders = OrderResource::collection(Order::all());
+
+            if (Gate::allows('is-tourist')) {
                 $orders = OrderResource::collection(Order::where('tourist_id', $user->id)->get());
                 return response()->json(['data' => $orders], 200);
-            } elseif ($user->type === 'tourguide') {
+            } else if (Gate::allows('is-tourguide')) {
                 $orders = OrderResource::collection(Order::where('tourguide_id', $user->id)->get());
                 return response()->json(['data' => $orders], 200);
             } else {
@@ -36,36 +38,20 @@ class OrderController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(StoreOrderRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            // 'tourist_id' => 'required|numeric',
-            'tourguide_id' => 'required|numeric',
-            'comment' => 'required|string',
-            'phone' => 'required|unique:tourists|regex:/^\+?\d{7,14}$/',
-            'from' => 'required|date',
-            'to' => 'required|date',
-            'total' => 'required|numeric',
-            'city' => 'required|string',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
+       
         try {
-            $user = auth()->user();
-            if ($user->type === 'tourist') {
+            if (Gate::allows('is-tourist')) {
+                $user = auth()->user();
                 $tourguide = Tourguide::findOrFail($request->tourguide_id);
                 if (!$tourguide) {
                     return response()->json(['message' => 'Tourguide Id not found'], 404);
                 }
-                // $tourist = Tourist::findOrFail($request->tourist_id);
-                // if (!$tourist) {
-                //     return response()->json(['message' => 'Tourist Id not found'], 404);
-                // }
                 $request->merge(['tourist_id' => $user->id]);
 
                 $order = Order::create($request->all());
-                return response()->json(['message' => 'Order created successfully', 'data' => new OrderResource($order)], 201);
+                return response()->json(['message' => 'Order created successfully', 'data' => new OrderResource($order)], 200);
             } else {
                 return response()->json(['message' => 'Only tourists are allowed to create orders.'], 403);
             }
@@ -74,16 +60,20 @@ class OrderController extends Controller
         }
     }
 
+
+
     public function show(Order $order)
     {
         try {
             $user = auth()->user();
-            if ($user->type === 'tourguide' && $order->tourguide_id === $user->id) {
-
-                return response()->json(new OrderResource($order), 200);
-            } elseif ($user->type === 'tourist' && $order->tourist_id === $user->id) {
-
-                return response()->json(new OrderResource($order), 200);
+            if (Gate::allows('is-tourguide')) {
+                if ($order->tourguide_id === $user->id) {
+                    return response()->json(new OrderResource($order), 200);
+                } 
+            } else if (Gate::allows('is-tourist')) {
+                if ($order->tourist_id === $user->id) {
+                    return response()->json(new OrderResource($order), 200);
+                }
             } else {
                 return response()->json(['message' => 'You are not allowed to view this order.'], 403);
             }
@@ -92,38 +82,18 @@ class OrderController extends Controller
         }
     }
 
-    public function update(Request $request, Order $order)
+    public function update(UpdateOrderRequest $request, Order $order)
     {
-        $validator = Validator::make($request->all(), [
-            // 'tourist_id' => 'required|numeric',
-            // 'tourguide_id' => 'required|numeric',
-            'comment' => 'required|string',
-            // 'phone' => 'required',
-            'phone' => 'required|unique:tourists|regex:/^\+?\d{7,14}$/',
-            'from' => 'required|date',
-            'to' => 'required|date',
-            'total' => 'required|numeric',
-            'city' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
+       
         try {
-            $user = auth()->user();
-            if ($user->type === 'tourist' && $order->tourist_id === $user->id && $order->status === 'pending') {
-
-                // $tourguide = Tourguide::findOrFail($request->tourguide_id);
-                // if (!$tourguide) {
-                //     return response()->json(['message' => 'Tourguide Id not found'], 404);
-                // }
-                // $tourist = Tourist::findOrFail($request->tourist_id);
-                // if (!$tourist) {
-                //     return response()->json(['message' => 'Tourist Id not found'], 404);
-                // }
-
-                $order->update($request->all());
-                return response()->json(['message' => 'Order updated successfully', 'data' => new OrderResource($order)], 200);
+            if (Gate::allows('is-tourguide')) {
+                $user = auth()->user();
+                if ($order->tourguide_id === $user->id) {
+                    $order->update([
+                        'status'=> $request->status,
+                    ]);
+                    return response()->json(['message' => 'Order updated successfully', 'data' => new OrderResource($order)], 200);
+                }
             } else {
                 return response()->json(['message' => 'You are not allowed to update this order.'], 403);
             }
@@ -134,16 +104,14 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         try {
-            $user = auth()->user();
-            if ($user->type === 'tourist') {
-                if ($user->id === $order->tourist_id) {
+            if (Gate::allows('is-tourist')) {
+                $user = auth()->user();
+                if ($order->tourist_id === $user->id) {
                     $order->delete();
                     return response()->json(['message' => 'Order deleted successfully'], 200);
-                } else {
-                    return response()->json(['message' => 'only the Owner Of The order is Allowed to Delete.'], 403);
-                }
+                } 
             } else {
-                return response()->json(['message' => 'Only tourists are allowed to delete orders.'], 403);
+                return response()->json(['message' => 'only the Owner Of The order is Allowed to Delete.'], 403);
             }
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while deleting the order.'], 500);

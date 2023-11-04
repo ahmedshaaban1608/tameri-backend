@@ -2,17 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreOrderRequest;
+use App\Http\Requests\UpdateOrderRequest;
+use Illuminate\Support\Facades\Gate;
 
 class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    function __construct(){
+        $this->middleware('auth');
+    }
     public function index()
     {
-        //
+
+        try {
+
+            $orders = OrderResource::collection(Order::paginate(20));
+            return view('Order.index', ['data' => $orders]);
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while retrieving the data.');
+    }
+        
     }
 
     /**
@@ -21,12 +35,13 @@ class OrderController extends Controller
     public function create()
     {
         //
+        return view('Order.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreOrderRequest $request)
     {
         //
     }
@@ -38,30 +53,21 @@ class OrderController extends Controller
     // {
     //     //
     // }
-  
-public function show($id)
+   
+public function show()
 {
-    // $orders = Order::all();
-    // return view('Dashboard.order', ['orders' => $orders]); 
-    $order = Order::find($id);
-    return view('Dashboard.order.showOrder', ['order' => $order]);
+    
+    $orders = Order::all();
+    return view('Dashboard.order', ['orders' => $orders]); 
 }
     /**
      * Show the form for editing the specified resource.
      */
-    // public function edit(Order $order)
-    // {
-    //     //
-    // }
 
     /**
      * Update the specified resource in storage.
      */
-    // public function update(Request $request, Order $order)
-    // {
-    //     //
-    // }
-
+   
     public function edit($id)
     {
            $order = Order::find($id);
@@ -76,8 +82,7 @@ public function show($id)
             $order->update([
                 'comment' => $request->input('comment'),
                 'city' => $request->input('city'),
-                // 'avatar' => $request->input('avatar'),
-                // 'phone' => $request->input('phone'),
+                
             ]);
     
             return redirect()->route('orders')->with('success', 'order updated successfully.');
@@ -90,6 +95,21 @@ public function show($id)
      */
     public function destroy(Order $order)
     {
-        //
+
+        try {
+            if (Gate::allows('is-admin')) {
+
+                    $order->delete();
+                    return to_route('Order.index');
+            } else {
+                return abort(403, 'You are not allowed to delete order.');
+            }
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while deleting the order.');
+
+        }
+
+
+
     }
 }

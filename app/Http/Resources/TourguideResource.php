@@ -17,12 +17,16 @@ class TourguideResource extends JsonResource
      public function getAvgStars($reviews){
         $stars = 0;
         $avg = 0;
+        $count = 0;
         foreach ($reviews as $value) {
             if (isset($value['stars'])) {
+                if($value['status'] === 'confirmed'){
                 $stars += $value['stars'];
-                $avg = $stars/count($reviews);
+                $count++;             
+                }
             }
         }
+        $avg = $stars/($count ? $count : 1);
         return ['avg'=>$avg];
     }
     public function toArray(Request $request): array

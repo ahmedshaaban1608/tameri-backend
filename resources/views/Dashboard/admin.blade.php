@@ -90,12 +90,13 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="{{ route('tourguides') }}">
+              <a class="nav-link" href="{{ route('tourguides') }}">
+
              <span class="menu-icon">
                 <i class="mdi mdi-laptop"></i>
               </span>
               <span class="menu-title">Tourguides</span>
-              {{-- <i class="menu-arrow"></i> --}}
+            
             </a>
             
           </li>
@@ -340,7 +341,7 @@
             @endif
         
             @if(isset($tourists))
-                @include('Dashboard.tourist.tourists')
+                @include('Tourist.index')
             @endif
         
             @if(isset($orders))
@@ -351,7 +352,7 @@
         @include('Dashboard.review.reviews')
     @endif
     @if(isset($tourguides))
-    @include('Dashboard.tourguide.tourguide')
+    @include('Tourguide.index')
 @endif
         </div>
         

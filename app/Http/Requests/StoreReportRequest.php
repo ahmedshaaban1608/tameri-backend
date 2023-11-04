@@ -11,7 +11,7 @@ class StoreReportRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +23,8 @@ class StoreReportRequest extends FormRequest
     {
         return [
             //
+            'subject' => 'required|string',
+            'problem' => 'required|string',
         ];
     }
 }

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreLanguageRequest;
+use App\Http\Requests\UpdateLanguageRequest;
 use App\Http\Resources\LanguageResource;
 use App\Models\Language;
-use App\Models\Tourguide;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -19,7 +21,6 @@ class LanguageController extends Controller
     public function index()
     {
         try {
-
             $languages = LanguageResource::collection(Language::all());
             return response()->json(['data' => $languages], 200);
         } catch (\Exception $e) {
@@ -27,23 +28,15 @@ class LanguageController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(StoreLanguageRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            // "tourguide_id" => "required|numeric",
-            "language" => "required"
-        ]);
-        if ($validator->fails()) {
-            return response($validator->errors()->all(), 422);
-        }
+       
         try {
-            $user = auth()->user();
-            if ($user->type === 'tourguide') {
-                // $tourguide = Tourguide::findOrFail($request->tourguide_id);
+            if (Gate::allows('is-tourguide')) {
+                $user = auth()->user();
                 $request->merge(['tourguide_id' => $user->id]);
-
                 $language = Language::create($request->all());
-                return response()->json(['message' => 'Language created successfully', 'data' => new LanguageResource($language)], 201);
+                return response()->json(['message' => 'Language created successfully', 'data' => new LanguageResource($language)], 200);
             } else {
                 return response()->json(['message' => 'Only tourguides are allowed to create languages.'], 403);
             }
@@ -52,13 +45,8 @@ class LanguageController extends Controller
         }
 
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Language $language)
     {
-
         try {
             return response()->json(new LanguageResource($language), 200);
         } catch (\Exception $e) {
@@ -66,29 +54,15 @@ class LanguageController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Language $language)
+    public function update(UpdateLanguageRequest $request, Language $language)
     {
-        $validator = Validator::make($request->all(), [
-            // 'tourguide_id' => 'required|numeric',
-            'language' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        try {
-            $user = auth()->user();
-            if ($user->type === 'tourguide' && $language->tourguide_id === $user->id) {
-
-                // $tourguide = Tourguide::findOrFail($request->tourguide_id);
-
-                $language->update($request->all());
-
-                return response()->json(['message' => 'Language updated successfully', 'data' => new LanguageResource($language)], 200);
+       try {
+            if (Gate::allows('is-tourguide')) {
+                $user = auth()->user();
+                if ($language->tourguide_id === $user->id) {
+                    $language->update($request->all());
+                    return response()->json(['message' => 'Language updated successfully', 'data' => new LanguageResource($language)], 200);
+                } 
             } else {
                 return response()->json(['message' => 'You are not allowed to update this languages.'], 403);
             }
@@ -100,17 +74,16 @@ class LanguageController extends Controller
     public function destroy(Language $language)
     {
         try {
-            $user = auth()->user();
-            if ($user->type === 'tourguide') {
-                if ($user->id === $language->tourguide_id) {
+            if (Gate::allows('is-tourguide')) {
+                $user = auth()->user();
+                if ($language->tourguide_id === $user->id) {
                     $language->delete();
                     return response()->json("Deleted Succssfully", 200);
-                } else {
-                    return response()->json(['message' => 'only the Owner Of The language is Allowed to Delete.'], 403);
-                }
+                } 
             } else {
-                return response()->json(['message' => 'Only tourguides are allowed to delete language.'], 403);
+                return response()->json(['message' => 'You are not allowed to delete this language.'], 403);
             }
+
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred while deleteing the language.'], 500);
         }

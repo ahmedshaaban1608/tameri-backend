@@ -43,4 +43,3 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->get('logout', [AuthController::class, 'logout']);
 
 Route::get('/showUsers', [App\Http\Controllers\AdminController::class, 'getUsers']);
-
