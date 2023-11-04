@@ -43,7 +43,6 @@ Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 Route::get('/users', [AdminController::class, 'showUsers'])->name('users');
 Route::get('/order', [AdminController::class, 'showOrders'])->name('orders');
-Route::get('/reviews', [AdminController::class, 'showReviews'])->name('reviews');
 
 Route::get('/tourists', [AdminController::class, 'showTourists'])->name('tourists');
 Route::delete('/tourists/{id}', [TouristController::class, 'destroy'])->name('tourists.destroy');
@@ -54,10 +53,13 @@ Route::get('/tourguides', [AdminController::class, 'showTourguides'])->name('tou
 Route::get('/tourguides/{id}', [TourguideController::class, 'show'])->name('tourguides.show');
 Route::put('/tourguides/{id}', [TourguideController::class, 'update'])->name('tourguides.update');
 
+Route::get('/reviews', [AdminController::class, 'showReviews'])->name('reviews');
+Route::get('/reviews/{id}', [ReviewController::class, 'show'])->name('reviews.show');
+Route::put('/reviews/{id}', [ReviewController::class, 'update'])->name('reviews.update');
 
 Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
 Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
-Route::get('/reviews/{id}', [ReviewController::class, 'show'])->name('reviews.show');
+
 
 
 // Route::resource('tourguides', TourguideController::class)->except(['show', 'update']);

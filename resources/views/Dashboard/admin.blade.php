@@ -349,7 +349,7 @@
             @endif
         
           @if(isset($reviews))
-        @include('Dashboard.review.reviews')
+        @include('Review.index')
     @endif
     @if(isset($tourguides))
     @include('Tourguide.index')
