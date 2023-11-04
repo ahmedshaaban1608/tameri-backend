@@ -39,10 +39,7 @@ Route::resource('reviews', ReviewController::class);
 Route::resource('areas', AreaController::class);
 Route::resource('languages', LanguageController::class);
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-
-Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-Route::get('/users', [AdminController::class, 'showUsers'])->name('users');
-Route::get('/order', [AdminController::class, 'showOrders'])->name('orders');
+// Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 
 Route::get('/tourists', [AdminController::class, 'showTourists'])->name('tourists');
 Route::delete('/tourists/{id}', [TouristController::class, 'destroy'])->name('tourists.destroy');
@@ -57,8 +54,12 @@ Route::get('/reviews', [AdminController::class, 'showReviews'])->name('reviews')
 Route::get('/reviews/{id}', [ReviewController::class, 'show'])->name('reviews.show');
 Route::put('/reviews/{id}', [ReviewController::class, 'update'])->name('reviews.update');
 
-Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+Route::get('/order', [AdminController::class, 'showOrders'])->name('orders');
 Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+Route::put('/orders/{id}', [OrderController::class, 'update'])->name('orders.update');
+
+Route::get('/users', [AdminController::class, 'showUsers'])->name('users');
+Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
 
 
 

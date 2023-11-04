@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use Illuminate\Support\Facades\Gate;
@@ -49,17 +50,16 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    // public function show(Order $order)
-    // {
-    //     //
-    // }
    
-public function show()
-{
-    
-    $orders = Order::all();
-    return view('Dashboard.order', ['orders' => $orders]); 
-}
+    public function show($id)
+    {
+        try {
+            $order = Order::findOrFail($id);
+            return view('Order.show', ['order' => $order]);
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while retrieving the data.');
+        }
+    }
     /**
      * Show the form for editing the specified resource.
      */
@@ -68,28 +68,50 @@ public function show()
      * Update the specified resource in storage.
      */
    
-    public function edit($id)
-    {
-           $order = Order::find($id);
-        return view('Dashboard.order.editOrder', ['order' => $order]);
-    }
+     public function edit($id)
+     {
+         try {
+             if (Gate::allows('is-admin')) {
+                 $order = Order::find($id);
+                 if ($order) {
+                     return view('Order.edit', ['order' => $order]); 
+                 } else {
+                     return redirect()->route('users')->with('error', 'User not found.');
+                 }
+             } else {
+                 return abort(403, 'You are not allowed to edit this user.');
+             }
+         } catch (\Exception $e) {
+             return abort(500, 'An error occurred while retrieving the data.');
+         }
+     }
 
     public function update(Request $request, $id)
     {
-        $order = Order::find($id);
-    
+        try {
+            $order = Order::findOrFail($id);
+
         if ($order) {
+            if (Gate::allows('is-admin')) {
             $order->update([
                 'comment' => $request->input('comment'),
                 'city' => $request->input('city'),
                 
             ]);
-    
             return redirect()->route('orders')->with('success', 'order updated successfully.');
         } else {
-            return redirect()->back()->with('error', 'order not found.');
+            return abort(403, 'You are not allowed to update the tourguide.');
         }
+    } else {
+        return back()->with('error', 'Tourguide not found.');
     }
+} catch (\Exception $e) {
+    return back()->with('error', 'An error occurred while updating the tourguide.');
+}
+    }
+    
+
+
     /**
      * Remove the specified resource from storage.
      */

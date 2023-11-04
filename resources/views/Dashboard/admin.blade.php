@@ -345,7 +345,7 @@
             @endif
         
             @if(isset($orders))
-                @include('Dashboard.order.order')
+                @include('Order.index')
             @endif
         
           @if(isset($reviews))
