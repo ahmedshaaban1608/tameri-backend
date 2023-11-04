@@ -337,7 +337,7 @@
         <div class="main-panel">
           <div class="content-wrapper">
             @if(isset($users))
-                @include('Dashboard.user.users')
+                @include('User.index')
             @endif
         
             @if(isset($tourists))

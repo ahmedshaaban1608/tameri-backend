@@ -66,16 +66,12 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    // public function show(User $user)
-    // {
-    //     //
-    // }
-
-    public function show(User $user)
+    
+    public function show($id)
 {
-
     try {
-        return view('User.show', ['data' => new UserResource($user)]);
+        $user = User::findOrFail($id);
+        return view('User.show', ['user' => $user]);
     } catch (\Exception $e) {
         return abort(500, 'An error occurred while retrieving the data.');
     }
@@ -104,69 +100,30 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update(UpdateUserRequest $request, User $user)
-    // {
-    //     //
-    // }
-    // public function edit($id)
-    // {
-    //     try {
-    //         if (Gate::allows('is-admin')) {
-    //                 $user->update($request->all());
-    //                 return to_route('User.index');
+   
 
-    //         } else {
-    //             return abort(403, 'You are not allowed to update user.');
-
-    //         }
-    //     } catch (\Exception $e) {
-    //         return abort(500, 'An error occurred while updating the user.');
-
-    //     }
-
-
-    // }
-
-    // public function update(Request $request, $id)
-    // {
-    //     $user = User::find($id);
-    
-    //     if ($user) {
-    //         $user->update([
-    //             'type' => $request->input('type'),
-    //             'name' => $request->input('name'),
-    //             'email' => $request->input('email'),
-                
-    //         ]);
-    
-    //         return redirect()->route('users')->with('success', 'user updated successfully.');
-    //     } else {
-    //         return redirect()->back()->with('error', 'user not found.');
-    //     }
-    // }
     public function edit($id)
 {
     try {
         if (Gate::allows('is-admin')) {
             $user = User::find($id);
             if ($user) {
-                return view('User.edit', ['data' => $user]);
+                return view('User.edit', ['user' => $user]);
             } else {
                 return redirect()->route('users')->with('error', 'User not found.');
             }
         } else {
             return abort(403, 'You are not allowed to edit this user.');
         }
-    } catch (\Exception $e) {
-        return abort(500, 'An error occurred while retrieving the data.');
-    }
+    } catch (\Throwable $th) {
+                return abort(500, 'An error occurred while retrieving the data.');
+            }
 }
 
 public function update(Request $request, $id)
 {
     try {
         $user = User::find($id);
-
         if ($user) {
             if (Gate::allows('is-admin')) {
                 $user->update([
