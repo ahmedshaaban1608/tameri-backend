@@ -60,15 +60,14 @@ class ReviewController extends Controller
 
         }
 
-
-
     }
 
 
-  public function show(Review $review)
+  public function show($id)
 {
     try {
-        return view('Review.show', ['data' => new ReviewResource($review)]);
+        $review = Review::findOrFail($id);
+        return view('Review.show',['review' => $review]);
     } catch (\Exception $e) {
         return abort(500, 'An error occurred while retrieving the data.');
     }
@@ -79,60 +78,29 @@ class ReviewController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Review $review)
+  
+    public function edit($id)
     {
-        //
         try {
             if (Gate::allows('is-admin')) {
-                return view('Review.edit', ['data'=> $review]);
-            } else{
-                return abort(403, 'You are not allowed to edit this review.');
+                $review = Review::find($id);
+                if ($review) {
+                    return view('Review.edit', ['review' => $review]); 
+                } else {
+                    return redirect()->route('users')->with('error', 'User not found.');
+                }
+            } else {
+                return abort(403, 'You are not allowed to edit this user.');
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
         }
     }
-
     /**
      * Update the specified resource in storage.
      */
-    // public function update(UpdateReviewRequest $request, Review $review)
-    // {
-
-    //     try {
-    //         if (Gate::allows('is-admin')) {
-    //                 $review->update($request->all());
-    //                 return to_route('Review.index');
-
-    //         } else {
-    //             return abort(403, 'You are not allowed to update review.');
-
-    //         }
-    //     } catch (\Exception $e) {
-    //         return abort(500, 'An error occurred while updating the review.');
-
-    //     }
 
 
-
-    // }
-
-    // public function update(Request $request, $id)
-    // {
-    //     $review = Review::find($id);
-    
-    //     if ($review) {
-    //         $review->update([
-    //             'title' => $request->input('title'),
-    //             'comment' => $request->input('comment'),
-                
-    //         ]);
-    
-    //         return redirect()->route('reviews')->with('success', 'reviews updated successfully.');
-    //     } else {
-    //         return redirect()->back()->with('error', 'reviews not found.');
-    //     }
-    // }
     public function update(Request $request, $id)
 {
     try {
