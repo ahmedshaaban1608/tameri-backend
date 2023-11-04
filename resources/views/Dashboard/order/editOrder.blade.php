@@ -49,16 +49,23 @@
     </style>
 </head>
 <body>
-    <h2>Edit Tourguide</h2>
+    <h2>Edit Order</h2>
 
-    <form class="editt" action="{{ route('tourguides.update', $tourguide->id) }}" method="POST">
+    <form class="editt" action="{{ route('orders.update', $order->id) }}" method="POST">
         @csrf
         @method('PUT')
-        <label for="bio">Bio:</label>
-        <input type="bio" id="bio" name="bio" value="{{ $tourguide['bio'] }}">
+        <label for="comment">Comment:</label>
+        <input type="text" id="comment" name="comment" value="{{ $order['comment'] }}">
 
-        <label for="description">Description:</label>
-        <input type="text" id="description" name="description" value="{{ $tourguide['description'] }}">
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" value="{{ $order['city'] }}">
+
+        {{-- <label for="avatar">Avatar:</label>
+        <input type="text" id="avatar" name="avatar" value="{{ $tourist['avatar'] }}">
+
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone" value="{{ $tourist['phone'] }}"> --}}
+        
         <button type="submit">Update</button>
     </form>
 </body>

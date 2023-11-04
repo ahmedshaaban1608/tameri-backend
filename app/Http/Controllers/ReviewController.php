@@ -96,26 +96,66 @@ class ReviewController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateReviewRequest $request, Review $review)
-    {
+    // public function update(UpdateReviewRequest $request, Review $review)
+    // {
 
-        try {
+    //     try {
+    //         if (Gate::allows('is-admin')) {
+    //                 $review->update($request->all());
+    //                 return to_route('Review.index');
+
+    //         } else {
+    //             return abort(403, 'You are not allowed to update review.');
+
+    //         }
+    //     } catch (\Exception $e) {
+    //         return abort(500, 'An error occurred while updating the review.');
+
+    //     }
+
+
+
+    // }
+
+    // public function update(Request $request, $id)
+    // {
+    //     $review = Review::find($id);
+    
+    //     if ($review) {
+    //         $review->update([
+    //             'title' => $request->input('title'),
+    //             'comment' => $request->input('comment'),
+                
+    //         ]);
+    
+    //         return redirect()->route('reviews')->with('success', 'reviews updated successfully.');
+    //     } else {
+    //         return redirect()->back()->with('error', 'reviews not found.');
+    //     }
+    // }
+    public function update(Request $request, $id)
+{
+    try {
+        $review = Review::find($id);
+
+        if ($review) {
             if (Gate::allows('is-admin')) {
-                    $review->update($request->all());
-                    return to_route('Review.index');
+                $review->update([
+                    'title' => $request->input('title'),
+                    'comment' => $request->input('comment'),
+                ]);
 
+                return redirect()->route('reviews')->with('success', 'Review updated successfully.');
             } else {
-                return abort(403, 'You are not allowed to update review.');
-
+                return abort(403, 'You are not allowed to update the review.');
             }
-        } catch (\Exception $e) {
-            return abort(500, 'An error occurred while updating the review.');
-
+        } else {
+            return redirect()->back()->with('error', 'Review not found.');
         }
-
-
-
+    } catch (\Exception $e) {
+        return abort(500, 'An error occurred while updating the review.');
     }
+}
 
     /**
      * Remove the specified resource from storage.

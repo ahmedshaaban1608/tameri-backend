@@ -49,16 +49,20 @@
     </style>
 </head>
 <body>
-    <h2>Edit Tourguide</h2>
+    <h2>Edit User</h2>
 
-    <form class="editt" action="{{ route('tourguides.update', $tourguide->id) }}" method="POST">
+    <form class="editt" action="{{ route('users.update', $user->id) }}" method="POST">
         @csrf
         @method('PUT')
-        <label for="bio">Bio:</label>
-        <input type="bio" id="bio" name="bio" value="{{ $tourguide['bio'] }}">
+        <label for="type">Type:</label>
+        <input type="text" id="type" name="type" value="{{ $user['type'] }}">
 
-        <label for="description">Description:</label>
-        <input type="text" id="description" name="description" value="{{ $tourguide['description'] }}">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ $user['name'] }}">
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ $user['email'] }}">
+        
         <button type="submit">Update</button>
     </form>
 </body>

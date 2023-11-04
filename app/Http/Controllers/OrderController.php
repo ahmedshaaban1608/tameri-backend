@@ -43,71 +43,53 @@ class OrderController extends Controller
      */
     public function store(StoreOrderRequest $request)
     {
-
-        try {
-            if (Gate::allows('is-admin')) {
-                $order = Order::create($request->all());
-                return to_route('Order.index');
-            } else {
-                return abort(403, 'You are not allowed to create order.');
-
-            }
-
-        } catch (\Exception $e) {
-            return abort(500, 'An error occurred while creating the order.');
-
-        }
-
+        //
     }
 
-public function show(Order $order)
+    /**
+     * Display the specified resource.
+     */
+    // public function show(Order $order)
+    // {
+    //     //
+    // }
+   
+public function show()
 {
-    try {
-        return view('Order.show', ['data' => new OrderResource($order)]);
-    } catch (\Exception $e) {
-        return abort(500, 'An error occurred while retrieving the data.');
-    }
-
+    
+    $orders = Order::all();
+    return view('Dashboard.order', ['orders' => $orders]); 
 }
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Order $order)
-    {
-        //
-        try {
-            if (Gate::allows('is-admin')) {
-                return view('Order.edit', ['data'=> $order]);
-            } else{
-                return abort(403, 'You are not allowed to edit this order.');
-            }
-        } catch (\Throwable $th) {
-            return abort(500, 'An error occurred while retrieving the data.');
-        }
-    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateOrderRequest $request, Order $order)
+   
+    public function edit($id)
     {
-
-        try {
-            if (Gate::allows('is-admin')) {
-                    $order->update($request->all());
-                    return to_route('Order.index');
-
-            } else {
-                return abort(403, 'You are not allowed to update order.');
-
-            }
-        } catch (\Exception $e) {
-            return abort(500, 'An error occurred while updating the order.');
-
-        }
-
+           $order = Order::find($id);
+        return view('Dashboard.order.editOrder', ['order' => $order]);
     }
 
+    public function update(Request $request, $id)
+    {
+        $order = Order::find($id);
+    
+        if ($order) {
+            $order->update([
+                'comment' => $request->input('comment'),
+                'city' => $request->input('city'),
+                
+            ]);
+    
+            return redirect()->route('orders')->with('success', 'order updated successfully.');
+        } else {
+            return redirect()->back()->with('error', 'order not found.');
+        }
+    }
     /**
      * Remove the specified resource from storage.
      */

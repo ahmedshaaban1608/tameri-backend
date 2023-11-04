@@ -56,7 +56,7 @@ class TourguideController extends Controller
                 ]);
                 $data['id'] = $user->id;
                 $tourist = Tourguide::create($data);
-                return to_route('Tourguide.index');
+                return route('Tourguide.index');
             } else {
                 return abort(403, 'You are not allowed to create tourguide.');
 
@@ -71,59 +71,65 @@ class TourguideController extends Controller
     /**
      * Display the specified resource.
      */
-    // public function show(Tourguide $tourguide)
-    // {
-    //     //
-    // }
-    public function show(Tourguide $tourguide)
-    {
-        try {
-            return view('Tourguide.show', ['data' => new TourguideResource($tourguide)]);
-        } catch (\Exception $e) {
-            return abort(500, 'An error occurred while retrieving the data.');
-        }
-
-    }
+    
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Tourguide $tourguide)
-    {
-        //
-        try {
-            if (Gate::allows('is-admin')) {
-                return view('Tourguide.edit', ['data'=> $tourguide]);
-            } else{
-                return abort(403, 'You are not allowed to edit this tourguide.');
-            }
-        } catch (\Throwable $th) {
-            return abort(500, 'An error occurred while retrieving the data.');
-        }
+    public function show($id)
+{
+    try {
+        $tourguide = Tourguide::findOrFail($id);
+        return view('Tourguide.show', ['tourguide' => $tourguide]);
+    } catch (\Exception $e) {
+        return abort(500, 'An error occurred while retrieving the data.');
     }
-
+}
+    
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTourguideRequest $request, Tourguide $tourguide)
+    public function edit($id)
     {
-
         try {
             if (Gate::allows('is-admin')) {
-                    $tourguide->update($request->all());
-                    return to_route('Tourguide.index');
-
+                $tourguide = Tourguide::find($id);
+                if ($tourguide) {
+                    return view('Tourguide.edit', ['tourguide' => $tourguide]); 
+                } else {
+                    return redirect()->route('users')->with('error', 'User not found.');
+                }
             } else {
-                return abort(403, 'You are not allowed to update tourguide.');
-
+                return abort(403, 'You are not allowed to edit this user.');
             }
         } catch (\Exception $e) {
-            return abort(500, 'An error occurred while updating the tourguide.');
-
+            return abort(500, 'An error occurred while retrieving the data.');
         }
-
-
     }
+    
+    
+public function update(Request $request, $id)
+{
+    try {
+        $tourguide = Tourguide::findOrFail($id);
+
+        if ($tourguide) {
+            if (Gate::allows('is-admin')) {
+                $tourguide->update([
+                    'description' => $request->input('description'),
+                    'bio' => $request->input('bio'),
+                ]);
+                return back()->with('success', 'Tourguide updated successfully.');
+            } else {
+                return abort(403, 'You are not allowed to update the tourguide.');
+            }
+        } else {
+            return back()->with('error', 'Tourguide not found.');
+        }
+    } catch (\Exception $e) {
+        return back()->with('error', 'An error occurred while updating the tourguide.');
+    }
+}
 
     /**
      * Remove the specified resource from storage.
