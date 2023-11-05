@@ -23,7 +23,7 @@ class UserController extends Controller
     public function index()
     {
         try {
-            $users = UserResource::collection(User::paginate(30));
+            $users = UserResource::collection(User::paginate(60));
             return view('Dashboard.admin', ['users' => $users]);
         } catch (\Throwable $th) {
             return abort(500, 'An error occurred while retrieving the data.');
@@ -138,10 +138,10 @@ public function update(Request $request, $id)
             if (Gate::allows('is-admin')) {
                 $user = User::findOrFail($id);
                 $user->delete();
-                // $tourguide = Tourguide::findOrFail($id);
-                // $tourguide->delete();
-                // $tourist = Tourist::findOrFail($id);
-                // $tourist->delete();
+                $tourguide = Tourguide::findOrFail($id);
+                $tourguide->delete();
+                $tourist = Tourist::findOrFail($id);
+                $tourist->delete();
               
                 return back()->with('success', 'user deleted successfully.');
             } else {

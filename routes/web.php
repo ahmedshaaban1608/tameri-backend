@@ -41,6 +41,8 @@ Route::resource('languages', LanguageController::class);
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 // Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 
+
+// Route::get('/users', [AdminController::class, 'showUsers'])->name('users');
 Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
@@ -67,9 +69,6 @@ Route::put('/orders/{id}', [OrderController::class, 'update'])->name('orders.upd
 Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
 
 // Route::get('/users', [AdminController::class, 'showUsers'])->name('users');
-Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
-Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
-Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
 
 // Route::resource('tourguides', TourguideController::class)->except(['show', 'update']);
