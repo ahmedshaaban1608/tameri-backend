@@ -19,7 +19,7 @@ class TourguideController extends Controller
 {
     function __construct()
     {
-        $this->middleware('auth:sanctum')->except(['index', 'show', 'store']);
+        $this->middleware('auth:sanctum')->except(['index', 'show', 'store', 'search']);
     }
     public function index()
     {
@@ -100,4 +100,27 @@ class TourguideController extends Controller
             return response()->json(['message' => 'An error occurred while deleting the tourguide'], 500);
         }
     }
+
+   public function search(Request $request){
+    try {
+        $name = $request->name;
+        $city = $request->city;
+        $language = $request->language;
+
+        $tourguides = TourguideResource::collection(
+            Tourguide::whereHas('user', function ($query) use ($name) {
+                $query->where('name', 'like', '%' . $name . '%');
+            })->whereHas('areas', function ($query) use ($city) {
+                $query->where('area', 'like', '%' . $city . '%'); 
+            })->whereHas('languages', function ($query) use ($language) {
+                $query->where('language', 'like', '%' . $language . '%'); 
+            })->get()
+        );
+
+        return response()->json(['data' => $tourguides], 200);
+    } catch (\Throwable $th) {
+        \Log::error($th);
+        return response()->json(['message' => $th], 500);
+    }
+}
 }

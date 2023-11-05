@@ -48,6 +48,8 @@ class TourguideResource extends JsonResource
             "phone"=>$this->phone,
             "languages"=> LanguageResource::collection($this->languages),
             "reviews" => $this->getAvgStars($reviews)
+           
+
         ];
     }
 }

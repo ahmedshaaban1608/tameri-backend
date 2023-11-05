@@ -42,4 +42,4 @@ Route::apiResource('reports', ReportController::class);
 Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->get('logout', [AuthController::class, 'logout']);
 
-Route::get('/showUsers', [App\Http\Controllers\AdminController::class, 'getUsers']);
+Route::post('/tourguides/search', [App\Http\Controllers\api\TourguideController::class, 'search']);

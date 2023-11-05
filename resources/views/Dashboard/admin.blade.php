@@ -36,10 +36,26 @@
                   <img class="img-xs rounded-circle " src="../../assets/images/faces/rawan.jpeg" alt="">
                   <span class="count bg-success"></span>
                 </div>
-                <div class="profile-name">
+                {{-- <div class="profile-name">
                   <h5 class="mb-0 font-weight-normal">rawan ramadan</h5>
                   <span>Gold Member</span>
+                </div> --}}
+                {{-- <div class="profile-name">
+                  <h5 class="mb-0 font-weight-normal">{{ $name }}</h5>
+                  <span>Gold Member</span>
+              </div>
+               --}}
+               @if (Auth::check())
+                <div class="profile-name">
+                    <h5 class="mb-0 font-weight-normal">{{ Auth::user()->name }}</h5>
+                    <span>Gold Member</span>
                 </div>
+            @else
+                <div class="profile-name">
+                    <h5 class="mb-0 font-weight-normal"></h5>
+                </div>
+            @endif
+              
               </div>
               <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
               <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
@@ -81,16 +97,16 @@
           <li class="nav-item nav-category">
             <span class="nav-link">Navigation</span>
           </li>
-          <li class="nav-item menu-items">
+          {{-- <li class="nav-item menu-items">
             <a class="nav-link" href="../../index.html">
               <span class="menu-icon">
                 <i class="mdi mdi-speedometer"></i>
               </span>
               <span class="menu-title">Dashboard</span>
             </a>
-          </li>
+          </li> --}}
           <li class="nav-item menu-items">
-              <a class="nav-link" href="{{ route('tourguides') }}">
+              <a class="nav-link" href="{{ route('tourguides.index') }}">
 
              <span class="menu-icon">
                 <i class="mdi mdi-laptop"></i>
@@ -102,7 +118,7 @@
           </li>
           <li class="nav-item menu-items">
             
-              <a class="nav-link" href="{{ route('tourists') }}">
+              <a class="nav-link" href="{{ route('tourists.index') }}">
               
                 <span class="menu-icon">
                     <i class="mdi mdi-playlist-play"></i>
@@ -111,7 +127,7 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="{{ route('reviews') }}">  
+            <a class="nav-link" href="{{ route('reviews.index') }}">  
               <span class="menu-icon">
                 <i class="mdi mdi-table-large"></i>
               </span>
@@ -119,7 +135,7 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="{{ route('orders') }}">
+            <a class="nav-link" href="{{ route('orders.index') }}">
               <span class="menu-icon">
                 <i class="mdi mdi-chart-bar"></i>
               </span>
@@ -128,7 +144,7 @@
           </li>
          
           <li class="nav-item menu-items">
-              <a class="nav-link" href="{{ route('users') }}">  
+              <a class="nav-link" href="{{ route('users.index') }}">  
               <span class="menu-icon">
                     <i class="mdi mdi-security"></i>
                 </span>
@@ -294,10 +310,19 @@
               <li class="nav-item dropdown">
                 <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                   <div class="navbar-profile">
-                    <img class="img-xs rounded-circle" src="../../assets/images/faces/rawan.jpeg" alt="">
-                    <p class="mb-0 d-none d-sm-block navbar-profile-name">rawan ramadan</p>
-                    <i class="mdi mdi-menu-down d-none d-sm-block"></i>
-                  </div>
+                   <img class="img-xs rounded-circle" src="../../assets/images/faces/rawan.jpeg" alt=""> 
+                    
+                  </div> 
+                  @if (Auth::check())
+                <div class="profile-name">
+                    <h5 class="mb-0 font-weight-normal">{{ Auth::user()->name }}</h5>
+                    
+                </div>
+            @else
+                <div class="profile-name">
+                    <h5 class="mb-0 font-weight-normal"></h5>
+                </div>
+            @endif
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
                   <h6 class="p-3 mb-0">Profile</h6>
@@ -337,7 +362,7 @@
         <div class="main-panel">
           <div class="content-wrapper">
             @if(isset($users))
-                @include('Dashboard.user.users')
+                @include('User.index')
             @endif
         
             @if(isset($tourists))
@@ -345,11 +370,11 @@
             @endif
         
             @if(isset($orders))
-                @include('Dashboard.order.order')
+                @include('Order.index')
             @endif
         
           @if(isset($reviews))
-        @include('Dashboard.review.reviews')
+        @include('Review.index')
     @endif
     @if(isset($tourguides))
     @include('Tourguide.index')
@@ -386,18 +411,17 @@
     $(document).ready(function() {
         $('#tourists').on('click', function(e) {
             e.preventDefault();
-            $.get("{{ route('tourists') }}", function(data) {
+            $.get("{{ route('tourists.index') }}", function(data) {
                 $('#displayContent').html(data);
             });
         });
 
         $('#users').on('click', function(e) {
-            e.preventDefault();
-            $.get("{{ route('users') }}", function(data) {
-                $('#displayContent').html(data);
-            });
-        });
+    e.preventDefault();
+    $.get("{{ route('users.index') }}", function(data) {
+        $('#displayContent').html(data);
     });
+});
 </script>
     <script src="../../assets/js/off-canvas.js"></script>
     <script src="../../assets/js/hoverable-collapse.js"></script>
