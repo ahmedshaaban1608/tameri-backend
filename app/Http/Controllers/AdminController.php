@@ -33,15 +33,15 @@ class AdminController extends Controller
     }
  
     public function showReviews()
-{
+    {
     $reviews = Review::all();
     return view('Dashboard.admin', ['reviews' => $reviews]);
-}
+    }
 
-public function showTourguides()
-{
+    public function showTourguides()
+    {
     $tourguides = Tourguide::all();
     return view('Dashboard.admin', ['tourguides' => $tourguides]);
-}
+    }
 
 }

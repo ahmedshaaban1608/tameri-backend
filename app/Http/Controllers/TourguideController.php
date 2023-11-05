@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Http\Resources\TourguideResource;
 use App\Models\Tourguide;
+use App\Http\Resources\TourguideResource;
+
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTourguideRequest;
@@ -23,8 +23,9 @@ class TourguideController extends Controller
         //
         try {
 
-            $tourguide = TourguideResource::collection(Tourguide::paginate(20));
-            return view('Tourguide.index', ['data' => $tourguide]);
+            $tourguides = TourguideResource::collection(Tourguide::paginate(20));
+           
+            return view('Dashboard.admin', ['tourguides' => $tourguides]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
     }
@@ -39,6 +40,7 @@ class TourguideController extends Controller
         return view('Tourguide.create');
         //
     }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -134,20 +136,23 @@ public function update(Request $request, $id)
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Tourguide $tourguide)
+    public function destroy($id)
     {
-        //
         try {
             if (Gate::allows('is-admin')) {
-
-                    $tourguide->delete();
-                    return to_route('Tourguide.index');
+                $tourguide = Tourguide::findOrFail($id);
+                $tourguide->delete();
+                $user = User::findOrFail($id);
+                $user->delete();
+                return back()->with('success', 'Tourguide deleted successfully.');
             } else {
                 return abort(403, 'You are not allowed to delete tourguide.');
             }
         } catch (\Exception $e) {
-            return abort(500, 'An error occurred while deleting the tourguide.');
-
+            return back()->with('error', 'An error occurred while deleting the tourguide.');
         }
     }
+    
+    
+
 }

@@ -23,7 +23,7 @@ class ReviewController extends Controller
         try {
 
             $reviews = ReviewResource::collection(Review::paginate(20));
-            return view('Review.index', ['data' => $reviews]);
+            return view('Dashboard.admin', ['reviews' => $reviews]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
     }
@@ -128,24 +128,19 @@ class ReviewController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Review $review)
+    public function destroy($id)
     {
-        //
-        {
-
-            try {
-                if (Gate::allows('is-admin')) {
-
-                        $review->delete();
-                        return to_route('Review.index');
-                } else {
-                    return abort(403, 'You are not allowed to delete area.');
-                }
-            } catch (\Exception $e) {
-                return abort(500, 'An error occurred while deleting the area.');
-
+        try {
+            if (Gate::allows('is-admin')) {
+                $review = Review::findOrFail($id);
+                $review->delete();
+              
+                return back()->with('success', 'review deleted successfully.');
+            } else {
+                return abort(403, 'You are not allowed to delete review.');
             }
-
+        } catch (\Exception $e) {
+            return back()->with('error', 'An error occurred while deleting the review.');
         }
     }
 }

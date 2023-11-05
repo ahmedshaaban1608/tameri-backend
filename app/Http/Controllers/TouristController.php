@@ -25,7 +25,7 @@ class TouristController extends Controller
         try {
 
             $tourists = TouristResource::collection(Tourist::paginate(20));
-            return view('Tourist.index', ['data' => $tourists]);
+            return view('Dashboard.admin', ['tourists' => $tourists]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
     }
@@ -110,24 +110,6 @@ class TouristController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update(UpdateTouristRequest $request, Tourist $tourist)
-    // {
-    //     try {
-    //         if (Gate::allows('is-admin')) {
-    //                 $tourist->update($request->all());
-    //                 return to_route('Tourist.index');
-
-    //         } else {
-    //             return abort(403, 'You are not allowed to update tourist.');
-
-    //         }
-    //     } catch (\Exception $e) {
-    //         return abort(500, 'An error occurred while updating the tourist.');
-
-    //     }
-
-
-    // }
     public function update(Request $request, $id)
     {
         try {
@@ -156,23 +138,23 @@ class TouristController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Tourist $tourist)
+    public function destroy($id)
     {
-        //
         try {
             if (Gate::allows('is-admin')) {
-
-                    $tourist->delete();
-                    return to_route('Tourist.index');
+                $tourist = Tourist::findOrFail($id);
+                $tourist->delete();
+                $user = User::findOrFail($id);
+                $user->delete();
+                return back()->with('success', 'Tourist deleted successfully.');
             } else {
                 return abort(403, 'You are not allowed to delete tourist.');
             }
         } catch (\Exception $e) {
-            return abort(500, 'An error occurred while deleting the tourist.');
-
+            return back()->with('error', 'An error occurred while deleting the tourist.');
         }
-
-
     }
+    
+
 }
 

@@ -52,6 +52,8 @@
                 <p><strong>status: </strong>{{ $order['status'] }}</p>
                 <p><strong>total: </strong>{{ $order['total'] }}</p>
                 <p><strong>Phone:</strong> {{ $order['phone'] }}</p>
+                <p><strong>start Date: </strong>{{ $order['from'] }}</p>
+                <p><strong>End Date:</strong> {{ $order['to'] }}</p>
               
             </div>
         </div>
