@@ -22,7 +22,7 @@ class ReviewController extends Controller
         //
         try {
 
-            $reviews = ReviewResource::collection(Review::paginate(20));
+            $reviews = ReviewResource::collection(Review::paginate(40));
             return view('Dashboard.admin', ['reviews' => $reviews]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
@@ -75,6 +75,7 @@ class ReviewController extends Controller
 }
 
 
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -101,19 +102,53 @@ class ReviewController extends Controller
      */
 
 
-    public function update(Request $request, $id)
+//     public function update(Request $request, $id)
+// {
+//     try {
+//         $review = Review::find($id);
+
+//         if ($review) {
+//             if (Gate::allows('is-admin')) {
+//                 $review->update([
+//                     'title' => $request->input('title'),
+//                     'comment' => $request->input('comment'),
+//                     'status' => $request->input('status'),
+//                 ]);
+
+//                 return redirect()->route('reviews')->with('success', 'Review updated successfully.');
+//             } else {
+//                 return abort(403, 'You are not allowed to update the review.');
+//             }
+//         } else {
+//             return redirect()->back()->with('error', 'Review not found.');
+//         }
+//     } catch (\Exception $e) {
+//         return abort(500, 'An error occurred while updating the review.');
+//     }
+// }
+public function update(Request $request, $id)
 {
     try {
         $review = Review::find($id);
 
         if ($review) {
             if (Gate::allows('is-admin')) {
-                $review->update([
-                    'title' => $request->input('title'),
-                    'comment' => $request->input('comment'),
-                ]);
+                if ($request->input('status_action') === 'declined') {
+                    $review->update(['status' => 'pending']);
+                    return redirect()->route('reviews')->with('success', 'Review status reverted to pending successfully.');
+                } elseif ($review->status === 'pending' && in_array($request->input('status_action'), ['confirmed'])) {
+                    $newStatus = $request->input('status_action');
+                    $review->update(['status' => $newStatus]);
+                    return redirect()->route('reviews')->with('success', 'Review status updated to ' . $newStatus . ' successfully.');
+                } else {
+                    $review->update([
+                        'title' => $request->input('title'),
+                        'comment' => $request->input('comment'),
+                        'status' => $request->input('status'),
+                    ]);
 
-                return redirect()->route('reviews')->with('success', 'Review updated successfully.');
+                    return redirect()->route('reviews')->with('success', 'Review updated successfully.');
+                }
             } else {
                 return abort(403, 'You are not allowed to update the review.');
             }
@@ -121,9 +156,10 @@ class ReviewController extends Controller
             return redirect()->back()->with('error', 'Review not found.');
         }
     } catch (\Exception $e) {
-        return abort(500, 'An error occurred while updating the review.');
+        return back()->with('error', 'An error occurred while updating the review: ' . $e->getMessage());
     }
 }
+
 
     /**
      * Remove the specified resource from storage.

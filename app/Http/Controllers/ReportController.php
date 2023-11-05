@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ReportResource;
 use App\Models\Report;
+use App\Models\Review;
+use App\Models\Order;
+use App\Models\Tourist;
+use App\Models\Tourguide;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreReportRequest;
 use App\Http\Requests\UpdateReportRequest;
@@ -17,18 +21,37 @@ class ReportController extends Controller
     function __construct(){
         $this->middleware('auth');
     }
+    // public function index()
+    // {
+    //     //
+    //     try {
+
+    //         $reports = ReportResource::collection(Report::paginate(20));
+    //         return view('Report.index', ['data' => $reports]);
+    //     } catch (\Exception $e) {
+    //         return abort(500, 'An error occurred while retrieving the data.');
+    // }
+
+    // }
+
     public function index()
-    {
-        //
-        try {
-
-            $reports = ReportResource::collection(Report::paginate(20));
-            return view('Report.index', ['data' => $reports]);
-        } catch (\Exception $e) {
-            return abort(500, 'An error occurred while retrieving the data.');
+{
+    try {
+        $reports = ReportResource::collection(Report::paginate(20));
+        $tourguidesCount = Tourguide::count();
+        $touristsCount = Tourist::count();
+        $reviewsCount = Review::count();
+        $ordersCount = Order::count();
+        return view('Dashboard.admin', [ 'reports' => $reports,
+        'tourguidesCount' => $tourguidesCount  ,
+        'touristsCount' => $touristsCount,
+         'reviewsCount' => $reviewsCount ,
+         'ordersCount' => $ordersCount 
+        ]);
+    } catch (\Exception $e) {
+        return abort(500, 'An error occurred while retrieving the data.');
     }
-
-    }
+}
 
     /**
      * Show the form for creating a new resource.
@@ -131,4 +154,5 @@ class ReportController extends Controller
 
     
     }
+ 
 }

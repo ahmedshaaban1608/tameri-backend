@@ -55,6 +55,7 @@
         <div class="container">
             <div class="tourguide-details">
                 <h2>ID: {{ $tourguide['id'] }}</h2>
+                <p>Name: {{ $user['name'] }}</p>
                 <p><strong>Birth Date:</strong> {{ $tourguide['birth_date'] }}</p>
                 <p><strong>Bio:</strong> {{ $tourguide['bio'] }}</p>
                 <p><strong>Description: </strong>{{ $tourguide['description'] }}</p>

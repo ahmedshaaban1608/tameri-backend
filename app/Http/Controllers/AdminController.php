@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Report;
 use App\Models\User;
 use App\Models\Tourist;
 use App\Models\Order;
@@ -9,12 +10,14 @@ use App\Models\Tourguide;
 use Illuminate\Http\Request;
 class AdminController extends Controller
 {
+   
     public function index()
     {
-        $users = User::all();
-        return view('Dashboard.admin', ['users' => $users]);
+        return redirect()->route('reports.index');
+        // $reports = Report::all();
+        // return view('Dashboard.admin', ['reports' => $reports]);
     }
-
+    
     public function showUsers()
     {
         $users = User::all();

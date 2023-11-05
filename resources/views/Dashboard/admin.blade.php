@@ -151,6 +151,14 @@
                 <span class="menu-title">User Pages</span>
                 {{-- <i class="menu-arrow"></i> --}}
             </a>
+            <li class="nav-item menu-items">
+              <a class="nav-link" href="{{ route('reports.index') }}">  
+              <span class="menu-icon">
+                    <i class="mdi mdi-security"></i>
+                </span>
+                <span class="menu-title">Collection</span>
+                
+            </a>
          
         </li>
         </ul>
@@ -361,6 +369,9 @@
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
+            @if(isset($reports))
+            @include('Report.index')
+        @endif
             @if(isset($users))
                 @include('User.index')
             @endif
@@ -379,16 +390,17 @@
     @if(isset($tourguides))
     @include('Tourguide.index')
 @endif
+
+
         </div>
         
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.html -->
-          <footer class="footer">
+          {{-- <footer class="footer">
             <div class="d-sm-flex justify-content-center justify-content-sm-between">
               <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © Ta-meri.com 2023</span>
-              {{-- <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin templates</a> from Bootstrapdash.com</span> --}}
-            </div>
-          </footer>
+                          </div>
+          </footer> --}}
           <!-- partial -->
         </div>
         <!-- main-panel ends -->

@@ -78,12 +78,16 @@ class TouristController extends Controller
     {
         try {
             $tourist = Tourist::findOrFail($id);
-            return view('Tourist.show', ['tourist' => $tourist]);
+    $user = $tourist->user; 
+            return view('Tourist.show', [
+                        'tourist' => $tourist,
+                        'user' => $user, 
+                    ]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
         }
     }
-    
+
 
     /**
      * Show the form for editing the specified resource.

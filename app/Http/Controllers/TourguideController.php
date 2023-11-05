@@ -82,7 +82,8 @@ class TourguideController extends Controller
 {
     try {
         $tourguide = Tourguide::findOrFail($id);
-        return view('Tourguide.show', ['tourguide' => $tourguide]);
+        $user = $tourguide->user; 
+        return view('Tourguide.show', ['tourguide' => $tourguide , 'user' => $user]);
     } catch (\Exception $e) {
         return abort(500, 'An error occurred while retrieving the data.');
     }

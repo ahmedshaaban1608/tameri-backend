@@ -51,6 +51,7 @@
         <div class="container">
             <div class="tourist-details">
                 <h2>ID: {{ $tourist['id'] }}</h2>
+                <p>Name: {{ $user['name'] }}</p>
                 <p>Country: {{ $tourist['country'] }}</p>
             <p>Gender: {{ $tourist['gender'] }}</p>
             <p>Phone: {{ $tourist['phone'] }}</p>
