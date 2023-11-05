@@ -21,11 +21,31 @@ class LanguageFactory extends Factory
 
     public function definition(): array
     {
+       $languagesArr =  [
+            "English",
+            "Spanish",
+            "French",
+            "German",
+            "Chinese",
+            "Japanese",
+            "Korean",
+            "Arabic",
+            "Russian",
+            "Italian",
+            "Portuguese",
+            "Dutch",
+            "Hindi",
+            "Swedish",
+            "Greek",
+            "Turkish",
+            "Vietnamese",
+            "Bengali",
+            "Farsi (Persian)",
+        ];
         $tourguideId = Tourguide::inRandomOrder()->first()->id;
         return [
            'tourguide_id'=>$tourguideId,
-           'language'=>$this->faker->languageCode
-
+           'language'=>$this->faker->randomElement($languagesArr),
         ];
     }
 }

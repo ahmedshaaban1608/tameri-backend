@@ -20,11 +20,29 @@ class AreaFactory extends Factory
     protected $model = Area::class;
 
     public function definition(): array
+    
     {
+        $cities = [
+            "Cairo",
+            "Giza",
+            "Luxor",
+            "Aswan",
+            "Alexandria",
+            "Sharm El Sheikh",
+            "Hurghada",
+            "Dahab",
+            "Siwa Oasis",
+            "Marsa Alam",
+            "Abu Simbel",
+            "El Minya",
+            "Ismailia",
+            "Port Said",
+            "Taba",
+        ];
         $tourguideId = Tourguide::inRandomOrder()->first()->id;
         return [
            'tourguide_id'=>$tourguideId,
-           'area'=>$this->faker->city
+           'area' => $this->faker->randomElement($cities),
 
         ];
     }
