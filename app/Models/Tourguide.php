@@ -30,16 +30,26 @@ class Tourguide extends Model
         return $this->belongsTo(User::class,'id');
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function averageStars()
+    {
+        return $this->reviews()->avg('stars');
+    }
+
     function languages(){
         return $this->hasMany(Language::class);
     }
+
     function areas(){
         return $this->hasMany(Area::class);
     }
-    function reviews(){
-        return $this->hasMany(Review::class);
-    }
+    
     function orders(){
         return $this->hasMany(Order::class);
     }
+    
 }

@@ -74,8 +74,23 @@
             @foreach ($reviews as $review)
     <tr>
         <td>{{ $review->id }}</td>
+
         {{-- <td>{{ $review->tourist->id }}</td> --}}
-            <td>{{ $review->tourguide->id }}</td>
+        {{-- <td>
+            @if ($review->tourist)
+                {{ $review->tourist->id }}
+            @else
+                N/A
+            @endif
+        </td> --}}
+        <td>
+            @if ($review->tourguide)
+                {{ $review->tourguide->id }}
+            @else
+                N/A
+            @endif
+        </td>
+            {{-- <td>{{ $review->tourguide->id }}</td> --}}
         <td>{{ $review->title }}</td>
         {{-- <td>{{ $review->comment }}</td> --}}
         <td>{{ $review->stars }}</td>
@@ -94,12 +109,9 @@
             </td>
             
             <td>
-                <form id="delete-form-{{ $review['id'] }}" action="{{ route('reviews.destroy', $review['id']) }}" method="POST" style="display: none;">
-                    @csrf
-                    @method('DELETE')
-                </form>
-                <a class="btn btn-danger" href="#" onclick="showConfirmation({{ $review['id'] }})">Delete</a>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#staticBackdrop" onclick="setDeleteUrl('{{ route('reviews.destroy', $review->id) }}')"> Delete</button>
             </td>
+            
             
             <tr>
                 <td colspan="10">
@@ -115,8 +127,38 @@
     @endif
     </div>
 
+    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Delete user</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are your sure?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <form id="deleteForm" method="post">
+                        @method('DELETE')
+                        @csrf
+                        <button type="submit" class="btn btn-primary">Delete</button>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function setDeleteUrl(url) {
+        
+            // Set the action URL for the delete form
+            document.getElementById('deleteForm').action = url;
+        }
+    </script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function showReviewDetails(reviewId) {
             if ($('#details_' + reviewId).is(':visible')) {
@@ -136,13 +178,12 @@
             });
         }
 
-        function showConfirmation(id) {
-            if (confirm('Are you sure you want to delete this review?')) {
-                document.querySelector(`form[action$="/reviews/${id}"]`).submit();
-            } else {
-                return false;
-            }
-        }
     </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    
 </body>
 </html>

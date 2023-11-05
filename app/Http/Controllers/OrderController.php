@@ -23,7 +23,7 @@ class OrderController extends Controller
         try {
 
             $orders = OrderResource::collection(Order::paginate(20));
-            return view('Order.index', ['data' => $orders]);
+            return view('Dashboard.admin', ['orders' => $orders]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
     }
@@ -115,23 +115,21 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Order $order)
-    {
 
+
+    public function destroy($id)
+    {
         try {
             if (Gate::allows('is-admin')) {
-
-                    $order->delete();
-                    return to_route('Order.index');
+                $order = Order::findOrFail($id);
+                $order->delete();
+                return back()->with('success', 'Order deleted successfully.');
             } else {
                 return abort(403, 'You are not allowed to delete order.');
             }
         } catch (\Exception $e) {
-            return abort(500, 'An error occurred while deleting the order.');
-
+            return back()->with('error', 'An error occurred while deleting the order.');
         }
-
-
-
     }
+    
 }

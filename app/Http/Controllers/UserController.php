@@ -6,6 +6,8 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Models\Tourguide;
+use App\Models\Tourist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -20,17 +22,14 @@ class UserController extends Controller
     }
     public function index()
     {
-        //
         try {
-            $users = UserResource::collection(User::paginate(20));
-            return view('User.index', ['data' => $users]);
-
-
+            $users = UserResource::collection(User::paginate(30));
+            return view('Dashboard.admin', ['users' => $users]);
         } catch (\Throwable $th) {
             return abort(500, 'An error occurred while retrieving the data.');
-
         }
     }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -83,20 +82,6 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    // public function edit(User $user)
-    // {
-    //     //
-    //     try {
-    //         if (Gate::allows('is-admin')) {
-    //             return view('User.edit', ['data'=> $user]);
-    //         } else{
-    //             return abort(403, 'You are not allowed to edit this user.');
-    //         }
-    //     } catch (\Throwable $th) {
-    //         return abort(500, 'An error occurred while retrieving the data.');
-    //     }
-    // }
-
     /**
      * Update the specified resource in storage.
      */
@@ -147,20 +132,24 @@ public function update(Request $request, $id)
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
         try {
             if (Gate::allows('is-admin')) {
-
-                    $user->delete();
-                    return to_route('User.index');
+                $user = User::findOrFail($id);
+                $user->delete();
+                // $tourguide = Tourguide::findOrFail($id);
+                // $tourguide->delete();
+                // $tourist = Tourist::findOrFail($id);
+                // $tourist->delete();
+              
+                return back()->with('success', 'user deleted successfully.');
             } else {
                 return abort(403, 'You are not allowed to delete user.');
             }
         } catch (\Exception $e) {
-            return abort(500, 'An error occurred while deleting the user.');
-
+            return back()->with('error', 'An error occurred while deleting the user.');
         }
-
     }
+    
 }
