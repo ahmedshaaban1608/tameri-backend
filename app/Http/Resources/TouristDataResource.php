@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class TouristDataResource extends JsonResource
 {
@@ -21,9 +22,9 @@ class TouristDataResource extends JsonResource
             "email"=> $this->user->email,
             "country"=> $this->country,
             "gender"=> $this->gender,
-            "avatar"=> $this->avatar ? $this->avatar : null,
+            'avatar' => isset($this->avatar) ? (Str::startsWith($this->avatar, 'http') ? $this->avatar : env('APP_URL').':8000/img/'.$this->avatar) : '/assets/user-avatar.png',
             "phone"=> $this->phone,
-            "orders"=> OrderResource::collection($this->orders),
+            "orders"=> OrderResource::collection($this->orders()->latest()->get()),
 
         ];
     }

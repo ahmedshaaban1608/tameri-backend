@@ -11,6 +11,8 @@ use App\Models\Tourguide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
+use DateTime;
+
 
 
 class OrderController extends Controller
@@ -25,7 +27,7 @@ class OrderController extends Controller
             $user = auth()->user();
 
             if (Gate::allows('is-tourist')) {
-                $orders = OrderResource::collection(Order::where('tourist_id', $user->id)->get());
+                $orders = OrderResource::collection(Order::where('tourist_id', $user->id)->latest()->get());
                 return response()->json(['data' => $orders], 200);
             } else if (Gate::allows('is-tourguide')) {
                 $orders = OrderResource::collection(Order::where('tourguide_id', $user->id)->get());
@@ -40,7 +42,9 @@ class OrderController extends Controller
 
     public function store(StoreOrderRequest $request)
     {
-       
+     
+
+
         try {
             if (Gate::allows('is-tourist')) {
                 $user = auth()->user();
@@ -49,14 +53,19 @@ class OrderController extends Controller
                     return response()->json(['message' => 'Tourguide Id not found'], 404);
                 }
                 $request->merge(['tourist_id' => $user->id]);
-
+                $requestTo = new DateTime($request->to);
+                $requestFrom = new DateTime($request->from);
+                $timeDifference = $requestTo->getTimestamp() - $requestFrom->getTimestamp();
+                $days = ceil($timeDifference / (60 * 60 * 24))+1;
+                $total = $tourguide->day_price * $days;
+                $request->merge(['total' => $total]);
                 $order = Order::create($request->all());
                 return response()->json(['message' => 'Order created successfully', 'data' => new OrderResource($order)], 200);
             } else {
                 return response()->json(['message' => 'Only tourists are allowed to create orders.'], 403);
             }
         } catch (\Exception $e) {
-            return response()->json(['message' => 'An error occurred while creating the order.'], 500);
+            return response()->json(['message' => 'An error occurred while creating the order.', 'error'=> $e], 500);
         }
     }
 

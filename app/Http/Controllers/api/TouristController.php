@@ -19,7 +19,7 @@ class TouristController extends Controller
 {
     function __construct()
     {
-        $this->middleware('auth:sanctum')->except(['index', 'show', 'store']);
+        $this->middleware('auth:sanctum')->except(['store']);
     }
     public function index()
     {
@@ -49,7 +49,7 @@ class TouristController extends Controller
             ]);
             $data['id'] = $user->id;
             $tourist = Tourist::create($data);
-            return response()->json(['data' => new TouristDataResource($tourist)], 200);
+            return response()->json(new TouristDataResource($tourist), 200);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'An error occurred while creating the tourist', 'error' => $th], 500);
         }
@@ -65,22 +65,41 @@ class TouristController extends Controller
 
     public function update(UpdateTouristRequest $request, Tourist $tourist)
     {
-
         try {
             if (Gate::allows('is-tourist')) {
-                $user = auth()->user();
-                if ($tourist->id === $user->id) {
-                    $tourist->update($request->all());
-                    // Return the tourist
-                    return response()->json(['data' => new TouristDataResource($tourist)], 200);
+                $currentUser = auth()->user();
+                if ($tourist->id === $currentUser->id) {
+                    $user = User::findOrfail($currentUser->id);
+                    $data = $request->all();
+                    
+                    // Update the "name" field
+                    if (isset($data['name'])) {
+                        $user->update(['name' => $data['name']]);
+                    }
+    
+                    // Update the "phone" field
+                    if (isset($data['phone'])) {
+                        $tourist->update(['phone' => $data['phone']]);
+                    }
+    
+                    // Update the "avatar" field if it's present
+                    if ($request->hasFile('avatar')) {
+                        $file = $request->file('avatar');
+                        $filename = time() . $file->getClientOriginalName();
+                        $file->move(public_path('img'), $filename);
+                        $tourist->update(['avatar' => $filename]);
+                    }
+    
+                    return response()->json(new TouristDataResource($tourist), 200);
                 }
             } else {
                 return response()->json(['message' => 'You are not allowed to update this tourist.'], 403);
             }
         } catch (\Throwable $th) {
-            return response()->json(['message' => 'An error occurred while deleting the tourist'], 500);
+            return response()->json(['error' => $th], 500);
         }
     }
+    
 
     public function destroy(Tourist $tourist)
     {

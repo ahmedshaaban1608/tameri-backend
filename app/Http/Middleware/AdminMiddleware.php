@@ -4,6 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+<<<<<<< HEAD
+=======
+use Illuminate\Support\Facades\Gate;
+>>>>>>> 1f682ffedea6c16c0fa8147030eed27803c76230
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminMiddleware
@@ -13,6 +17,7 @@ class AdminMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
+<<<<<<< HEAD
     // public function handle( $request, Closure $next)
     // {
     //     if (auth()->check() && auth()->user()->role === 'admin') {
@@ -30,4 +35,13 @@ class AdminMiddleware
         return redirect('/home'); 
     }
 
+=======
+    public function handle(Request $request, Closure $next): Response
+    {
+        if (Gate::allows('is-admin')) {
+            return $next($request);
+        }
+        return abort(403, 'You are not allowed');
+    }
+>>>>>>> 1f682ffedea6c16c0fa8147030eed27803c76230
 }
