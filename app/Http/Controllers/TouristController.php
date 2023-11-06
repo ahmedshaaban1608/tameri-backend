@@ -17,14 +17,15 @@ class TouristController extends Controller
      * Display a listing of the resource.
      */
     function __construct(){
-        $this->middleware('auth');
+        // $this->middleware('auth');
+        $this->middleware('isadmin');
     }
     public function index()
     {
         //
         try {
 
-            $tourists = TouristResource::collection(Tourist::paginate(20));
+            $tourists = TouristResource::collection(Tourist::paginate(10));
             return view('Dashboard.admin', ['tourists' => $tourists]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');

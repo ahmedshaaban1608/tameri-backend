@@ -1,69 +1,37 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-        
-        h2 {
-            text-align: center;
-            color: #333;
-        }
-        
-        .editt {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-        }
-        
-        input[type="text"] {
-            width: calc(100% - 12px);
-            padding: 6px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            box-sizing: border-box;
-        }
-        
-        button[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-        }
-    </style>
-</head>
-<body>
-    <h2>Edit User</h2>
 
-    <form class="editt" action="{{ route('users.update', $user->id) }}" method="POST">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body class="p-4">
+    <h2 class="text-center text-dark">Edit User</h2>
+
+    <form class="col-md-6 mx-auto" action="{{ route('users.update', $user->id) }}" method="POST">
         @csrf
         @method('PUT')
-        <label for="type">Type:</label>
-        <input type="text" id="type" name="type" value="{{ $user['type'] }}">
+        <div class="form-group">
+            <label for="type" class="text-dark">Type:</label>
+            <input type="text" id="type" name="type" class="form-control" value="{{ $user['type'] }}">
+        </div>
 
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" value="{{ $user['name'] }}">
+        <div class="form-group">
+            <label for="name" class="text-dark">Name:</label>
+            <input type="text" id="name" name="name" class="form-control" value="{{ $user['name'] }}">
+        </div>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="{{ $user['email'] }}">
-        
-        <button type="submit">Update</button>
+        <div class="form-group">
+            <label for="email" class="text-dark">Email:</label>
+            <input type="email" id="email" name="email" class="form-control" value="{{ $user['email'] }}">
+        </div>
+
+        <button type="submit" class="btn btn-success btn-block">Update</button>
     </form>
+
+    {{-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script> --}}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

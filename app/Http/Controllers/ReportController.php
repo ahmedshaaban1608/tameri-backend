@@ -19,7 +19,8 @@ class ReportController extends Controller
      * Display a listing of the resource.
      */
     function __construct(){
-        $this->middleware('auth');
+        // $this->middleware('auth');
+        $this->middleware('isadmin');
     }
     // public function index()
     // {

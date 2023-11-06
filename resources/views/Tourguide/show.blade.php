@@ -2,76 +2,68 @@
 <html>
 <head>
     <title>Show Tourist</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
+        p {
+            text-align: justify;
+            text-justify: inter-word;
+            font-size: 14px;
+            margin: 0; 
+            line-height: 2; 
         }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 15px;
-            text-align: center;
-        }
-        .container {
-            width: 40%;
-            margin: auto;
-            overflow: hidden;
-        }
-        .tourguide-details {
-            background-color: #fff;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-        }
-        .tourguide-details h2 {
-            font-size: 24px;
-            color: #333;
-        }
-        .tourguide-details p {
-            color: #555;
-            margin-bottom: 10px;
-        }
-        .tourguide-details img {
-            max-width: 100px;
-            max-height: 100px;
-            margin-top: 10px;
-        }
-        .image-container {
-            display: inline-block;
-            vertical-align: top;
-            margin-right: 20px; /* Adjust margin as needed */
+        .description {
+            margin-bottom: 1em;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Tourguide Details</h1>
+    <header class="bg-dark text-white">
+        <h1 class="display-4">Tourguide Details</h1>
     </header>
-    <div class="content-wrapper">
-        <div class="container">
-            <div class="tourguide-details">
+    <div class="container w-75">
+        <div class="card p-3 shadow">
+            <div class="card-content">
                 <h2>ID: {{ $tourguide['id'] }}</h2>
                 <p>Name: {{ $user['name'] }}</p>
                 <p><strong>Birth Date:</strong> {{ $tourguide['birth_date'] }}</p>
                 <p><strong>Bio:</strong> {{ $tourguide['bio'] }}</p>
-                <p><strong>Description: </strong>{{ $tourguide['description'] }}</p>
-                <p><strong>Gender: </strong>{{ $tourguide['gender'] }}</p>
-                <p><strong>Phone:</strong> {{ $tourguide['phone'] }}</p>
-                <div class="image-container">
-                    <p><strong>Avatar:</strong></p>
-                    <img src="{{ $tourguide['avatar'] }}" alt="Avatar">
+                <div class="description">
+                    <p><strong>Description:</strong></p>
+                    <?php
+                    $description = $tourguide['description'];
+                    $words = explode(' ', $description); 
+                    $wordCount = count($words);
+                    $wordsPerLine = 10; 
+                    $lines = ceil($wordCount / $wordsPerLine);
+
+                    for ($i = 0; $i < $lines; $i++) {
+                        echo '<p>';
+                        for ($j = 0; $j < $wordsPerLine; $j++) {
+                            $wordIndex = $i * $wordsPerLine + $j;
+                            if ($wordIndex < $wordCount) {
+                                echo $words[$wordIndex] . ' ';
+                            }
+                        }
+                        echo '</p>';
+                    }
+                    ?>
                 </div>
-                <div class="image-container">
-                    <p><strong>Profile Image:</strong></p>
-                    <img src="{{ $tourguide['profile_img'] }}" alt="profile_img">
+                <p><strong>Gender:</strong> {{ $tourguide['gender'] }}</p>
+                <p><strong>Phone:</strong> {{ $tourguide['phone'] }}</p>
+                <div class="row">
+                    <div class="col-6">
+                        <p><strong>Avatar:</strong></p>
+                        <img src="{{ $tourguide['avatar'] }}" alt="Avatar" class="img-thumbnail w-50">
+                    </div>
+                    <div class="col-6">
+                        <p><strong>Profile Image:</strong></p>
+                        <img src="{{ $tourguide['profile_img'] }}" alt="profile_img" class="img-thumbnail w-50">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
 </html>
+
 

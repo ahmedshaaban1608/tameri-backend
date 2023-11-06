@@ -58,4 +58,8 @@ class User extends Authenticatable
     function reports(){
         return $this->hasMany(Report::class);
     }
+    public function isAdmin()
+    {
+        return $this->role === 'admin'; 
+    }
 }

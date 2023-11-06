@@ -1,70 +1,23 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>User Data</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            /* background-color: #f4f4f4; */
-            margin: 20px;
-        }
-        h2 {
-            color: #333;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #3f3e3e;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #353434;
-        }
-        th {
-            background-color: #363434;
-        }
-        tr:nth-child(even) {
-            background-color: #2e2d2d;
-        }
-        .action-button {
-            text-align: center;
-            padding: 6px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-        .show-button {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .update-button {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .delete-button {
-            background-color: #f44336;
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 
-{{-- @if(count($users) > 0) --}}
-   
-        <div class="content-wrapper">
-            
-            @if(isset($users))
-                <div id="displayUserDetails"></div> 
-        <table>
-            <thead>
+<div class="content-wrapper">
+    <div class="container">
+        <div class="text-center mb-3">
+     <input type="text" id="search-input" class="form-control" placeholder="Search by name">
+    </div>
+    
+    @if(isset($users))
+        <div id="displayUserDetails"></div>
+        <table id="data-table" class="table table-bordered">
+            <thead class="thead-dark">
                 <tr>
                     <th>ID</th>
                     <th>Type</th>
@@ -77,101 +30,117 @@
             </thead>
             <tbody>
                 @foreach ($users as $user)
-                <tr>
-                    <td>{{ $user->id }}</td>
-                    <td>{{ $user->type }}</td>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                   
-                   
-                    <td>
-                        <a class="action-button show-button btn btn-primary" href="javascript:void(0);" onclick="showUserDetails({{ $user->id }})">
-                            Show
-                        </a>
-                    </td>
-                    
-                    
+                    <tr>
+                        <td>{{ $user->id }}</td>
+                        <td>{{ $user->type }}</td>
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->email }}</td>
                         <td>
-                            <a  href="javascript:void(0);" class="action-button update-button" onclick="editUser({{ $user['id'] }})">Update</a>
+                            <a class="btn btn-success" href="javascript:void(0);" onclick="showUserDetails({{ $user->id }})">
+                                {{-- Show --}}
+                                <i class="fas fa-eye"></i>
+                            </a>
                         </td>
-                     
                         <td>
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#staticBackdrop" onclick="setDeleteUrl('{{ route('users.destroy', $user->id) }}')"> Delete</button>
+                            <a class="btn btn-primary" href="javascript:void(0);" onclick="editUser({{ $user->id }})">
+                                {{-- Update --}}
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger" onclick="showSweetAlert('{{ route('users.destroy', $user->id) }}')">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                            <form id="deleteForm" method="POST" style="display: none;">
+                                @method('DELETE')
+                                @csrf
+                                <button type="submit" class="btn btn-primary">Delete</button>
+                            </form>
                         </td>
                         
-                        
-            <tr>
-                <td colspan="7">
-                    <div class="details-div" id="details_{{ $user['id'] }}" style="display: none;"></div>
-                </td>
-            </tr>
+                        <tr>
+                            <td colspan="7">
+                                <div class="details-div" id="details_{{ $user->id }}" style="display: none;"></div>
+                            </td>
+                        </tr>
                     </tr>
                 @endforeach
             </tbody>
         </table>
-        @endif
-    </div>
-
-    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Delete user</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Are your sure?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <form id="deleteForm" method="post">
-                        @method('DELETE')
-                        @csrf
-                        <button type="submit" class="btn btn-primary">Delete</button>
-                    </form>
-                </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-        function setDeleteUrl(url) {
-        
-            // Set the action URL for the delete form
-            document.getElementById('deleteForm').action = url;
-        }
-    </script>
+    @endif
+</div>
 
 <script>
-    function showUserDetails(userId) {
-            if ($('#details_' + userId).is(':visible')) {
-                $('#details_' + userId).hide();
-            } else {
-                $.get(`/users/${userId}`, function (data) {
-                    $('.details-div').hide();
-                    $('#details_' + userId).html(data).show();
-                });
-            }
-        }
+   function showSweetAlert(url) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                preConfirm: () => {
+                    const deleteForm = document.getElementById('deleteForm');
+                    deleteForm.action = url;
+                    deleteForm.style.display = 'block';
+                    deleteForm.submit();
+                }
+            });}
 
-        function editUser(id) {
-            $.get(`/users/${id}/edit`, function (data) {
+
+    function showUserDetails(userId) {
+        if ($('#details_' + userId).is(':visible')) {
+            $('#details_' + userId).hide();
+        } else {
+            $.get(`/users/${userId}`, function (data) {
                 $('.details-div').hide();
-                $('#details_' + id).html(data).show();
+                $('#details_' + userId).html(data).show();
             });
         }
+    }
 
-
+    function editUser(id) {
+        $.get(`/users/${id}/edit`, function (data) {
+            $('.details-div').hide();
+            $('#details_' + id).html(data).show();
+        });
+    }
 </script>
+<div class="card-footer border-0 py-5">
+    <span class="text-muted text-sm">
+      Showing  items 
+    </span>
+    <nav aria-label="Page navigation example">
+      {!! $users->links() !!}  
+    </nav>    
+  </div>
+  <script>
+    document.getElementById('search-input').addEventListener('keyup', function() {
+        const searchQuery = this.value.toLowerCase();
+        const table = document.getElementById('data-table');
+        const rows = table.getElementsByTagName('tr');
 
+        for (let row of rows) {
+            const cells = row.getElementsByTagName('td');
+            let shouldDisplay = false;
 
+            for (let cell of cells) {
+                const text = cell.textContent || cell.innerText;
+                if (text.toLowerCase().indexOf(searchQuery) > -1) {
+                    shouldDisplay = true;
+                    break;
+                }
+            }
+
+            row.style.display = shouldDisplay ? '' : 'none';
+        }
+    });
+</script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-
 </body>
-
 </html>
+

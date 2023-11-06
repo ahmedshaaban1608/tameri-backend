@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Collection Data</title>
-   
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .card {
             margin: 20px;
@@ -29,34 +29,96 @@
         @if(isset($reports))
             <div class="row">
                 <div class="col-md-6">
-                    <div class="card">
-                        <h2>Tourguide</h2>
-                        <p>Number of Tourguide: <?php echo $tourguidesCount; ?></p>
-                    </div>
-
-                    <div class="card">
-                        <h2>Tourist</h2>
-                        <p>Number of Tourist: <?php echo $touristsCount; ?></p>
-                    </div>
+                    <canvas id="tourguideChart" width="400" height="400"></canvas>
+                    <canvas id="touristChart" width="400" height="400"></canvas>
                 </div>
-
                 <div class="col-md-6">
-                    <div class="card">
-                        <h2>Review</h2>
-                        <p>Number of Reviews: <?php echo $reviewsCount; ?></p>
-                    </div>
-
-                    <div class="card">
-                        <h2>Order</h2>
-                        <p>Number of Order: <?php echo $ordersCount; ?></p>
-                    </div>
+                    <canvas id="reviewChart" width="400" height="400"></canvas>
+                    <canvas id="orderChart" width="400" height="400"></canvas>
                 </div>
             </div>
         @endif
     </div>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script>
+        const tourguideCtx = document.getElementById('tourguideChart').getContext('2d');
+        const touristCtx = document.getElementById('touristChart').getContext('2d');
+        const reviewCtx = document.getElementById('reviewChart').getContext('2d');
+        const orderCtx = document.getElementById('orderChart').getContext('2d');
+
+        const tourguideData = <?php echo json_encode($tourguidesCount); ?>;
+        const touristData = <?php echo json_encode($touristsCount); ?>;
+        const reviewData = <?php echo json_encode($reviewsCount); ?>;
+        const orderData = <?php echo json_encode($ordersCount); ?>;
+
+        const chartOptions = {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        };
+
+        new Chart(tourguideCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Tourguide'],
+                datasets: [{
+                    label: 'Number of Tourguides',
+                    data: [tourguideData],
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: chartOptions
+        });
+
+        new Chart(touristCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Tourist'],
+                datasets: [{
+                    label: 'Number of Tourists',
+                    data: [touristData],
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: chartOptions
+        });
+
+        new Chart(reviewCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Review'],
+                datasets: [{
+                    label: 'Number of Reviews',
+                    data: [reviewData],
+                    backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: chartOptions
+        });
+
+        new Chart(orderCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Order'],
+                datasets: [{
+                    label: 'Number of Orders',
+                    data: [orderData],
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: chartOptions
+        });
+    </script>
 </body>
 </html>
 

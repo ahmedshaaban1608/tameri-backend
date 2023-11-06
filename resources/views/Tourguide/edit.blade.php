@@ -1,65 +1,37 @@
+
+
+
 <!DOCTYPE html>
 <html>
+
 <head>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-        
-        h2 {
-            text-align: center;
-            color: #333;
-        }
-        
-        .editt {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-        }
-        
-        input[type="text"] {
-            width: calc(100% - 12px);
-            padding: 6px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            box-sizing: border-box;
-        }
-        
-        button[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-        }
-    </style>
+    <title>Edit Tourguide</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h2>Edit Tourguide</h2>
 
-    <form class="editt" action="{{ route('tourguides.update', $tourguide->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <label for="bio">Bio:</label>
-        <input type="bio" id="bio" name="bio" value="{{ $tourguide['bio'] }}">
+<body class="p-4">
+    <div class="container w-50">
+        <h2 class="text-center mb-4">Edit Tourguide</h2>
 
-        <label for="description">Description:</label>
-        <input type="text" id="description" name="description" value="{{ $tourguide['description'] }}">
-        <button type="submit">Update</button>
-    </form>
+        <form class="card p-4" action="{{ route('tourguides.update', $tourguide->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+
+            <div class="mb-3">
+                <label for="bio" class="form-label text-dark">Bio:</label>
+                <input type="text" id="bio" name="bio" value="{{ $tourguide['bio'] }}" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label text-dark">Description:</label>
+                <input type="text" id="description" name="description" value="{{ $tourguide['description'] }}" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-success w-100 mt-3">Update</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

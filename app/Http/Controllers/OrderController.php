@@ -10,19 +10,19 @@ use App\Http\Requests\UpdateOrderRequest;
 use Illuminate\Support\Facades\Gate;
 
 class OrderController extends Controller
-{
+{  
     /**
      * Display a listing of the resource.
      */
     function __construct(){
-        $this->middleware('auth');
+        $this->middleware('isadmin');
     }
     public function index()
     {
 
         try {
 
-            $orders = OrderResource::collection(Order::paginate(20));
+            $orders = OrderResource::collection(Order::paginate(10));
             return view('Dashboard.admin', ['orders' => $orders]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');

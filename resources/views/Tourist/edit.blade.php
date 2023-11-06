@@ -1,72 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-        
-        h2 {
-            text-align: center;
-            color: #333;
-        }
-        
-        .editt {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-        }
-        
-        input[type="text"] {
-            width: calc(100% - 12px);
-            padding: 6px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            box-sizing: border-box;
-        }
-        
-        button[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-        }
-    </style>
+    <title>Edit Tourist</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
-<body>
-    <h2>Edit Tourist</h2>
+<body class="p-2">
+    <h2 class="text-center text-dark">Edit Tourist</h2>
+    <div class="container">
+        <form class="border p-4 bg-light" action="{{ route('tourists.update', $tourist->id) }}" method="POST">
+            @csrf
+            @method('PUT')
 
-    <form class="editt" action="{{ route('tourists.update', $tourist->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <label for="country">Country:</label>
-        <input type="text" id="country" name="country" value="{{ $tourist['country'] }}">
+            <div class="form-group">
+                <label for="country" class="text-dark">Country:</label>
+                <input type="text" id="country" name="country" value="{{ $tourist['country'] }}" class="form-control">
+            </div>
 
-        <label for="gender">Gender:</label>
-        <input type="text" id="gender" name="gender" value="{{ $tourist['gender'] }}">
+            <div class="form-group">
+                <label for="gender" class="text-dark">Gender:</label>
+                <input type="text" id="gender" name="gender" value="{{ $tourist['gender'] }}" class="form-control">
+            </div>
 
-        <label for="avatar">Avatar:</label>
-        <input type="text" id="avatar" name="avatar" value="{{ $tourist['avatar'] }}">
+            <div class="form-group">
+                <label for="avatar" class="text-dark">Avatar:</label>
+                <input type="text" id="avatar" name="avatar" value="{{ $tourist['avatar'] }}" class="form-control">
+            </div>
 
-        <label for="phone">Phone:</label>
-        <input type="text" id="phone" name="phone" value="{{ $tourist['phone'] }}">
-        
-        <button type="submit">Update</button>
-    </form>
+            <div class="form-group">
+                <label for="phone" class="text-dark">Phone:</label>
+                <input type="text" id="phone" name="phone" value="{{ $tourist['phone'] }}" class="form-control">
+            </div>
+            
+            <button type="submit" class="btn btn-success w-100 mt-3">Update</button>
+        </form>
+    </div>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

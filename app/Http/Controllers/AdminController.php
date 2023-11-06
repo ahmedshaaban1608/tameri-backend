@@ -46,5 +46,5 @@ class AdminController extends Controller
     $tourguides = Tourguide::all();
     return view('Dashboard.admin', ['tourguides' => $tourguides]);
     }
-
+   
 }

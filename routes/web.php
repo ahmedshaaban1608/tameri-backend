@@ -10,7 +10,7 @@ use App\Http\Controllers\TouristController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
-
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +39,14 @@ Route::resource('reviews', ReviewController::class);
 Route::resource('areas', AreaController::class);
 Route::resource('languages', LanguageController::class);
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-// Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+Route::post('/logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
+
+// Route::get('/admin', [AdminController::class, 'index'])->name('admin.index')->middleware('auth', 'admin');
+// Route::get('/logout', function () {
+//     Auth::logout();
+//     return redirect()->route('admin.index');
+// })->name('logout')->middleware('auth');
+
 
 Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
@@ -65,6 +72,7 @@ Route::delete('/reviews/{id}', [ReviewController::class, 'destroy'])->name('revi
 Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
 Route::put('/orders/{id}', [OrderController::class, 'update'])->name('orders.update');
 Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
+
 
 // Route::get('/users', [AdminController::class, 'showUsers'])->name('users');
 

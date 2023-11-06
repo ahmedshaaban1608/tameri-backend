@@ -16,14 +16,15 @@ class TourguideController extends Controller
      * Display a listing of the resource.
      */
     function __construct(){
-        $this->middleware('auth');
+        // $this->middleware('auth');
+        $this->middleware('isadmin');
     }
     public function index()
     {
         //
         try {
 
-            $tourguides = TourguideResource::collection(Tourguide::paginate(20));
+            $tourguides = TourguideResource::collection(Tourguide::paginate(10));
            
             return view('Dashboard.admin', ['tourguides' => $tourguides]);
         } catch (\Exception $e) {

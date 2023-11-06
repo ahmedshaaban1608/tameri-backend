@@ -18,12 +18,13 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
     function __construct(){
-        $this->middleware('auth');
+        // $this->middleware('auth');
+        $this->middleware('isadmin');
     }
     public function index()
     {
         try {
-            $users = UserResource::collection(User::paginate(60));
+            $users = UserResource::collection(User::paginate(10));
             return view('Dashboard.admin', ['users' => $users]);
         } catch (\Throwable $th) {
             return abort(500, 'An error occurred while retrieving the data.');
@@ -117,15 +118,15 @@ public function update(Request $request, $id)
                     'email' => $request->input('email'),
                 ]);
 
-                return redirect()->route('users')->with('success', 'User updated successfully.');
+                return back()->with('success', 'Tourguide updated successfully.');
             } else {
-                return abort(403, 'You are not allowed to update the user.');
+                return abort(403, 'You are not allowed to update the tourguide.');
             }
         } else {
-            return redirect()->route('users')->with('error', 'User not found.');
+            return back()->with('error', 'Tourguide not found.');
         }
     } catch (\Exception $e) {
-        return abort(500, 'An error occurred while updating the user.');
+        return back()->with('error', 'An error occurred while updating the tourguide.');
     }
 }
 

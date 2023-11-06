@@ -1,58 +1,27 @@
-
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Show users</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 15px;
-            text-align: center;
-        }
-        .container {
-            width: 40%;
-            margin: auto;
-            overflow: hidden;
-        }
-        .user-details{
-            background-color: #fff;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-        }
-        .user-details h2 {
-            font-size: 24px;
-            color: #333;
-        }
-        .user-details p {
-            color: #555;
-            margin-bottom: 10px;
-        }
-       
-    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+
 <body>
-    <header>
-        <h1>Users Details</h1>
+    <header class="bg-dark text-white py-4">
+        <h1 class="text-center">Users Details</h1>
     </header>
-    <div class="content-wrapper">
-        <div class="container">
-            <div class="user-details">
-                <p>ID: {{ $user['id']}}</p>
-                <p>Type: {{ $user['type'] }}</p>
-                <p>Name: {{ $user['name'] }}</p>
-                <p>Email: {{ $user['email'] }}</p>
-                
+    <div class="container mt-4">
+        <div class="card p-4">
+            <p class="font-weight-bold">ID: {{ $user['id'] }}</p>
+            <p class="font-weight-bold">Type: {{ $user['type'] }}</p>
+            <p class="font-weight-bold">Name: {{ $user['name'] }}</p>
+            <p class="font-weight-bold">Email: {{ $user['email'] }}</p>
         </div>
     </div>
-    </div>
+
+    {{-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script> --}}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
