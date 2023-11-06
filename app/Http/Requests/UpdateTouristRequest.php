@@ -23,9 +23,9 @@ class UpdateTouristRequest extends FormRequest
     {
         return [
             //
-            'country' => 'required|string',
-            'gender' => 'required|string|in:male,female',
+            'name' => 'required|string',
             'phone' => ['required', 'regex:/^\+?\d{7,14}$/', Rule::unique('tourists')->ignore($this->tourist)],
+            'avatar' => 'image'
         ];
     }
 }

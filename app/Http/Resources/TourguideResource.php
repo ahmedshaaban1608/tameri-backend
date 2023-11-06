@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class TourguideResource extends JsonResource
 {
@@ -42,8 +43,8 @@ class TourguideResource extends JsonResource
             "birth_date"=> $this->birth_date,
             "bio"=> $this->bio,
             "description"=> $this->description,
-            "avatar"=>$this->avatar ? $this->avatar : null,
-            "profile_img"=>$this->profile_img ? $this->profile_img : null,
+            'avatar' => isset($this->avatar) ? (Str::startsWith($this->avatar, 'http') ? $this->avatar : env('APP_URL').':8000/img/'.$this->avatar) : '/assets/tourguide-avatar.png',
+            "profile_img"=>isset($this->profile_img) ? (Str::startsWith($this->profile_img, 'http') ? $this->profile_img : env('APP_URL').':8000/img/'.$this->profile_img) : '/assets/profile_img.jpg',
             "day_price"=>$this->day_price ? $this->day_price : 0,
             "phone"=>$this->phone,
             "languages"=> LanguageResource::collection($this->languages),

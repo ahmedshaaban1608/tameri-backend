@@ -43,3 +43,4 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->get('logout', [AuthController::class, 'logout']);
 
 Route::post('/tourguides/search', [App\Http\Controllers\api\TourguideController::class, 'search']);
+
