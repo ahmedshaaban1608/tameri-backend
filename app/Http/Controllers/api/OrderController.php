@@ -27,7 +27,7 @@ class OrderController extends Controller
             $user = auth()->user();
 
             if (Gate::allows('is-tourist')) {
-                $orders = OrderResource::collection(Order::where('tourist_id', $user->id)->get());
+                $orders = OrderResource::collection(Order::where('tourist_id', $user->id)->latest()->get());
                 return response()->json(['data' => $orders], 200);
             } else if (Gate::allows('is-tourguide')) {
                 $orders = OrderResource::collection(Order::where('tourguide_id', $user->id)->get());

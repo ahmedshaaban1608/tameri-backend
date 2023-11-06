@@ -23,7 +23,7 @@ class TouristDataResource extends JsonResource
             "gender"=> $this->gender,
             "avatar"=> $this->avatar ? $this->avatar : null,
             "phone"=> $this->phone,
-            "orders"=> OrderResource::collection($this->orders),
+            "orders"=> OrderResource::collection($this->orders()->latest()->get()),
 
         ];
     }

@@ -22,7 +22,7 @@ class ReviewController extends Controller
         //
         try {
 
-            $reviews = ReviewResource::collection(Review::paginate(40));
+            $reviews = ReviewResource::collection(Review::orderBy('status', 'asc')->paginate(40));
             return view('Dashboard.admin', ['reviews' => $reviews]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
