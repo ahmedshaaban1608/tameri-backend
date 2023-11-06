@@ -41,8 +41,6 @@ Route::resource('languages', LanguageController::class);
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 // Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 
-
-// Route::get('/users', [AdminController::class, 'showUsers'])->name('users');
 Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
