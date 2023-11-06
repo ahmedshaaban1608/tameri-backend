@@ -22,11 +22,7 @@ class OrderController extends Controller
 
         try {
 
-<<<<<<< HEAD
-            $orders = OrderResource::collection(Order::paginate(10));
-=======
             $orders = OrderResource::collection(Order::orderBy('id','desc')->paginate(20));
->>>>>>> 1f682ffedea6c16c0fa8147030eed27803c76230
             return view('Dashboard.admin', ['orders' => $orders]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
