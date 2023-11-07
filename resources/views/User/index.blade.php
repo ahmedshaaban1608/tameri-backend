@@ -3,8 +3,25 @@
 <head>
     <title>User Data</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+   
+   <style>
+      
+        .card {
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid #eceef3;
+            border-radius: 0.75rem;
+        }
+        table tbody tr:not(.showData) {
+            border-bottom: 1px solid #e7eaf0;
+           
+        }
+        tr.showData {
+            border-bottom: 1px solid #e7eaf0;
+        }
+        </style>
 </head>
 <body>
 
@@ -16,8 +33,14 @@
     
     @if(isset($users))
         <div id="displayUserDetails"></div>
-        <table id="data-table" class="table table-bordered">
-            <thead class="thead-dark">
+        <div class="card">
+            <div class="container-fluid">
+                
+                <h2 class="text-center">User Data</h2>
+                <div class="table-responsive">
+        <table id="data-table" class="table  shadow border-0">
+           
+            <thead class="thead-light">
                 <tr>
                     <th>ID</th>
                     <th>Type</th>
@@ -67,7 +90,11 @@
                 @endforeach
             </tbody>
         </table>
+                </div>
+            </div>
+        </div>
     @endif
+    
 </div>
 
 <script>

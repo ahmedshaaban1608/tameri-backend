@@ -2,8 +2,9 @@
 <html>
 <head>
     <title>Show review</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+   
+  <style>
         .card-content {
             word-wrap: break-word;
         }
@@ -15,8 +16,8 @@
     </style>
 </head>
 <body class="p-4">
-    <header class="bg-dark text-white text-center p-3 mb-4">
-        <h1 class="text-white ">Review Details</h1>
+    <header class="bg-light text-dark text-center">
+        <h1 class="display-4">Review Details</h1>
     </header>
     <div class="container w-50">
         <div class="card p-4 shadow">

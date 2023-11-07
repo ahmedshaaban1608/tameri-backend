@@ -7,25 +7,40 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        table.table-sm th ,td {
-            text-align: center
-           
-        }
-        table{
-            border: 2 solid #e7eaf0;
-        }
+       table.table-sm th,
+    td {
+        text-align: center;
+    }
+
+    .card {
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 1px solid #eceef3;
+        border-radius: 0.75rem;
+    }
+    table.table-sm tbody tr:not(.showData) {
+        border-bottom: 1px solid #e7eaf0;
+       
+    }
+    tr.showData {
+        border-bottom: 1px solid #e7eaf0;
+    }
     </style>
 </head>
 <body>
-    <div class="content-wrapper">
+    <div class=" content-wrapper ">
+        
         <div class="text-center mb-3">
             <input type="text" id="search-input" class="form-control" placeholder="Search by name">
            </div>
         @if(isset($tourguides))
-            <div id="displayTourguideDetails"></div> 
+            <div id="displayTourguideDetails"></div>
+            <div class="card"> 
            <h1 class="text-center">Tourguides</h1>
-            <table id="data-table" class="table table-sm table-nowrap">
-                <thead    class="thead-light" >
+           <div class="table-responsive">
+            <table id="data-table" class="table  table-sm shadow border-0">
+                <thead class="thead-light" >
                     
                      <tr>
                         <th>ID</th>
@@ -47,7 +62,15 @@
                             <td>{{ $tourguide['id'] }}</td>
                             <td>{{ $tourguide['gender'] }}</td>
                             <td>{{ $tourguide['bio'] }}</td>
-                            <td><img src="{{ $tourguide->avatar }}" alt="Avatar" style="width: 50px; height: 50px;"></td>
+                            <td>
+                                @if (Str::startsWith($tourguide['avatar'], 'http'))
+                                <img src="{{$tourguide['avatar']}}" alt="{{ $tourguide['name'] }}" class="w-75 rounded-4 shadow" style="object-fit: cover;">
+                                        @else
+                                        <img src="{{ asset('img/' . $tourguide['avatar']) }}" alt="{{ $tourguide['name'] }}" class="w-100 rounded-4 shadow" style="object-fit: cover;">
+                                          @endif
+                            
+                                {{-- <img src="{{ $tourguide->avatar }}" alt="Avatar" style="width: 50px; height: 50px;"> --}}
+                            </td>
                             <td>{{ $tourguide['day_price'] }}</td>
                             <td>{{ $tourguide['phone'] }}</td>
                             <td>
@@ -78,7 +101,7 @@
                                     <button type="submit" class="btn btn-primary">Delete</button>
                                 </form>
                             </td>
-                            <tr class="showData">
+                            <tr class="showData ">
                                 <td colspan="12">
                                     <div class="details-div" id="details_{{ $tourguide['id'] }}" style="display: none;"></div>
                                 </td>
@@ -87,6 +110,8 @@
                     @endforeach
                 </tbody>
             </table>
+           </div>
+        </div>
         @endif
         </div>
         <div class="card-footer border-0 py-5">

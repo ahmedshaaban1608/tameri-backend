@@ -10,9 +10,11 @@
 </head>
 
 <body class="p-4">
+    <header class=" bg-light text-dark">
+        <h1 class="display-4 ">Edit Tourguide</h1>
+    </header>
     <div class="container w-50">
-        <h2 class="text-center mb-4">Edit Tourguide</h2>
-
+     
         <form class="card p-4" action="{{ route('tourguides.update', $tourguide->id) }}" method="POST">
             @csrf
             @method('PUT')

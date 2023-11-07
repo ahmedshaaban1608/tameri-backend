@@ -4,17 +4,37 @@
     <title>Tourists Data</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+ 
+    <style>
+      
+     .card {
+         word-wrap: break-word;
+         background-color: #fff;
+         background-clip: border-box;
+         border: 1px solid #eceef3;
+         border-radius: 0.75rem;
+     }
+     table tbody tr:not(.showData) {
+         border-bottom: 1px solid #e7eaf0;
+        
+     }
+     tr.showData {
+         border-bottom: 1px solid #e7eaf0;
+     }
+     </style>
 </head>
 <body>
     <div class="text-center mb-3">
         <input type="text" id="search-input" class="form-control" placeholder="Search by name">
        </div>
+       <div class="card">
     <div class="container-fluid">
-       
-        <h2>Tourists Data</h2>
-        <table id="data-table" class="table table-bordered">
-            <thead class="thead-dark">
+        
+        <h2 class="text-center">Tourists Data</h2>
+        <div class="table-responsive">
+        <table id="data-table" class="table shadow border-0">
+            <thead class="thead-light">
                 <tr>
                     <th>ID</th>
                     <th>Country</th>
@@ -34,11 +54,12 @@
                             <td>{{ $tourist['country'] }}</td>
                             <td>{{ $tourist['gender'] }}</td>
                             <td>
-                                @if($tourist['avatar'])
-                                    <img src="{{ $tourist['avatar'] }}" alt="Avatar" style="max-width: 100px; max-height: 100px;">
-                                @else
-                                    No Avatar
-                                @endif
+                                @if (Str::startsWith($tourist['avatar'], 'http'))
+                                <img src="{{$tourist['avatar']}}" alt="{{ $tourist['name'] }}" class="w-25 rounded-4 shadow" style="object-fit: cover;">
+                                        @else
+                                        <img src="{{ asset('img/' . $tourist['avatar']) }}" alt="{{ $tourist['name'] }}" class="w-100 rounded-4 shadow" style="object-fit: cover;">
+                                          @endif
+                                
                             </td>
                             <td>{{ $tourist['phone'] }}</td>
                             <td>
@@ -78,6 +99,8 @@
                 @endisset
             </tbody>
         </table>
+        </div>
+    </div>
     </div>
 
     <!-- Modal -->
@@ -104,7 +127,7 @@
             </div>
         </div>
     </div>
-
+  
     <div class="card-footer border-0 py-5">
         <span class="text-muted text-sm">
           Showing  items 

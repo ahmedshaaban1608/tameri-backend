@@ -3,14 +3,15 @@
 
 <head>
     <title>Show Tourist</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+ </head>
 
 <body>
-    <header class="bg-dark text-center py-4">
-        <h1 class="display-4 text-white ">Tourist Details</h1>
+  
+    <header class="bg-light text-dark text-center">
+        <h1 class="display-4">Tourist Details</h1>
     </header>
-
     <div class="container mt-4">
         <div class="card p-4">
             <h2>ID: {{ $tourist['id'] }}</h2>

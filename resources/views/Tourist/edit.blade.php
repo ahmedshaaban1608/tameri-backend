@@ -2,10 +2,13 @@
 <html>
 <head>
     <title>Edit Tourist</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    </head>
 <body class="p-2">
-    <h2 class="text-center text-dark">Edit Tourist</h2>
+    <header class=" bg-light text-dark text-center">
+        <h1 class="display-4 ">Edit Tourist</h1>
+    </header>
     <div class="container">
         <form class="border p-4 bg-light" action="{{ route('tourists.update', $tourist->id) }}" method="POST">
             @csrf

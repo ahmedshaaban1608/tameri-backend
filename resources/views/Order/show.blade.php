@@ -3,7 +3,8 @@
 
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
+   
+     <style>
         .card p {
             margin-bottom: 6px;
         }
@@ -11,8 +12,8 @@
 </head>
 
 <body class="p-4">
-    <header class="bg-dark text-white text-center p-3">
-        <h1>Order Details</h1>
+    <header class="bg-light text-dark text-center">
+        <h1 class="display-4">Order Details</h1>
     </header>
 
     <div class="container my-4 w-50">

@@ -3,9 +3,9 @@
 <head>
     <title>Reviews</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+   
+      <style>
          .td-title {
             max-width: 25px;
             padding: 5px 10px;
@@ -13,15 +13,31 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        .card {
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid #eceef3;
+            border-radius: 0.75rem;
+        }
+        table tbody tr:not(.showData) {
+            border-bottom: 1px solid #e7eaf0;
+           
+        }
+        tr.showData {
+            border-bottom: 1px solid #e7eaf0;
+        }
     </style>
 </head>
 <body>
-    <div class="">
-        <h1>Reviews</h1>
+    <div class="card">
+        <div class="container-fluid">
+        <h1 class="text-center">Reviews</h1>
         @if(isset($reviews))
         <div id="displayReviewDetails"></div>
-        <table class="table">
-            <thead class="thead-dark">
+        <div class="table-responsive">
+        <table class="table shadow border-0">
+            <thead class="thead-light">
                 <tr>
                     <th>ID</th>
                     <th>Tourguide_ID</th>
@@ -80,9 +96,10 @@
                 @endisset
             </tbody>
         </table>
+        </div>
         @endif
     </div>
-
+    </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

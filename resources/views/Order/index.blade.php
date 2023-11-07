@@ -3,8 +3,8 @@
 
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+   
     <style>
     
         .table-container {
@@ -12,19 +12,35 @@
     max-width: 100%;
 }
 
+.card {
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid #eceef3;
+            border-radius: 0.75rem;
+        }
+        table tbody tr:not(.showData) {
+            border-bottom: 1px solid #e7eaf0;
+           
+        }
+        tr.showData {
+            border-bottom: 1px solid #e7eaf0;
+        }
     </style>
 
     <title>Order Data</title>
 </head>
 
 <body>
+    <div class="card">
     <div class="container-fluid">
-        <h1>Orders Data</h1>
+        <h1 class="text-center">Orders Data</h1>
         @if(isset($orders))
         <div id="displayOrderDetails"></div>
         <div class="table-responsive table-container">
+            <div class="table-responsive">
             <table class="table table-sm">
-                <thead class="thead-dark">
+                <thead class="thead-light">
                     <tr>
                         <th>ID</th>
                         <th>Tourist ID</th>
@@ -78,10 +94,11 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>
         </div>
         @endif
     </div>
-
+    </div>
     <script>
         function showSweetAlert(url) {
             Swal.fire({

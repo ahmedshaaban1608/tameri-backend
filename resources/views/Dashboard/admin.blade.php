@@ -78,32 +78,18 @@
                         </a>
                     </li>
                     
-                </ul>
-                <!-- Divider -->
-                <hr class="navbar-divider my-5 opacity-20">
-                <!-- Navigation -->
                 
-                <!-- Push content down -->
-                <div class="mt-auto"></div>
-                <!-- User (md) -->
-                <ul class="navbar-nav">
-                    {{-- <li class="nav-item">
-                       
-                             <a href="{{ route('logout') }}">
-                                <i class="bi bi-box-arrow-left"></i> Logout
-                            </a>
-                             
-                    </li> --}}
                     <li class="nav-item">
-                      <form method="POST" action="{{ route('logout') }}">
+                      <form id="logoutForm" method="POST" action="{{ route('logout') }}">
                           @csrf 
-                          <button type="submit"><i class="bi bi-box-arrow-left"></i>Logout</button>
+                          <a href="#" class="nav-link" onclick="document.getElementById('logoutForm').submit()">
+                              <i class="bi bi-box-arrow-left"></i>Logout
+                          </a>
                       </form>
-                      
                   </li>
-                   
+                  
                 </ul>
-            </div>
+              
         </div>
     </nav>
     <!-- Main content -->

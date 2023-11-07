@@ -17,12 +17,12 @@
     </style>
 </head>
 <body>
-    <header class="bg-dark text-white">
+    <header class="bg-light text-dark">
         <h1 class="display-4">Tourguide Details</h1>
     </header>
     <div class="container w-75">
-        <div class="card p-3 shadow">
-            <div class="card-content">
+        <div class="card p-3 shadow ">
+            <div class="card-content ">
                 <h2>ID: {{ $tourguide['id'] }}</h2>
                 <p>Name: {{ $user['name'] }}</p>
                 <p><strong>Birth Date:</strong> {{ $tourguide['birth_date'] }}</p>

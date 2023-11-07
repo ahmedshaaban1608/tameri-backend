@@ -6,12 +6,14 @@
 <head>
     <title>Edit Order</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+   
 </head>
 
 <body class="p-4">
     <div class="container w-50">
-        <h2 class="text-center mb-4">Edit Order</h2>
-
+        <header class=" bg-light text-dark text-center">
+            <h1 class="display-4 ">Edit Order</h1>
+        </header>
         <form class="card p-4" action="{{ route('orders.update', $order->id) }}" method="POST">
             @csrf
             @method('PUT')
