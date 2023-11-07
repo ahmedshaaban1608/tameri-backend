@@ -37,6 +37,7 @@
             <thead class="thead-light">
                 <tr>
                     <th>ID</th>
+                     <th>Name</th>
                     <th>Country</th>
                     <th>Gender</th>
                     <th>Avatar</th>
@@ -51,6 +52,7 @@
                     @foreach($tourists as $tourist)
                         <tr>
                             <td>{{ $tourist['id'] }}</td>
+                            <td>{{ $tourist->user['name'] }}</td>
                             <td>{{ $tourist['country'] }}</td>
                             <td>{{ $tourist['gender'] }}</td>
                             <td>

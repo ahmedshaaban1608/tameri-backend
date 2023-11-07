@@ -45,7 +45,7 @@
                      <tr>
                         <th>ID</th>
                         <th>Gender</th>
-                        <th>Bio</th>
+                        <th>Name</th>
                         <th>Avatar</th>
                         <th>Day Price</th>
                         <th>Phone</th>
@@ -61,7 +61,7 @@
                         <tr>
                             <td>{{ $tourguide['id'] }}</td>
                             <td>{{ $tourguide['gender'] }}</td>
-                            <td>{{ $tourguide['bio'] }}</td>
+                            <td>{{ $tourguide->user['name'] }}</td>
                             <td>
                                 @if (Str::startsWith($tourguide['avatar'], 'http'))
                                 <img src="{{$tourguide['avatar']}}" alt="{{ $tourguide['name'] }}" class="w-75 rounded-4 shadow" style="object-fit: cover; width:100px!important">
