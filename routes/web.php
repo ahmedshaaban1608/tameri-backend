@@ -82,3 +82,6 @@ Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders
 // Route::get('/tourists', function () {
 //     return view('Dashboard.tourists');
 // })->name('tourists');
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
