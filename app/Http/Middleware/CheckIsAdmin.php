@@ -20,6 +20,6 @@ class CheckIsAdmin
             return $next($request);
         }
 
-        return abort(403, 'Only admins are allowed to access the dashboard');
+        return to_route('forbidden');
     }
 }
