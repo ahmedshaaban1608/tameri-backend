@@ -74,7 +74,7 @@
                                     <button type="submit" class="btn btn-primary">Delete</button>
                                 </form>
                             </td>
-                            <tr>
+                            <tr class="showData">
                                 <td colspan="12">
                                     <div class="details-div" id="details_{{ $tourguide['id'] }}" style="display: none;"></div>
                                 </td>
@@ -133,16 +133,19 @@
             });
         }
     </script>
-    <script>
-        document.getElementById('search-input').addEventListener('keyup', function() {
-            const searchQuery = this.value.toLowerCase();
-            const table = document.getElementById('data-table');
-            const rows = table.getElementsByTagName('tr');
-    
-            for (let row of rows) {
-                const cells = row.getElementsByTagName('td');
+ <script>
+    document.getElementById('search-input').addEventListener('keyup', function() {
+        const searchQuery = this.value.toLowerCase();
+        const table = document.getElementById('data-table');
+        const rows = table.querySelectorAll('tbody > tr');
+
+        for (let row of rows) {
+            const isShowData = row.classList.contains('showData');
+
+            if (!isShowData) {
+                const cells = row.querySelectorAll('td');
                 let shouldDisplay = false;
-    
+
                 for (let cell of cells) {
                     const text = cell.textContent || cell.innerText;
                     if (text.toLowerCase().indexOf(searchQuery) > -1) {
@@ -150,10 +153,17 @@
                         break;
                     }
                 }
-    
+
                 row.style.display = shouldDisplay ? '' : 'none';
+
+                // If the parent row is hidden, hide the child showData row
+                const showDataRow = row.nextElementSibling;
+                if (showDataRow && showDataRow.classList.contains('showData')) {
+                    showDataRow.style.display = shouldDisplay ? '' : 'none';
+                }
             }
-        });
-    </script>
+        }
+    });
+</script>
 </body>
 </html>

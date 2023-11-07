@@ -8,7 +8,7 @@
 
 <body>
     <header class="bg-dark text-white py-4">
-        <h1 class="text-center">Users Details</h1>
+        <h1 class="text-center text-white">Users Details</h1>
     </header>
     <div class="container mt-4">
         <div class="card p-4">

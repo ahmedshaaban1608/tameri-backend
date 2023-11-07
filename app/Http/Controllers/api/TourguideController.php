@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class TourguideController extends Controller
@@ -65,10 +66,45 @@ class TourguideController extends Controller
     {
         try {
             if (Gate::allows('is-tourguide')) {
-                $user = auth()->user();
-                if ($tourguide->id === $user->id) {
+                $currentUser = auth()->user();
+                $oldAvatar = $tourguide->avatar;
+                $oldImage = $tourguide->profile_img;
+                if ($tourguide->id === $currentUser->id) {
+                    $user = User::findOrfail($currentUser->id);
+                    $data = $request->all();
+                    if (isset($data['name'])) {
+                        $user->update(['name' => $data['name']]);
+                    }
+                    $tourguide->update(['phone' => $data['phone'], 'bio'=> $data['bio'], 'description'=> $data['description'], 'day_price'=> $data['day_price']]);
 
-                    $tourguide->update($request->all());
+                    if ($request->hasFile('avatar')) {
+                        $file = $request->file('avatar');
+                        $avatarname = time() . $file->getClientOriginalName();
+                        $file->move(public_path('img'), $avatarname);
+                        $tourguide->update(['avatar' => $avatarname]);
+                        if (!Str::startsWith($oldAvatar, 'http')) {
+                            $avatarPath = public_path('img/' . $oldAvatar);
+                            if (file_exists($avatarPath)) {
+                                unlink($avatarPath);
+                                
+                            }
+                        }
+                    }
+
+                    if ($request->hasFile('profile_img')) {
+                        $file = $request->file('profile_img');
+                        $imagename = time() . $file->getClientOriginalName();
+                        $file->move(public_path('img'), $imagename);
+                        $tourguide->update(['profile_img' => $imagename]);
+                        if (!Str::startsWith($oldImage, 'http')) {
+                            $imagePath = public_path('img/' . $oldImage);
+                            if (file_exists($imagePath)) {
+                                unlink($imagePath);
+                                
+                            }
+                        }
+                    }
+                    return response()->json(new TourguideDataResource($tourguide), 200);
 
                 }
             } else {

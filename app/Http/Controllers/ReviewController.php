@@ -16,14 +16,15 @@ class ReviewController extends Controller
      */
     function __construct(){
         // $this->middleware('auth');
-        $this->middleware('isadmin');
+        $this->middleware(['auth','isadmin']);
+
     }
     public function index()
     {
         //
         try {
 
-            $reviews = ReviewResource::collection(Review::orderBy('status', 'asc')->paginate(40));
+            $reviews = ReviewResource::collection(Review::orderBy('status', 'asc')->orderBy('id', 'desc')->paginate(40));
             return view('Dashboard.admin', ['reviews' => $reviews]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');

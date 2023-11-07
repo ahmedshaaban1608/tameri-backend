@@ -15,7 +15,8 @@ class OrderController extends Controller
      * Display a listing of the resource.
      */
     function __construct(){
-        $this->middleware('isadmin');
+        $this->middleware(['auth','isadmin']);
+
     }
     public function index()
     {

@@ -58,7 +58,7 @@
                             </form>
                         </td>
                         
-                        <tr>
+                        <tr class="showData">
                             <td colspan="7">
                                 <div class="details-div" id="details_{{ $user->id }}" style="display: none;"></div>
                             </td>
@@ -119,21 +119,31 @@
     document.getElementById('search-input').addEventListener('keyup', function() {
         const searchQuery = this.value.toLowerCase();
         const table = document.getElementById('data-table');
-        const rows = table.getElementsByTagName('tr');
+        const rows = table.querySelectorAll('tbody > tr');
 
         for (let row of rows) {
-            const cells = row.getElementsByTagName('td');
-            let shouldDisplay = false;
+            const isShowData = row.classList.contains('showData');
 
-            for (let cell of cells) {
-                const text = cell.textContent || cell.innerText;
-                if (text.toLowerCase().indexOf(searchQuery) > -1) {
-                    shouldDisplay = true;
-                    break;
+            if (!isShowData) {
+                const cells = row.querySelectorAll('td');
+                let shouldDisplay = false;
+
+                for (let cell of cells) {
+                    const text = cell.textContent || cell.innerText;
+                    if (text.toLowerCase().indexOf(searchQuery) > -1) {
+                        shouldDisplay = true;
+                        break;
+                    }
+                }
+
+                row.style.display = shouldDisplay ? '' : 'none';
+
+                // If the parent row is hidden, hide the child showData row
+                const showDataRow = row.nextElementSibling;
+                if (showDataRow && showDataRow.classList.contains('showData')) {
+                    showDataRow.style.display = shouldDisplay ? '' : 'none';
                 }
             }
-
-            row.style.display = shouldDisplay ? '' : 'none';
         }
     });
 </script>
