@@ -24,8 +24,13 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', [AdminController::class, 'index'])->middleware(['auth','isadmin']);
-
-
+Route::get('/forbidden', function(){
+  return view('forbidden');
+})->name('forbidden');
+Route::post('/forbidden', function(){
+  Auth::logout();
+  return redirect('/login'); 
+})->name('forbiddenLogout');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

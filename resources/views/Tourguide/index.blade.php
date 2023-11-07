@@ -9,6 +9,10 @@
     <style>
         table.table-sm th ,td {
             text-align: center
+           
+        }
+        table{
+            border: 2 solid #e7eaf0;
         }
     </style>
 </head>
@@ -20,8 +24,8 @@
         @if(isset($tourguides))
             <div id="displayTourguideDetails"></div> 
            <h1 class="text-center">Tourguides</h1>
-            <table id="data-table" class="table table-sm table-bordered">
-                <thead    class="thead-dark" >
+            <table id="data-table" class="table table-sm table-nowrap">
+                <thead    class="thead-light" >
                     
                      <tr>
                         <th>ID</th>
