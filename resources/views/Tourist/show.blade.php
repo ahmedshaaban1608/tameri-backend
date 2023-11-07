@@ -20,7 +20,12 @@
             <p class="lead">Gender: {{ $tourist['gender'] }}</p>
             <p class="lead">Phone: {{ $tourist['phone'] }}</p>
             <p class="lead">Avatar:</p>
+            @if (Str::startsWith($tourist['avatar'], 'http'))
             <img src="{{ $tourist['avatar'] }}" class="img-fluid w-25" alt="Avatar">
+            @else
+            <img src="{{ asset('img/' . $tourist['avatar']) }}" class="img-fluid w-25" alt="Avatar">
+
+            @endif
         </div>
     </div>
 

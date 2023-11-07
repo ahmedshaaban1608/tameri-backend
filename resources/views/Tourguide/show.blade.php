@@ -51,13 +51,24 @@
                 <p><strong>Gender:</strong> {{ $tourguide['gender'] }}</p>
                 <p><strong>Phone:</strong> {{ $tourguide['phone'] }}</p>
                 <div class="row">
+                    
                     <div class="col-6">
                         <p><strong>Avatar:</strong></p>
+                        @if (Str::startsWith($tourguide['avatar'], 'http'))
                         <img src="{{ $tourguide['avatar'] }}" alt="Avatar" class="img-thumbnail w-50">
+                        @else
+                        <img src="{{ asset('img/' . $tourguide['avatar'])}}" alt="Avatar" class="img-thumbnail w-50">
+
+                        @endif
                     </div>
                     <div class="col-6">
                         <p><strong>Profile Image:</strong></p>
-                        <img src="{{ $tourguide['profile_img'] }}" alt="profile_img" class="img-thumbnail w-50">
+                        @if (Str::startsWith($tourguide['profile_img'], 'http'))
+                        <img src="{{ $tourguide['profile_img'] }}" alt="Avatar" class="img-thumbnail w-50">
+                        @else
+                        <img src="{{ asset('img/' . $tourguide['profile_img'])}}" alt="Avatar" class="img-thumbnail w-50">
+
+                        @endif
                     </div>
                 </div>
             </div>

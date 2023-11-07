@@ -64,9 +64,9 @@
                             <td>{{ $tourguide['bio'] }}</td>
                             <td>
                                 @if (Str::startsWith($tourguide['avatar'], 'http'))
-                                <img src="{{$tourguide['avatar']}}" alt="{{ $tourguide['name'] }}" class="w-75 rounded-4 shadow" style="object-fit: cover;">
+                                <img src="{{$tourguide['avatar']}}" alt="{{ $tourguide['name'] }}" class="w-75 rounded-4 shadow" style="object-fit: cover; width:100px!important">
                                         @else
-                                        <img src="{{ asset('img/' . $tourguide['avatar']) }}" alt="{{ $tourguide['name'] }}" class="w-100 rounded-4 shadow" style="object-fit: cover;">
+                                        <img src="{{ asset('img/' . $tourguide['avatar']) }}" alt="{{ $tourguide['name'] }}" class="w-100 rounded-4 shadow" style="object-fit: cover; width:100px!important">
                                           @endif
                             
                                 {{-- <img src="{{ $tourguide->avatar }}" alt="Avatar" style="width: 50px; height: 50px;"> --}}
