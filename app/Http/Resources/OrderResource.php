@@ -6,6 +6,7 @@ use App\Models\Tourguide;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class OrderResource extends JsonResource
 {
@@ -16,13 +17,14 @@ class OrderResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $tourguide_avatar = Tourguide::withTrashed()->find($this->tourguide_id)->avatar;
         return [
             "id"=> $this->id,
             "tourist_id"=> $this->tourist_id,
             "tourist_name" => User::withTrashed()->find($this->tourist_id)->name,
             "tourguide_id"=> $this->tourguide_id,
             "tourguide_name" => User::withTrashed()->find($this->tourguide_id)->name,
-            "tourguide_avatar" => Tourguide::withTrashed()->find($this->tourguide_id)->avatar,
+            "tourguide_avatar" => isset($tourguide_avatar) ? (Str::startsWith($tourguide_avatar, 'http') ? $tourguide_avatar : env('APP_URL').':8000/img/'.$tourguide_avatar) : '/assets/tourguide-avatar.png',
             "status"=> $this->status,
             "comment"=> $this->comment,
             "phone"=> $this->phone,

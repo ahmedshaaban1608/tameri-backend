@@ -16,7 +16,7 @@
 </head>
 <body class="p-4">
     <header class="bg-dark text-white text-center p-3 mb-4">
-        <h1>Review Details</h1>
+        <h1 class="text-white ">Review Details</h1>
     </header>
     <div class="container w-50">
         <div class="card p-4 shadow">

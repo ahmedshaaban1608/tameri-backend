@@ -22,11 +22,11 @@ class UpdateTourguideRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'gender' => 'required|string|in:male,female',
-            'birth_date' => 'required|date',
+            'name' => 'required|string',
             'bio' => 'required|string',
             'description' => 'required|string',
-            'profile_img' => 'required|string',
+            'avatar' => 'image',
+            'profile_img' => 'image',
             'day_price' => 'required|numeric',
             'phone' => ['required', 'regex:/^\+?\d{7,14}$/', Rule::unique('tourguides')->ignore($this->tourguide)],
         ];

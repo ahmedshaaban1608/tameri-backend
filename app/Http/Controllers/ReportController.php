@@ -20,7 +20,8 @@ class ReportController extends Controller
      */
     function __construct(){
         // $this->middleware('auth');
-        $this->middleware('isadmin');
+        $this->middleware(['auth','isadmin']);
+
     }
     // public function index()
     // {

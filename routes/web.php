@@ -23,9 +23,8 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AdminController::class, 'index'])->middleware(['auth','isadmin']);
+
 
 Auth::routes();
 

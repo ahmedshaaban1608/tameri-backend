@@ -7,8 +7,8 @@
 </head>
 
 <body>
-    <header class="bg-dark text-white text-center py-4">
-        <h1 class="display-4">Tourist Details</h1>
+    <header class="bg-dark text-center py-4">
+        <h1 class="display-4 text-white ">Tourist Details</h1>
     </header>
 
     <div class="container mt-4">

@@ -29,15 +29,15 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <!-- Brand -->
-            <a class="navbar-brand py-lg-2 mb-lg-5 px-lg-6 me-0" href="#">
-                   <a class="sidebar-brand brand-logo" href="../../index.html"><img src="../../assets/images/logo.png" alt="logo" /></a>
+            <a class="navbar-brand py-lg-2 px-lg-6 me-0" href="#">
+                   <a class="sidebar-brand brand-logo" href="/"><img src="../../assets/images/logo.png" alt="logo" /></a>
             </a>
             <!-- User menu (mobile) -->
            
            
            
             <!-- Collapse -->
-            <div class="collapse navbar-collapse" id="sidebarCollapse">
+            <div class="collapse navbar-collapse mt-4" id="sidebarCollapse">
                 <!-- Navigation -->
                 <ul class="navbar-nav">
                   
@@ -109,27 +109,27 @@
     <!-- Main content -->
     <div class="h-screen flex-grow-1 overflow-y-lg-auto">
         <!-- Header -->
-        <header class="bg-surface-primary border-bottom pt-6">
+        <header class="bg-surface-primary border-bottom py-3">
             <div class="container-fluid">
                 <div class="mb-npx">
                     <div class="row align-items-center">
                         <div class="col-sm-6 col-12 mb-4 mb-sm-0">
                             <!-- Title -->
                             <h1 class="h2 mb-0 ls-tight">
-                              <a class="sidebar-brand brand-logo" href="../../index.html">
-                                <img src="../../assets/images/logo.png" alt="logo" width="200" height="100">
+                              <a class="sidebar-brand brand-logo text-decoration-none text-danger" href="/">
+                               <h2 class="text-danger fw-bold" style="font-weight:bold!important; font-size:25px!important">Tameri Dashboard</h2>
                               </a>
                                                           </div>
                         <!-- Actions -->
                         <div class="col-sm-6 col-12 text-sm-end">
                           
-                                  <div class="count-indicator">
-                                  <img  width="50px" class="img-xs rounded-circle  " src="../../assets/images/faces/rawan.jpeg" alt="">
+                                  <div class="count-indicator d-flex justify-content-end me-3 align-items-center">
+                                 
                                   <span class="count bg-success"></span>
                                   
                                   @if (Auth::check())
                                   <div class="profile-name">
-                                  <h5 class="mb-0 font-weight-normal">{{ Auth::user()->name }}</h5>
+                                  <h5 class="mb-0 font-weight-normal">{{ Auth::user()->name }} ({{Auth::user()->type}})</h5>
                                  
                                   </div>
                                   @else

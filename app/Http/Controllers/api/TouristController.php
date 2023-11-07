@@ -8,11 +8,10 @@ use App\Http\Resources\TouristDataResource;
 use App\Http\Resources\TouristResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Models\Tourist;
-use Illuminate\Http\Request;
+
 
 
 class TouristController extends Controller
@@ -68,6 +67,7 @@ class TouristController extends Controller
         try {
             if (Gate::allows('is-tourist')) {
                 $currentUser = auth()->user();
+                $oldAvatar = $tourist->avatar;
                 if ($tourist->id === $currentUser->id) {
                     $user = User::findOrfail($currentUser->id);
                     $data = $request->all();
@@ -88,6 +88,13 @@ class TouristController extends Controller
                         $filename = time() . $file->getClientOriginalName();
                         $file->move(public_path('img'), $filename);
                         $tourist->update(['avatar' => $filename]);
+                        if (!Str::startsWith($oldAvatar, 'http')) {
+                            $avatarPath = public_path('img/' . $oldAvatar);
+                            if (file_exists($avatarPath)) {
+                                unlink($avatarPath);
+                                
+                            }
+                        }
                     }
     
                     return response()->json(new TouristDataResource($tourist), 200);

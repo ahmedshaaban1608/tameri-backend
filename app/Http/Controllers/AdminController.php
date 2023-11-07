@@ -10,7 +10,9 @@ use App\Models\Tourguide;
 use Illuminate\Http\Request;
 class AdminController extends Controller
 {
-   
+    function __construct(){
+        $this->middleware(['auth','isadmin']);
+    }
     public function index()
     {
         return redirect()->route('reports.index');
