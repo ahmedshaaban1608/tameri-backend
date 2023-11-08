@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAreaRequest;
 use App\Http\Requests\UpdateAreaRequest;
 use App\Http\Resources\AreaResource;
+use App\Http\Resources\TourguideDataResource;
 use App\Models\Area;
+use App\Models\Tourguide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
@@ -27,7 +29,7 @@ class AreaController extends Controller
         }
 
     }
-    public function store(StoreAreaRequest $request)
+    public function store(StoreAreaRequest $request,)
     {
         try {
             if (Gate::allows('is-tourguide')) {
@@ -35,7 +37,8 @@ class AreaController extends Controller
                 $request->merge(['tourguide_id' => $user->id]);
 
                 $area = Area::create($request->all());
-                return response()->json(['message' => 'Area created successfully', 'data' => new AreaResource($area)], 200);
+                $tourguide = Tourguide::findOrFail($user->id);
+                return response()->json(new TourguideDataResource($tourguide), 200);
             } else {
                 return response()->json(['message' => 'Only tourguides are allowed to create area.'], 403);
             }
@@ -80,7 +83,9 @@ class AreaController extends Controller
                 $user = auth()->user();
                 if ($area->tourguide_id === $user->id) {
                     $area->delete();
-                    return response()->json(['message' => 'Area deleted successfully'], 200);
+                   
+            $tourguide = Tourguide::findOrFail($user->id);
+            return response()->json(new TourguideDataResource($tourguide), 200);
                 } 
             } else {
                 return response()->json(['message' => 'You are not allowed to delete this area.'], 403);

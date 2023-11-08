@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\TourguideDataResource;
 use App\Models\Order;
 use App\Models\Tourguide;
 use Illuminate\Http\Request;
@@ -101,7 +102,8 @@ class OrderController extends Controller
                     $order->update([
                         'status'=> $request->status,
                     ]);
-                    return response()->json(['message' => 'Order updated successfully', 'data' => new OrderResource($order)], 200);
+                    $tourguide = Tourguide::findOrFail($user->id);
+                    return response()->json(new TourguideDataResource($tourguide), 200);
                 }
             } else {
                 return response()->json(['message' => 'You are not allowed to update this order.'], 403);

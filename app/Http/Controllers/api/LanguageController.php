@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLanguageRequest;
 use App\Http\Requests\UpdateLanguageRequest;
 use App\Http\Resources\LanguageResource;
+use App\Http\Resources\TourguideDataResource;
 use App\Models\Language;
+use App\Models\Tourguide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
@@ -36,7 +38,8 @@ class LanguageController extends Controller
                 $user = auth()->user();
                 $request->merge(['tourguide_id' => $user->id]);
                 $language = Language::create($request->all());
-                return response()->json(['message' => 'Language created successfully', 'data' => new LanguageResource($language)], 200);
+                $tourguide = Tourguide::findOrFail($user->id);
+                return response()->json(new TourguideDataResource($tourguide), 200);
             } else {
                 return response()->json(['message' => 'Only tourguides are allowed to create languages.'], 403);
             }
@@ -78,7 +81,8 @@ class LanguageController extends Controller
                 $user = auth()->user();
                 if ($language->tourguide_id === $user->id) {
                     $language->delete();
-                    return response()->json("Deleted Succssfully", 200);
+                    $tourguide = Tourguide::findOrFail($user->id);
+                    return response()->json(new TourguideDataResource($tourguide), 200);
                 } 
             } else {
                 return response()->json(['message' => 'You are not allowed to delete this language.'], 403);
