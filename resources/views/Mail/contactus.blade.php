@@ -1,3 +1,3 @@
-<h1>
+<p>
   {{$formData['message']}}
-</h1>
+</p>
