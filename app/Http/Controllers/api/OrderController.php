@@ -172,53 +172,5 @@ class OrderController extends Controller
         }
     }
 
-    public function payment(Request $request, Order $order) {
-        return response()->json($request);
-        // $validator = Validator::make($request->all(), [
-        //     'source' => 'required|string',
-        // ]);
-    
-        // if ($validator->fails()) {
-        //     return response()->json(['errors' => $validator->errors()], 422);
-        // }
-    
-        // try {
-        //     if (Gate::allows('is-tourist')) {
-        //         $user = auth()->user();
-                
-        //         // Check if the order's tourist_id matches the user's id
-        //         if ($order->tourist_id === $user->id) {
-        //             Stripe::setApiKey(env('STRIPE_SECRET'));
-    
-        //             $data = [
-        //                 'currency' => 'usd',
-        //                 'amount' => $order->total
-        //             ];
-    
-        //             // Create a Stripe customer using the email and source provided
-        //             $customer = Customer::create([
-        //                 'email' => $user->email,
-        //                 'source' => $request->input('source'), // Use 'source' instead of 'stripeToken'
-        //             ]);
-    
-        //             // Create a charge for the customer
-        //             $charge = Charge::create([
-        //                 'customer' => $customer->id, // Use the customer ID, not tourist_id
-        //                 'amount' => $data['amount'] * 100,
-        //                 'currency' => $data['currency'],
-        //             ]);
-    
-        //             $order->update([
-        //                 'payment' => 'paid',
-        //             ]);
-    
-        //             return response()->json(['message' => 'Order payment successfully'], 200);
-        //         } 
-        //     } else {
-        //         return response()->json(['message' => 'Only the Owner Of The order is Allowed to pay.'], 403);
-        //     }
-        // } catch (\Exception $e) {
-        //     return response()->json(['message' => 'An error occurred while processing the payment.'], 500);
-        // }
-    }
+  
 }    

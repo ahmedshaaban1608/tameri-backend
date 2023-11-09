@@ -116,7 +116,7 @@ class TouristController extends Controller
                 $user = auth()->user();
                 if ($tourist->id === $user->id) {
 
-                    $tourist->delete();
+                    // $tourist->delete();
 
                     // Return a success message
                     return response()->json([

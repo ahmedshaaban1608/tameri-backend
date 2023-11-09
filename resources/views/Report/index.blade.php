@@ -413,7 +413,7 @@
         new Chart(document.getElementById('userChart').getContext('2d'), {
             type: 'pie',
             data: {
-                labels: ['Users', 'Others'],
+                labels: ['Active', 'Other'],
                 datasets: [{
                     label: 'Number of Users',
                     data: [userData, 100 - userData],

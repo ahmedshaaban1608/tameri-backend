@@ -74,7 +74,7 @@ class UserController extends Controller
     {
         try {
             // Delete the user
-            $user->delete();
+            // $user->delete();
             // Return a success message
             return response()->json(['message' => 'User is deleted successfully.']);
         } catch (\Throwable $th) {
