@@ -123,7 +123,7 @@
 </html>
  --}}
  {{-- //////////////////2///////////////////// --}}
-{{-- 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -213,8 +213,9 @@
 
     </script>
 </body>
-</html> --}}
+</html>
 {{-- //////////////3//////////// --}}
+{{-- 
 <!DOCTYPE html>
 <html>
 <head>
@@ -231,36 +232,7 @@
 <body class="antialiased">
     
     <div class="container ">
-        {{-- <div class="row mb-3" style="margin-top: -30px">
-            <div class="col-md-3">
-                <div class="card text-center p-3">
-                    <i class="fas fa-chart-pie fa-3x"></i>
-                    <h3>Chart 1</h3>
-                    <p>Data</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card text-center p-3">
-                    <i class="fas fa-user fa-3x"></i>
-                    <h3>User Icon</h3>
-                    <p>User Information</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card text-center p-3">
-                    <i class="fas fa-chart-line fa-3x"></i>
-                    <h3>Chart 2</h3>
-                    <p>Data</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card text-center p-3">
-                    <i class="fas fa-cog fa-3x"></i>
-                    <h3>Settings</h3>
-                    <p>Configuration</p>
-                </div>
-            </div>
-        </div> --}}
+      
         
         <div class="row" style="margin-top: -30px">
             <div class="col-md-8">
@@ -432,4 +404,4 @@
         });
     </script>
 </body>
-</html>
+</html> --}}
