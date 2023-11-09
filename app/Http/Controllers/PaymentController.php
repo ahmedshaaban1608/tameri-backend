@@ -13,10 +13,14 @@ use Stripe\Stripe;
 class PaymentController extends Controller
 {
     public function show($id){
+        $user = auth()->user();
         $order = Order::findOrFail($id);
+        if($user->id === $order->tourist_id){     
         $tourist = Tourist::where("id",$order->tourist_id)->first();
         $tourguide = Tourguide::where("id",$order->tourguide_id)->first();
         return view('Payment.payorder', ['order'=> $order, 'tourist'=>$tourist,'tourguide'=>$tourguide]);
+        }
+        return abort(403,'You are not allowed to access this page');
     }
     
 

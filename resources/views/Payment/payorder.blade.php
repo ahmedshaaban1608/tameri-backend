@@ -10,7 +10,7 @@
   @if($order->payment === 'pending')
 <div class="container d-flex justify-content-center align-items-center mt-5 m-auto" style="max-width:600px">
   <div class="row mt-5 ">
-    <h1 class="mb-3"> Welcome Ahmed</h1>
+    <h1 class="mb-3"> Welcome {{$tourist->user['name']}}</h1>
     <h4 class="mb-3"> make a payment to complete the booking process</h4>
     <table class="table table-striped">
 <tbody>
@@ -38,7 +38,7 @@
 
 
 <div class="container d-flex justify-content-center align-items-center mt-5 m-auto">
-<form action="{{ route('charge', $order->id) }}" method="POST">
+<form action="{{ route('charge') }}" method="POST">
 @csrf
 <input type="hidden" name="price" value="{{ $order->total }}">
 <input type="hidden" name="id" value="{{ $order->id }}">

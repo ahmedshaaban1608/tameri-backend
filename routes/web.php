@@ -45,6 +45,7 @@ Route::resource('areas', AreaController::class);
 Route::resource('languages', LanguageController::class);
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 Route::post('/logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
-Route::get('/orderpayment/{id}', [PaymentController::class, 'show'])->name('payment');
-Route::post('/orderpayment/', [PaymentController::class, 'charge'])->name('charge');
+Route::get('/orderpayment/{id}', [PaymentController::class, 'show'])->name('payment')->middleware(['auth']);
+Route::post('/orderpayment', [PaymentController::class, 'charge'])->name('charge');
+Route::get('/orderpayment', [AdminController::class, 'index'])->middleware(['auth','isadmin']);
 
