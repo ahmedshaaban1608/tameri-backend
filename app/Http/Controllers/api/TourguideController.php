@@ -82,6 +82,7 @@ class TourguideController extends Controller
                         $avatarname = time() . $file->getClientOriginalName();
                         $file->move(public_path('img'), $avatarname);
                         $tourguide->update(['avatar' => $avatarname]);
+                      try {
                         if (!Str::startsWith($oldAvatar, 'http') && isset($oldAvatar)) {
                             $avatarPath = public_path('img/' . $oldAvatar);
                             if (file_exists($avatarPath)) {
@@ -89,6 +90,9 @@ class TourguideController extends Controller
                                 
                             }
                         }
+                      } catch (\Throwable $th) {
+                        //throw $th;
+                      }
                     }
 
                     if ($request->hasFile('profile_img')) {
@@ -96,6 +100,7 @@ class TourguideController extends Controller
                         $imagename = time() . $file->getClientOriginalName();
                         $file->move(public_path('img'), $imagename);
                         $tourguide->update(['profile_img' => $imagename]);
+                    try {
                         if (!Str::startsWith($oldAvatar, 'http') && isset($oldAvatar)) {
                             $imagePath = public_path('img/' . $oldImage);
                             if (file_exists($imagePath)) {
@@ -103,6 +108,9 @@ class TourguideController extends Controller
                                 
                             }
                         }
+                    } catch (\Throwable $th) {
+                        //throw $th;
+                    }
                     }
                     return response()->json(new TourguideDataResource($tourguide), 200);
 
