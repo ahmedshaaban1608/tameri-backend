@@ -124,7 +124,7 @@ class TourguideController extends Controller
                 $user = auth()->user();
                 if ($tourguide->id === $user->id) {
 
-                    $tourguide->delete();
+                    // $tourguide->delete();
                     return response()->json([
                         'message' => 'Tourguide deleted successfully.'
                     ], 200);

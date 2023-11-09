@@ -140,18 +140,25 @@ public function update(Request $request, $id)
             if (Gate::allows('is-admin')) {
                 $user = User::findOrFail($id);
                 $user->delete();
-                $tourguide = Tourguide::findOrFail($id);
-                $tourguide->delete();
-                $tourist = Tourist::findOrFail($id);
-                $tourist->delete();
-              
-                return back()->with('success', 'user deleted successfully.');
+    
+                $tourguide = Tourguide::where('id', $id)->first();
+                if ($tourguide) {
+                    $tourguide->delete();
+                }
+               
+                $tourist = Tourist::where('id', $id)->first();
+                if ($tourist) {
+                    $tourist->delete();
+                }
+    
+                return back()->with('success', 'User deleted successfully.');
             } else {
-                return abort(403, 'You are not allowed to delete user.');
+                return abort(403, 'You are not allowed to delete the user.');
             }
         } catch (\Exception $e) {
             return back()->with('error', 'An error occurred while deleting the user.');
         }
     }
+    
     
 }

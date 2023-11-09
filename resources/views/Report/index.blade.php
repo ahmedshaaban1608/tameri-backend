@@ -124,7 +124,7 @@
  --}}
  {{-- //////////////////2///////////////////// --}}
 
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -213,9 +213,9 @@
 
     </script>
 </body>
-</html>
+</html> --}}
 {{-- //////////////3//////////// --}}
-{{-- 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -385,7 +385,7 @@
         new Chart(document.getElementById('userChart').getContext('2d'), {
             type: 'pie',
             data: {
-                labels: ['Users', 'Others'],
+                labels: ['Active', 'Other'],
                 datasets: [{
                     label: 'Number of Users',
                     data: [userData, 100 - userData],
@@ -404,4 +404,4 @@
         });
     </script>
 </body>
-</html> --}}
+</html> 
