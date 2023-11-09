@@ -136,10 +136,10 @@ public function update(Request $request, $id)
         if ($review) {
             if (Gate::allows('is-admin')) {
                 if ($request->input('status_action') === 'declined') {
-                    $review->update(['status' => 'pending']);
-                    return redirect()->route('reviews')->with('success', 'Review status reverted to pending successfully.');
-                } elseif ($review->status === 'pending' && in_array($request->input('status_action'), ['confirmed'])) {
-                    $newStatus = $request->input('status_action');
+                    $review->update(['status' => 'declined']); 
+                    return redirect()->route('reviews')->with('success', 'Review status updated to declined successfully.');
+                } elseif ($review->status === 'pending' && in_array($request->input('status_action'), ['confirmed'])) {   
+                     $newStatus = $request->input('status_action');
                     $review->update(['status' => $newStatus]);
                     return redirect()->route('reviews')->with('success', 'Review status updated to ' . $newStatus . ' successfully.');
                 } else {

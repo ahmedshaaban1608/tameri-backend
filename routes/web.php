@@ -3,6 +3,7 @@
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TourguideController;
@@ -44,3 +45,7 @@ Route::resource('areas', AreaController::class);
 Route::resource('languages', LanguageController::class);
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 Route::post('/logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
+Route::get('/orderpayment/{id}', [PaymentController::class, 'show'])->name('payment')->middleware(['auth']);
+Route::post('/orderpayment', [PaymentController::class, 'charge'])->name('charge');
+Route::get('/orderpayment', [AdminController::class, 'index'])->middleware(['auth','isadmin']);
+

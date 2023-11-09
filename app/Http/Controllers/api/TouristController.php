@@ -88,13 +88,17 @@ class TouristController extends Controller
                         $filename = time() . $file->getClientOriginalName();
                         $file->move(public_path('img'), $filename);
                         $tourist->update(['avatar' => $filename]);
-                        if (!Str::startsWith($oldAvatar, 'http')) {
+                       try {
+                        if (!Str::startsWith($oldAvatar, 'http') && isset($oldAvatar)) {
                             $avatarPath = public_path('img/' . $oldAvatar);
                             if (file_exists($avatarPath)) {
                                 unlink($avatarPath);
                                 
                             }
                         }
+                       } catch (\Throwable $th) {
+                        //throw $th;
+                       }
                     }
     
                     return response()->json(new TouristDataResource($tourist), 200);
