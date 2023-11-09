@@ -14,7 +14,7 @@ class Order extends Model
 
 
 
-    protected $fillable = ['tourist_id', 'tourguide_id', 'comment', 'phone', 'from', 'to', 'total', 'city', 'status'];
+    protected $fillable = ['tourist_id', 'tourguide_id', 'comment', 'phone', 'from', 'to', 'total', 'city', 'status', 'payment'];
 
     function tourguide()
     {

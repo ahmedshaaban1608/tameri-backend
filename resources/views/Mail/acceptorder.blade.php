@@ -40,7 +40,7 @@
 <div class="view">
 <p >Please visit your profile to complete the booking process</p>
 <br>
-<a href="{{ env('FRONTEND_URL') }}/profile" class="viewBtn">complete the order</a>
+<a href="{{ env('APP_URL_MAIN') }}/orderpayment/{{$formData['id'}}" class="viewBtn">complete the order</a>
 
 </div>
 <div style="margin-top:30px">

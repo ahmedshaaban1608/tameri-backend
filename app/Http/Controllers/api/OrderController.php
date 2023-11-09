@@ -140,8 +140,14 @@ class OrderController extends Controller
                                 "endDate"=> $order->to,
                                 "totalPrice"=> $order->total,
                                 "city"=> $order->city,
+                                "id"=> $order->id,
                             ];
-                            Mail::to($tourist->user['email'])->send(new AcceptOrderMail($data));
+                            try {
+                                Mail::to($tourist->user['email'])->send(new AcceptOrderMail($data));
+
+                            } catch (\Throwable $th) {
+                                return response()->json($th, 405);
+                            }
                         } catch (\Throwable $th) {
         
                         }
