@@ -28,7 +28,7 @@
       </tr>
       <tr>
         <th>Total Price</th>
-        <td>{{$order->total}}</td>
+        <td>{{$order->total}} USD</td>
       </tr>
     </tbody>
     </table>
