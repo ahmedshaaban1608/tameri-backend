@@ -7,12 +7,20 @@ use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\TourguideDataResource;
+use App\Mail\AcceptOrderMail;
+use App\Mail\NewOrderMail;
 use App\Models\Order;
 use App\Models\Tourguide;
+use App\Models\Tourist;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use DateTime;
+use Stripe\Charge;
+use Stripe\Customer;
+use Stripe\Stripe;
 
 
 
@@ -61,6 +69,22 @@ class OrderController extends Controller
                 $total = $tourguide->day_price * $days;
                 $request->merge(['total' => $total]);
                 $order = Order::create($request->all());
+                try {
+                    $data = [
+                        'name' => $tourguide->user['name'],
+                        'subject' => 'Congratulations, you got a new booking order from '.$user['name'],
+                        "tourist_name" =>$user['name'],
+                        "tourguide_name" => User::withTrashed()->find($tourguide->id)->name,
+                        "comment"=> $order->comment,
+                        "startDate"=> $order->from,
+                        "endDate"=> $order->to,
+                        "totalPrice"=> $order->total,
+                        "city"=> $order->city,
+                    ];
+                    Mail::to($tourguide->user['email'])->send(new NewOrderMail($data));
+                } catch (\Throwable $th) {
+
+                }
                 return response()->json(['message' => 'Order created successfully', 'data' => new OrderResource($order)], 200);
             } else {
                 return response()->json(['message' => 'Only tourists are allowed to create orders.'], 403);
@@ -102,7 +126,26 @@ class OrderController extends Controller
                     $order->update([
                         'status'=> $request->status,
                     ]);
+                    $tourist = Tourist::findOrFail($order->tourist_id);
                     $tourguide = Tourguide::findOrFail($user->id);
+
+                    if($request->status === 'accepted'){
+                        try {
+                            $data = [
+                                'tourist_name' => $tourist->user['name'],
+                                'subject' => $user['name'].' accepted your booking order ',
+                                "tourguide_name" =>$user['name'],
+                                "comment"=> $order->comment,
+                                "startDate"=> $order->from,
+                                "endDate"=> $order->to,
+                                "totalPrice"=> $order->total,
+                                "city"=> $order->city,
+                            ];
+                            Mail::to($tourist->user['email'])->send(new AcceptOrderMail($data));
+                        } catch (\Throwable $th) {
+        
+                        }
+                    }
                     return response()->json(new TourguideDataResource($tourguide), 200);
                 }
             } else {
@@ -128,4 +171,54 @@ class OrderController extends Controller
             return response()->json(['message' => 'An error occurred while deleting the order.'], 500);
         }
     }
-}
+
+    public function payment(Request $request, Order $order) {
+        return response()->json($request);
+        // $validator = Validator::make($request->all(), [
+        //     'source' => 'required|string',
+        // ]);
+    
+        // if ($validator->fails()) {
+        //     return response()->json(['errors' => $validator->errors()], 422);
+        // }
+    
+        // try {
+        //     if (Gate::allows('is-tourist')) {
+        //         $user = auth()->user();
+                
+        //         // Check if the order's tourist_id matches the user's id
+        //         if ($order->tourist_id === $user->id) {
+        //             Stripe::setApiKey(env('STRIPE_SECRET'));
+    
+        //             $data = [
+        //                 'currency' => 'usd',
+        //                 'amount' => $order->total
+        //             ];
+    
+        //             // Create a Stripe customer using the email and source provided
+        //             $customer = Customer::create([
+        //                 'email' => $user->email,
+        //                 'source' => $request->input('source'), // Use 'source' instead of 'stripeToken'
+        //             ]);
+    
+        //             // Create a charge for the customer
+        //             $charge = Charge::create([
+        //                 'customer' => $customer->id, // Use the customer ID, not tourist_id
+        //                 'amount' => $data['amount'] * 100,
+        //                 'currency' => $data['currency'],
+        //             ]);
+    
+        //             $order->update([
+        //                 'payment' => 'paid',
+        //             ]);
+    
+        //             return response()->json(['message' => 'Order payment successfully'], 200);
+        //         } 
+        //     } else {
+        //         return response()->json(['message' => 'Only the Owner Of The order is Allowed to pay.'], 403);
+        //     }
+        // } catch (\Exception $e) {
+        //     return response()->json(['message' => 'An error occurred while processing the payment.'], 500);
+        // }
+    }
+}    
