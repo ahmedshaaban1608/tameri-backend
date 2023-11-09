@@ -88,7 +88,7 @@ class TouristController extends Controller
                         $filename = time() . $file->getClientOriginalName();
                         $file->move(public_path('img'), $filename);
                         $tourist->update(['avatar' => $filename]);
-                        if (!Str::startsWith($oldAvatar, 'http')) {
+                        if (!Str::startsWith($oldAvatar, 'http') && isset($oldAvatar)) {
                             $avatarPath = public_path('img/' . $oldAvatar);
                             if (file_exists($avatarPath)) {
                                 unlink($avatarPath);

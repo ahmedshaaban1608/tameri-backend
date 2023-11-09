@@ -82,7 +82,7 @@ class TourguideController extends Controller
                         $avatarname = time() . $file->getClientOriginalName();
                         $file->move(public_path('img'), $avatarname);
                         $tourguide->update(['avatar' => $avatarname]);
-                        if (!Str::startsWith($oldAvatar, 'http')) {
+                        if (!Str::startsWith($oldAvatar, 'http') && isset($oldAvatar)) {
                             $avatarPath = public_path('img/' . $oldAvatar);
                             if (file_exists($avatarPath)) {
                                 unlink($avatarPath);
@@ -96,7 +96,7 @@ class TourguideController extends Controller
                         $imagename = time() . $file->getClientOriginalName();
                         $file->move(public_path('img'), $imagename);
                         $tourguide->update(['profile_img' => $imagename]);
-                        if (!Str::startsWith($oldImage, 'http')) {
+                        if (!Str::startsWith($oldAvatar, 'http') && isset($oldAvatar)) {
                             $imagePath = public_path('img/' . $oldImage);
                             if (file_exists($imagePath)) {
                                 unlink($imagePath);
@@ -111,7 +111,7 @@ class TourguideController extends Controller
                 return response()->json(['message' => 'You are not allowed to update this tourguide.'], 403);
             }
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'An error occurred while updating the tourguide'], 500);
+            return response()->json(['error' => $th], 500);
         }
 
         return response()->json(['message' => 'Tourguide updated successfully', 'data' => new TourguideDataResource($tourguide)], 200);
