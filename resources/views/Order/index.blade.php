@@ -65,7 +65,7 @@
                         <td>{{ $order->total }}</td>
                         <td>{{ $order->city }}</td>
                         <td>
-                            <a class="btn btn-primary" href="javascript:void(0);" onclick="showOrderDetails({{ $order->id }})">
+                            <a class="btn btn-success" href="javascript:void(0);" onclick="showOrderDetails({{ $order->id }})">
                                 <i class="fas fa-eye"></i>
                             </a>
                         </td>

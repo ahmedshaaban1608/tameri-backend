@@ -62,12 +62,12 @@
                         N/A
                         @endif
                     </td>
-                    <td class="td-title">{{ $review->title }}</td> <!-- Apply custom style here -->
+                    <td class="td-title">{{ $review->title }}</td> 
                     <td>{{ $review->stars }}</td>
                     <td>{{ $review->status }}</td>
                     <td>{{ $review->created_at }}</td>
                     <td>
-                        <a class="btn btn-primary" href="javascript:void(0);" onclick="showReviewDetails({{ $review->id }})">
+                        <a class="btn btn-success" href="javascript:void(0);" onclick="showReviewDetails({{ $review->id }})">
                             <i class="fas fa-eye"></i>
                         </a>
                     </td>

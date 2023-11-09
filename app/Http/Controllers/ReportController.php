@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ReportResource;
+use App\Models\User;
 use App\Models\Report;
 use App\Models\Review;
 use App\Models\Order;
@@ -44,11 +45,13 @@ class ReportController extends Controller
         $touristsCount = Tourist::count();
         $reviewsCount = Review::count();
         $ordersCount = Order::count();
+        $usersCount = User::count();
         return view('Dashboard.admin', [ 'reports' => $reports,
         'tourguidesCount' => $tourguidesCount  ,
         'touristsCount' => $touristsCount,
          'reviewsCount' => $reviewsCount ,
-         'ordersCount' => $ordersCount 
+         'ordersCount' => $ordersCount,
+         'usersCount' => $usersCount,
         ]);
     } catch (\Exception $e) {
         return abort(500, 'An error occurred while retrieving the data.');
