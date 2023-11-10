@@ -1,0 +1,49 @@
+version: 2.1
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - production
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:latest
+
+    steps:
+      - checkout
+
+      # Build your project here
+      - run:
+         name: Install Dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y libxml2-dev
+            composer install --no-scripts
+
+       - run:
+          name: Install Node.js and npm
+          command: |
+            sudo apt-get install -y nodejs
+            sudo apt-get install -y npm
+            npm install
+
+      # Install lftp
+      - run:
+          name: Install lftp
+          command: sudo apt-get update && sudo apt-get install lftp -y
+
+      # Execute the deployment script for the production branch
+      - run:
+          name: Deploy to cPanel for production branch
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "production" ]; then
+              bash .circleci/deploy.sh
+            else
+              echo "Skipping deployment for branch ${CIRCLE_BRANCH}"
+            fi
