@@ -18,13 +18,23 @@ jobs:
     steps:
       - checkout
 
-      # Install Composer
+      # Install Zip Extension
       - run:
-          name: Install Composer
+          name: Install Zip Extension
           command: |
-            php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-            php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-            php -r "unlink('composer-setup.php');"
+            sudo apt-get update
+            sudo apt-get install -y libzip-dev
+            docker-php-ext-install zip
+
+      # Install Unzip
+      - run:
+          name: Install Unzip
+          command: sudo apt-get install unzip
+
+      # Install Git
+      - run:
+          name: Install Git
+          command: sudo apt-get install git
 
       # Update Composer Dependencies
       - run:
