@@ -18,6 +18,14 @@ jobs:
     steps:
       - checkout
 
+      # Install Composer
+      - run:
+          name: Install Composer
+          command: |
+            php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+            php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+            php -r "unlink('composer-setup.php');"
+
       # Update Composer Dependencies
       - run:
           name: Update Composer Dependencies
