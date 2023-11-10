@@ -20,13 +20,13 @@ jobs:
 
       # Build your project here
       - run:
-         name: Install Dependencies
+          name: Install Dependencies
           command: |
             sudo apt-get update
             sudo apt-get install -y libxml2-dev
             composer install --no-scripts
 
-       - run:
+      - run:
           name: Install Node.js and npm
           command: |
             sudo apt-get install -y nodejs
