@@ -18,14 +18,17 @@ jobs:
     steps:
       - checkout
 
-      # Build your project here
+      # Update Composer Dependencies
       - run:
-          name: Install Dependencies
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y libxml2-dev
-            composer install --no-scripts
+          name: Update Composer Dependencies
+          command: composer update --no-scripts
 
+      # Install your project dependencies
+      - run:
+          name: Install Composer Dependencies
+          command: composer install --no-scripts
+
+      # Install Node.js and npm
       - run:
           name: Install Node.js and npm
           command: |
@@ -37,6 +40,11 @@ jobs:
       - run:
           name: Install lftp
           command: sudo apt-get update && sudo apt-get install lftp -y
+
+      # Clear Composer Cache
+      - run:
+          name: Clear Composer Cache
+          command: composer clear-cache
 
       # Execute the deployment script for the production branch
       - run:
