@@ -12,57 +12,14 @@ workflows:
 
 jobs:
   build:
-    docker:
-      - image: php:8.1-cli
 
     steps:
       - checkout
-
-      # Install Zip Extension
-      - run:
-          name: Install Zip Extension
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y libzip-dev
-            docker-php-ext-install zip
-
-      # Install Unzip
-      - run:
-          name: Install Unzip
-          command: sudo apt-get install unzip
-
-      # Install Git
-      - run:
-          name: Install Git
-          command: sudo apt-get install git
-
-      # Update Composer Dependencies
-      - run:
-          name: Update Composer Dependencies
-          command: composer update --no-scripts
-
-      # Install your project dependencies
-      - run:
-          name: Install Composer Dependencies
-          command: composer install --no-scripts
-
-      # Install Node.js and npm
-      - run:
-          name: Install Node.js and npm
-          command: |
-            sudo apt-get install -y nodejs
-            sudo apt-get install -y npm
-            npm install
 
       # Install lftp
       - run:
           name: Install lftp
           command: sudo apt-get update && sudo apt-get install lftp -y
-
-      # Clear Composer Cache
-      - run:
-          name: Clear Composer Cache
-          command: composer clear-cache
 
       # Execute the deployment script for the production branch
       - run:
