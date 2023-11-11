@@ -28,7 +28,7 @@ class ReviewFactory extends Factory
             'tourguide_id'=> $tourguideId,
             'title'=>$this->faker->sentence,
             'comment'=>$this->faker->paragraph,
-            'stars'=>$this->faker->numberBetween(1,5),
+            'stars'=>$this->faker->numberBetween(3,5),
             'status'=>$this->faker->randomElement(['pending', 'confirmed', 'declined']),
         ];
     }

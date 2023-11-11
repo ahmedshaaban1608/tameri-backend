@@ -20,13 +20,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
      
-        Tourist::factory()->count(50)->create();
-        Tourguide::factory()->count(50)->create();
-        Area::factory()->count(200)->create();
-        Language::factory()->count(200)->create();
+        Tourist::factory()->count(10)->create();
+        Tourguide::factory()->count(30)->create();
+        Area::factory()->count(100)->create();
+        Language::factory()->count(100)->create();
         Order::factory()->count(100)->create();
         Review::factory()->count(100)->create();
-        Report::factory()->count(50)->create();
+        // Report::factory()->count(50)->create();
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([

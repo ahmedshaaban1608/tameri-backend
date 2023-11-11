@@ -21,6 +21,23 @@ class OrderFactory extends Factory
     protected $model = Order::class;
     public function definition(): array
     {
+        $cities = [
+            "Cairo",
+            "Giza",
+            "Luxor",
+            "Aswan",
+            "Alexandria",
+            "Sharm El Sheikh",
+            "Hurghada",
+            "Dahab",
+            "Siwa Oasis",
+            "Marsa Alam",
+            "Abu Simbel",
+            "El Minya",
+            "Ismailia",
+            "Port Said",
+            "Taba",
+        ];
         $tourguideId = Tourguide::inRandomOrder()->first()->id;
         $touristId = Tourist::inRandomOrder()->first()->id;
         return [
@@ -30,8 +47,8 @@ class OrderFactory extends Factory
             'phone'=>$this->faker->phoneNumber,
             'from'=>$this->faker->dateTimeBetween('now','+5 days'),
             'to'=>$this->faker->dateTimeBetween('+5 days','+10 days'),
-            'total'=>$this->faker->numberBetween(300,50),
-            'city'=> $this->faker->city,
+            'total'=>$this->faker->numberBetween(900,200),
+            'city'=>  $this->faker->randomElement($cities),
             'status'=>$this->faker->randomElement(['pending', 'rejected', 'accepted']),
         ];
     }
