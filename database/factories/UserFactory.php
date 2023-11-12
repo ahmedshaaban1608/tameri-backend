@@ -18,9 +18,17 @@ class UserFactory extends Factory
      */protected $model = User::class;
     public function definition(): array
     {
+        $name = [
+            "Ahmed", "Hamza", "Omar", "Ali", "Hossam",
+            "Youssef", "Mohammad", "Tarek", "Yaaqoub", "Amir",
+            "David", "Kareem", "Rafat", "Hesham", "Rawan",
+            "Aisha", "Rwda", "Yara", "Noura", "Amal",
+            "Layla", "Yasmine", "Omnia", "Nada", "Farida",
+            "Sara", "Doaa", "Hassan", "Khaled", "Fatima"
+        ];
         return [
             'type' =>$this->faker->randomElement(['tourist', 'tourguide']),
-            'name' => $this->faker->firstName(),
+            'name' => $this->faker->randomElement($name),
             'email' => $this->faker->unique()->safeEmail(),
             'password' => bcrypt('123456'), // password
         ];
