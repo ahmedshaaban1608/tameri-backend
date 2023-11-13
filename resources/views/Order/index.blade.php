@@ -2,11 +2,15 @@
 <html lang="en">
 
 <head>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
    
     <style>
-    
+        .card-footer .page-item.active .page-link {
+        background-color: blue !important;
+        color: white !important;
+    }
         .table-container {
     overflow-x: auto;
     max-width: 100%;
@@ -155,18 +159,18 @@
             });
         }
     </script>
-
+ <div class="card-footer border-0 py-5">
+    <span class="text-muted text-sm">
+      Showing  items 
+    </span>
+    <nav aria-label="Page navigation example">
+      {!! $orders->links() !!}  
+    </nav>    
+  </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <div class="card-footer border-0 py-5">
-        <span class="text-muted text-sm">
-          Showing  items 
-        </span>
-        <nav aria-label="Page navigation example">
-          {!! $orders->links() !!}  
-        </nav>    
-      </div>
+   
 </body>
 
 </html>

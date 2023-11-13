@@ -26,7 +26,7 @@ class TouristController extends Controller
         //
         try {
 
-            $tourists = TouristResource::collection(Tourist::paginate(10));
+            $tourists = TouristResource::collection(Tourist::paginate(5));
             return view('Dashboard.admin', ['tourists' => $tourists]);
         } catch (\Exception $e) {
             return abort(500, 'An error occurred while retrieving the data.');
