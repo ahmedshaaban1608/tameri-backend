@@ -49,6 +49,7 @@
                         <th>Phone</th>
                         <th>Total Price</th>
                         <th>City</th>
+                        <th>Payment</th>
                         <th>Show</th>
                         <th>Update</th>
                         <th>Delete</th>
@@ -64,6 +65,17 @@
                         <td>{{ $order->phone }}</td>
                         <td>{{ $order->total }}</td>
                         <td>{{ $order->city }}</td>
+                        {{-- <td>{{ $order->payment }}</td> --}}
+                        <!-- ... -->
+<td>
+    @if($order->payment == 'paid')
+        <span class="badge bg-success">Paid</span>
+    @else
+        <span class="badge bg-warning text-dark">Pending</span>
+    @endif
+</td>
+
+
                         <td>
                             <a class="btn btn-success" href="javascript:void(0);" onclick="showOrderDetails({{ $order->id }})">
                                 <i class="fas fa-eye"></i>
