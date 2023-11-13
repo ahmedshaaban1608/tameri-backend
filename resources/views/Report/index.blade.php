@@ -390,11 +390,12 @@
                     label: 'Number of Users',
                     data: [userData, 100 - userData],
                     backgroundColor: [
-                        'rgba(255, 206, 86, 0.5)',  
-                        'rgba(0, 0, 0, 0.1)'
+                        
+                'rgba(46, 204, 113, 0.3)',
+                'rgba(0, 0, 0, 0.1)'
                     ],
                     borderColor: [
-                        'rgba(255, 206, 86, 1)', 
+                        'rgba(46, 204, 113, 1)', 
                         'rgba(0, 0, 0, 0)'
                     ],
                     borderWidth: 1

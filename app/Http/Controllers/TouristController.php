@@ -126,7 +126,6 @@ class TouristController extends Controller
                     $tourist->update([
                         'country' => $request->input('country'),
                         'gender' => $request->input('gender'),
-                        'avatar' => $request->input('avatar'),
                         'phone' => $request->input('phone'),
                     ]);
                     return back()->with('success', 'Tourist updated successfully.');

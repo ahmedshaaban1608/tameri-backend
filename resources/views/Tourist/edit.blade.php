@@ -24,10 +24,10 @@
                 <input type="text" id="gender" name="gender" value="{{ $tourist['gender'] }}" class="form-control">
             </div>
 
-            <div class="form-group">
+            {{-- <div class="form-group">
                 <label for="avatar" class="text-dark">Avatar:</label>
                 <input type="text" id="avatar" name="avatar" value="{{ $tourist['avatar'] }}" class="form-control">
-            </div>
+            </div> --}}
 
             <div class="form-group">
                 <label for="phone" class="text-dark">Phone:</label>

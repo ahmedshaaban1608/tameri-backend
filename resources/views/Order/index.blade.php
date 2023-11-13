@@ -39,8 +39,8 @@
         <div id="displayOrderDetails"></div>
         <div class="table-responsive table-container">
             <div class="table-responsive">
-            <table class="table table-sm">
-                <thead class="thead-light">
+            <table class="table table-sm ">
+                <thead  class="thead-light font-weight-bold">
                     <tr>
                         <th>ID</th>
                         <th>Tourist ID</th>
@@ -74,7 +74,6 @@
         <span class="badge bg-warning text-dark">Pending</span>
     @endif
 </td>
-
 
                         <td>
                             <a class="btn btn-success" href="javascript:void(0);" onclick="showOrderDetails({{ $order->id }})">

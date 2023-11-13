@@ -9,6 +9,7 @@ use App\Http\Resources\OrderResource;
 use App\Http\Resources\TourguideDataResource;
 use App\Mail\AcceptOrderMail;
 use App\Mail\NewOrderMail;
+use App\Mail\RejectorderMail;
 use App\Models\Order;
 use App\Models\Tourguide;
 use App\Models\Tourist;
@@ -142,12 +143,31 @@ class OrderController extends Controller
                                 "city"=> $order->city,
                                 "id"=> $order->id,
                             ];
-                            try {
+                        
                                 Mail::to($tourist->user['email'])->send(new AcceptOrderMail($data));
 
-                            } catch (\Throwable $th) {
-                                return response()->json($th, 405);
-                            }
+                        } catch (\Throwable $th) {
+        
+                        }
+                    }
+
+                    if($request->status === 'rejected'){
+                        try {
+                            $data = [
+                                'tourist_name' => $tourist->user['name'],
+                                'subject' => $user['name'].' rejected your booking order ',
+                                "tourguide_name" =>$user['name'],
+                                "comment"=> $order->comment,
+                                "startDate"=> $order->from,
+                                "endDate"=> $order->to,
+                                "totalPrice"=> $order->total,
+                                "city"=> $order->city,
+                                "id"=> $order->id,
+                            ];
+                           
+                                Mail::to($tourist->user['email'])->send(new RejectorderMail($data));
+
+                          
                         } catch (\Throwable $th) {
         
                         }
