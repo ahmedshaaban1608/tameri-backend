@@ -50,7 +50,7 @@
 
                 <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="{{ env('STRIPE_KEY') }}"
                     data-amount="{{ $order->total }}00" data-name="Stripe Payment" data-description="Payment for your order"
-                    data-image="{{ asset('assets/images/logo.png') }}" data-locale="auto" data-currency="usd"
+                    data-image="{{ asset('img/favicon.ico') }}" data-locale="auto" data-currency="usd"
                     data-order="{{ $order->id }}"></script>
             </form>
         </div>
