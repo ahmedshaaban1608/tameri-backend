@@ -1,66 +1,107 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Tameri Backend Project
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Overview
 
-## About Laravel
+Welcome to the Tameri Backend Project! This Laravel and Bootstrap-based project serves as the backend infrastructure for the Tameri application, providing essential features for seamless operation.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Team Members
+- [Ahmed Shaaban Ahmed](https://github.com/ahmedshaaban1608)
+- [Dina Emad Noureldin](https://github.com/dinaemad88)
+- [Rawan Ramadan Ismail](https://github.com/rawanramadan22)
+- [Rwda Emad eldeen](https://github.com/rwda)
+- [Hamza Mahmoud Omar](https://github.com/hamza-halawa2020)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Frontend (Angular)
+The frontend is implemented using the angular framework.
+- [Tameri Frontend Repo](https://github.com/ahmedshaaban1608/Ta-meri)
 
-## Learning Laravel
+## Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Payment Gateway
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+The project includes a secure and reliable payment gateway for facilitating transactions within the Tameri application.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Dashboard View (Admin Panel)
 
-## Laravel Sponsors
+Admins can access a comprehensive dashboard view, providing insights and control over the system. Key metrics, user management, and various features are accessible through the admin panel.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### Controllers
 
-### Premium Partners
+- **HomeController**: Manages the main functionality and routes related to the home page.
+- **AreaController**: Handles operations related to geographic areas.
+- **OrderController**: Manages order processing, tracking, and related operations.
+- **LanguageController**: Manages language-related functionalities.
+- **ReviewController**: Handles user reviews and feedback.
+- **ReportController**: Manages reporting functionality.
+- **TourGuideController**: Manages tour guides and related operations.
+- **TouristController**: Handles tourist-related functionalities.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+### Resources
 
-## Contributing
+Dedicated resource classes support each controller, ensuring clean and organized code structure for data transformation and formatting.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Requests
 
-## Code of Conduct
+Request classes validate incoming data, ensuring accurate and secure information for the application.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Mail Services
 
-## Security Vulnerabilities
+The project incorporates mail services to handle email notifications and communication between users.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Guard, Authorization, and Authentication
 
-## License
+Security is a top priority with guards for user roles, robust authorization mechanisms, and a well-implemented authentication system.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Getting Started
+
+1. **Clone the repository.**
+    ```bash
+    git clone https://github.com/ahmedshaaban1608/tameri-backend
+    ```
+
+2. **Install dependencies.**
+    ```bash
+    composer install
+    ```
+3. **Install Dependencies**
+    ```bash
+    npm install
+    ```
+4. **Set up environment variables.**
+    - Configure database settings and API keys for external services in the `.env` file.
+
+5. **Run database migrations.**
+    ```bash
+    php artisan migrate
+    ```
+
+6. **Start the development server.**
+    ```bash
+    php artisan serve
+    ```
+
+Explore the codebase, and refer to the documentation or contact maintainers for questions or issues.
+
+##
+## Project gallery
+- Homepage
+![Home page](screenshots/home.png)
+
+- Tourguides list
+![Tourguides](screenshots/tourguides.png)
+
+- Tourists list
+![Tourists list](screenshots/tourist.png)
+
+- Orders
+![orders](screenshots/orders.png)
+
+- Show user
+![Show user](screenshots/showuser.png)
+
+- Delete action
+![Delete action](screenshots/delete.png)
+
+##
+Feel free to explore our project and contribute to making Egypt's tourism experiences memorable for everyone!
