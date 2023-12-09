@@ -29,7 +29,7 @@ class AreaController extends Controller
         }
 
     }
-    public function store(StoreAreaRequest $request,)
+    public function store(StoreAreaRequest $request, )
     {
         try {
             if (Gate::allows('is-tourguide')) {
@@ -67,7 +67,7 @@ class AreaController extends Controller
 
                     $area->update($request->all());
                     return response()->json(['message' => 'Area updated successfully', 'data' => new AreaResource($area)], 200);
-                } 
+                }
             } else {
                 return response()->json(['message' => 'You are not allowed to update this area.'], 403);
             }
@@ -83,10 +83,10 @@ class AreaController extends Controller
                 $user = auth()->user();
                 if ($area->tourguide_id === $user->id) {
                     $area->delete();
-                   
-            $tourguide = Tourguide::findOrFail($user->id);
-            return response()->json(new TourguideDataResource($tourguide), 200);
-                } 
+
+                    $tourguide = Tourguide::findOrFail($user->id);
+                    return response()->json(new TourguideDataResource($tourguide), 200);
+                }
             } else {
                 return response()->json(['message' => 'You are not allowed to delete this area.'], 403);
             }
